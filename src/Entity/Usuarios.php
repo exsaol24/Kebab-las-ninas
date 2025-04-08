@@ -19,7 +19,7 @@ class Usuarios
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -48,6 +48,9 @@ class Usuarios
      */
     #[ORM\OneToMany(targetEntity: Pedidos::class, mappedBy: 'usuarios')]
     private Collection $pedidos;
+
+    #[ORM\Column]
+    private ?int $administrador = null;
 
     public function __construct()
     {
@@ -200,6 +203,18 @@ class Usuarios
                 $pedido->setUsuarios(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAdministrador(): ?int
+    {
+        return $this->administrador;
+    }
+
+    public function setAdministrador(int $administrador): static
+    {
+        $this->administrador = $administrador;
 
         return $this;
     }

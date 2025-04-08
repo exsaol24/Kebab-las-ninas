@@ -35,6 +35,8 @@
 .navbar-links {
     display: flex;
     gap: 16px;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    position: relative;
 }
 
 .navbar-link {
@@ -46,11 +48,49 @@
 .navbar-link:hover {
     text-decoration: underline;
 }
+.navbar-brand img{
+    width: 12rem; 
+}
+.navbar-logo-img {
+    width: 8rem; 
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px; 
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none; 
+}
+
+.navbar-links.show .close-button {
+    display: block; /* Visible solo cuando el menú está desplegado */
+}
 
 /* Responsive styles */
 @media (max-width: 768px) {
     .navbar-links {
-        display: none;
+        display: flex;
+        flex-direction: column;
+        background-color: rgba(0, 0, 0, 0.8); /* Fondo semitransparente */
+        position: absolute;
+        top: 0;
+        right: -100%; /* Oculto inicialmente */
+        height: 100%;
+        width: 250px;
+        padding: 16px;
+        transform: translateX(0);
+        opacity: 0;
+    }
+
+    .navbar-links.show {
+        right: 0; /* Despliega hacia la derecha */
+        transform: translateX(0);
+        opacity: 1;
     }
 
     .navbar-toggle {

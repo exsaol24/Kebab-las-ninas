@@ -1,18 +1,24 @@
 {% set page_css = 'navbar' %}
+{% if app.request.attributes.get('_route') != 'app_login' %}
 <nav class="navbar">
     <div class="navbar-brand">
-        <span class="navbar-title">kebablasninas Database</span>
+        <a href="{{ path('app_inicio') }}" class="navbar-logo">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo" class="navbar-logo-img">
+        </a>
     </div>
     <div class="navbar-toggle">
-        <button class="navbar-button">
+        <button class="navbar-button" onclick="toggleMenu()">
             <svg class="navbar-icon" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <title>Menu</title>
                 <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
             </svg>
         </button>
     </div>
-    <div class="navbar-links">
-        <a href="{{ path('app_administradores') }}" class="navbar-link">Administrador</a>
+    <div class="navbar-links" id="navbar-links">
+        <button class="close-button" onclick="toggleMenu()">X</button>
+        <a href="{{ path('app_login') }}" class="navbar-link">Login</a>
         <a href="{{ path('app_categorias') }}" class="navbar-link">Categorias</a>
     </div>
 </nav>
+<script src="{{ asset('js/navbar.js') }}"></script>
+{% endif %}
