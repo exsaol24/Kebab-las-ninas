@@ -19,28 +19,41 @@ final class LoginController extends AbstractController
     }
 
     #[Route('/login', name: 'app_login', methods: ['GET', 'POST'])]
-    public function index(Request $request): Response
-    {
-        $error = null; // Inicializar la variable de error
+public function index(Request $request): Response
+{
+    $error = null;
 
-        if ($request->isMethod('POST')) {
-            $email = $request->request->get('email');
-            $password = $request->request->get('password');
+    if ($request->isMethod('POST')) {
+        $email = $request->request->get('email');
+        $password = $request->request->get('password');
 
-            // Buscar el usuario en la base de datos
-            $usuario = $this->entityManager->getRepository(Usuarios::class)->findOneBy(['email' => $email]);
+        // Buscar el usuario en la base de datos
+        $usuario = $this->entityManager->getRepository(Usuarios::class)->findOneBy(['email' => $email]);
 
-            // Verificar si el usuario existe y la contraseña coincide
-            if ($usuario && $usuario->getContrasena() === $password) {
-                return $this->redirectToRoute('app_inicio'); // Redirige al índice del inicio
-            }
+        // Verificar si el usuario existe, está verificado y la contraseña coincide
+        if ($usuario && $usuario->getContrasena() === $password && $usuario->isVerificado() == 1) {
+            // Guardar el nombre del usuario en la sesión
+            $session = $request->getSession();
+            $session->set('user_name', $usuario->getNombre());
 
-            // Asignar el mensaje de error si las credenciales son inválidas
-            $error = 'Credenciales inválidas.';
+            return $this->redirectToRoute('app_inicio');
         }
 
-        return $this->render('login/index.html.twig', [
-            'error' => $error, // Pasar el error a la plantilla
-        ]);
+        $error = 'Credenciales inválidas.';
     }
+
+    return $this->render('login/index.html.twig', [
+        'error' => $error,
+    ]);
+    
+}
+#[Route('/logout', name: 'app_logout', methods: ['GET'])]
+public function logout(Request $request): Response
+{
+    // Obtener la sesión y limpiarla
+    $session = $request->getSession();
+    $session->clear();
+
+    return $this->redirectToRoute('app_login');
+}
 }
