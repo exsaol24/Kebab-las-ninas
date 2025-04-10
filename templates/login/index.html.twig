@@ -6,8 +6,16 @@
 
 {% block body %}
 <div class="container">
+    <video autoplay muted loop class="background-video">
+        <source src="{{ asset('video/doner.mp4') }}" type="video/mp4">
+        Tu navegador no soporta la reproducción de videos.
+    </video>
     <div class="form-container">
-        <h1 class="title">Bienvenido</h1>
+        <div class="form-brand">
+            <a href="{{ path('app_inicio') }}" class="form-brand">
+                <img src="{{ asset('img/logo.png') }}" alt="Logo" class="form-brand-img">
+            </a>
+        </div>
         <p class="subtitle">Por favor, inicia sesión para continuar</p>
         
         {% if error %}
