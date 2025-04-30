@@ -1,10 +1,59 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Inicio{% endblock %}
+{% set page_css = 'inicio' %}
+{% block title %}Inicio - Kebab Las Niñas{% endblock %}
 
 {% block body %}
-<div class="inicio-wrapper">
-    <h1>Bienvenido al Inicio</h1>
-    <p>Has iniciado sesión correctamente.</p>
+
+    <!-- Banner principal -->
+    <section class="banner">
+        <div class="banner-content">
+            <h2>¡El mejor sabor en cada bocado!</h2>
+            <p>Disfruta de nuestros kebabs únicos y deliciosos.</p>
+            <a href="#about" class="btn btn-primary">Conócenos</a>
+        </div>
+        <div class="banner-image">
+            <img src="/img/pueba2.png" alt="Deliciosos Kebabs">
+        </div>
+    </section>
+
+    <!-- Sección "Sobre Nosotros" -->
+    <section id="about" class="about-us">
+        <h2>Sobre Nosotros</h2>
+        <p>En Kebab Las Niñas nos especializamos en ofrecer comida rápida de calidad, con un toque único que encanta a nuestros clientes.</p>
+        <div class="about-image">
+            <img src="/images/about-us.jpg" alt="Sobre Nosotros">
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section id="testimonials" class="testimonials">
+        <h2>Lo que dicen nuestros clientes</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p>"¡El mejor kebab que he probado! Definitivamente volveré."</p>
+                <span>- Juan Pérez</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Excelente servicio y comida deliciosa. Muy recomendado."</p>
+                <span>- María López</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Un lugar perfecto para disfrutar con amigos y familia."</p>
+                <span>- Carlos García</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pie de página -->
+    <footer id="contact" class="footer">
+        <p>© 2025 Kebab Las Niñas. Todos los derechos reservados.</p>
+        <p>Contacto: <a href="mailto:info@kebablasniñas.com">info@kebablasniñas.com</a></p>
+        <p>Síguenos en nuestras redes sociales:</p>
+        <div class="social-links">
+            <a href="#"><img src="/img/facebook.png" alt="Facebook"></a>
+            <a href="#"><img src="/img/instagram.png" alt="Instagram"></a>
+            <a href="#"><img src="/img/x.png" alt="Twitter"></a>
+        </div>
+    </footer>
 </div>
 {% endblock %}
