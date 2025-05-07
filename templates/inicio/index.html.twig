@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
+
 {% set page_css = 'inicio' %}
+
 {% block title %}Inicio - Kebab Las Niñas{% endblock %}
 
 {% block body %}
 
-    <!-- Banner principal -->
     <section class="banner">
         <div class="banner-content">
             <h2>¡El mejor sabor en cada bocado!</h2>
@@ -12,20 +13,18 @@
             <a href="#about" class="btn btn-primary">Conócenos</a>
         </div>
         <div class="banner-image">
-            <img src="/img/pueba2.png" alt="Deliciosos Kebabs">
+            <img src="/img/prueba1.png" alt="Deliciosos Kebabs">
         </div>
     </section>
 
-    <!-- Sección "Sobre Nosotros" -->
     <section id="about" class="about-us">
         <h2>Sobre Nosotros</h2>
         <p>En Kebab Las Niñas nos especializamos en ofrecer comida rápida de calidad, con un toque único que encanta a nuestros clientes.</p>
         <div class="about-image">
-            <img src="/images/about-us.jpg" alt="Sobre Nosotros">
+            <img src="/img/prueba3.png" alt="Sobre Nosotros">
         </div>
     </section>
 
-    <!-- Testimonios -->
     <section id="testimonials" class="testimonials">
         <h2>Lo que dicen nuestros clientes</h2>
         <div class="testimonials-grid">
@@ -44,7 +43,22 @@
         </div>
     </section>
 
-    <!-- Pie de página -->
+    <section id="platos" class="platos">
+        <h2>Nuestros Platos</h2>
+        <div class="platos-grid">
+            {% for plato in platos %}
+                <div class="plato-card">
+                    <img src="{{ plato.imagen }}" alt="{{ plato.nombre }}" class="plato-imagen">
+                    <div class="plato-info">
+                        <h3 class="plato-nombre">{{ plato.nombre }}</h3>
+                        <p class="plato-descripcion">{{ plato.descripcion }}</p>
+                        <p class="plato-precio">{{ plato.precio | number_format(2, '.', ',') }} €</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
     <footer id="contact" class="footer">
         <p>© 2025 Kebab Las Niñas. Todos los derechos reservados.</p>
         <p>Contacto: <a href="mailto:info@kebablasniñas.com">info@kebablasniñas.com</a></p>
@@ -55,5 +69,5 @@
             <a href="#"><img src="/img/x.png" alt="Twitter"></a>
         </div>
     </footer>
-</div>
+
 {% endblock %}
