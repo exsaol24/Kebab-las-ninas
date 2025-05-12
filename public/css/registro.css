@@ -1,0 +1,151 @@
+/* Asegurar que html y body ocupen toda la altura de la pantalla */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif; /* Fuente consistente */
+    line-height: 1.6; /* Mejora legibilidad */
+    color: #333333; /* Color por defecto del texto */
+}
+
+/* Fondo del body */
+body {
+    background-image: url('/img/fondoregisrer.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Contenedor para centrar el formulario */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Estilo del contenedor del formulario */
+.form-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+}
+
+/* Logo/brand */
+.form-brand {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-brand-img {
+    width: 150px;
+    height: auto;
+}
+
+/* Subtítulo */
+.subtitle {
+    text-align: center;
+    font-size: 1.1em;
+    color: #555555;
+    margin-bottom: 25px;
+}
+
+/* Mensaje de error */
+.error-message {
+    font-size: 0.9em;
+    color: #d9534f;
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid #d9534f;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #fef2f2;
+}
+
+/* Grupo de campos del formulario */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Etiquetas del formulario */
+label {
+    display: block;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+/* Campos de entrada */
+.input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 1em;
+    color: #333333;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input:focus {
+    border-color: #f7b204;
+    outline: none;
+    box-shadow: 0 0 8px rgba(247, 178, 4, 0.3);
+}
+
+/* Botón de envío */
+.button {
+    width: 100%;
+    padding: 12px;
+    background-color: #fbbf24;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.button:hover {
+    background-color: #f7a600;
+}
+
+/* Enlace a login */
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #555555;
+}
+
+.login-link a {
+    color: #f7b204;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.login-link a:hover {
+    color: #f7a600;
+    text-decoration: underline;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 20px;
+    }
+    .form-brand-img {
+        width: 100px;
+    }
+}
