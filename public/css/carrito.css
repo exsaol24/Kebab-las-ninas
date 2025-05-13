@@ -1,0 +1,441 @@
+/* Estilos generales para la página del carrito */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    margin: 0;
+    padding-top: 20px;
+    padding-bottom: 50px;
+    line-height: 1.6;
+}
+
+/* Contenedor principal para centrar el contenido */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Añadido margen superior para el contenedor principal del carrito */
+.cart-container {
+    margin-top: 80px;
+}
+
+
+h1 {
+    text-align: center;
+    color: #f59e0b;
+    margin-bottom: 40px;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para los mensajes flash */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    opacity: 0.9;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+/* Estilos para la tabla del carrito */
+.cart-table {
+    width: 100%;
+    margin-bottom: 30px;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.cart-table th,
+.cart-table td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-table th {
+    background-color: #f59e0b;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Bordes redondeados para las esquinas de la tabla */
+.cart-table th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.cart-table th:last-child {
+    border-top-right-radius: 10px;
+}
+
+.cart-table tbody tr:nth-child(even) {
+    background-color: #fff;
+}
+
+.cart-table tbody tr:nth-child(odd) {
+    background-color: #fffbeb;
+}
+
+.cart-table tbody tr:hover {
+    background-color: #fef2f2;
+    transition: background-color 0.2s ease;
+}
+
+/* Estilo para el formulario de cantidad */
+.quantity-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quantity-form input[type="number"] {
+    width: 50px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1em;
+}
+
+/* Estilos para los botones dentro de la tabla */
+.update-btn,
+.btn-danger {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.95em;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    display: inline-block;
+    text-align: center;
+    font-weight: bold;
+}
+
+.update-btn {
+    background-color: #fbbf24;
+    color: #333;
+}
+
+.update-btn:hover {
+    background-color: #f59e0b;
+    color: white;
+}
+
+.update-btn:active {
+    transform: scale(0.98);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-danger:active {
+    transform: scale(0.98);
+}
+
+/* Estilos para la fila del total */
+.total-row td {
+    font-weight: bold;
+    font-size: 1.2em;
+    border-top: 3px solid #f59e0b;
+    padding-top: 20px;
+}
+
+.total-label {
+    color: #f59e0b;
+    text-align: right;
+}
+
+.total-value {
+    color: #f59e0b;
+    text-align: left;
+}
+
+
+/* Estilos para los botones fuera de la tabla (Vaciar Carrito) */
+.button-group {
+    text-align: right;
+    margin-top: 20px;
+    padding-right: 15px;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    display: inline-block;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.btn-warning:active {
+    transform: scale(0.98);
+}
+
+/* Estilos para el enlace de checkout */
+.checkout-link {
+    text-align: right;
+    margin-top: 30px;
+    padding-right: 15px;
+}
+
+.checkout-link p {
+    color: #555;
+    font-style: italic;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    display: inline-block;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-success:active {
+    transform: scale(0.98);
+}
+
+
+/* Estilos para el carrito vacío */
+.empty-cart {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 40px 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.empty-cart-message {
+    text-align: center;
+    font-size: 1.3em;
+    color: #555;
+    margin: 10px 0;
+}
+
+.empty-cart-message a {
+    color: #f59e0b;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.empty-cart-message a:hover {
+    color: #fbbf24;
+    text-decoration: underline;
+}
+
+
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    /* Transforma la tabla en un listado apilado en pantallas pequeñas */
+    .cart-table,
+    .cart-table thead,
+    .cart-table tbody,
+    .cart-table th,
+    .cart-table td,
+    .cart-table tr {
+        display: block;
+    }
+
+    .cart-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .cart-table tbody tr {
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-table tbody td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        min-height: 30px;
+        text-align: right;
+    }
+
+    .cart-table tbody td:last-child {
+        border-bottom: 0;
+    }
+
+    /* Crea la "etiqueta" para cada dato en móvil usando el atributo data-label */
+    .cart-table tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        width: 45%;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #555;
+        text-align: left;
+    }
+
+    /* Ajustes para el formulario de cantidad en móvil */
+    .quantity-form {
+        justify-content: flex-end;
+        margin-top: 5px;
+    }
+
+    .quantity-form input[type="number"] {
+        width: 40px;
+        padding: 5px;
+        font-size: 0.9em;
+    }
+
+    .update-btn {
+        padding: 5px 10px;
+        font-size: 0.9em;
+    }
+
+
+    /* Ajustes para los botones Eliminar en móvil */
+    .btn-danger {
+        display: block;
+        margin-top: 10px;
+        text-align: center;
+        padding: 8px 10px;
+        font-size: 0.9em;
+        width: 100%;
+    }
+
+    /* Ajustes para la fila del Total en móvil */
+    .cart-table tfoot tr {
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px solid #ccc;
+        background-color: #fffbeb;
+        margin-top: 15px;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .cart-table tfoot td {
+        border: none;
+        padding: 10px;
+    }
+
+
+    .total-label {
+        flex: 1;
+        text-align: left;
+        padding-left: 15px;
+    }
+
+    .total-value {
+        flex: 1;
+        text-align: right;
+        padding-right: 15px;
+        position: relative;
+    }
+
+    .total-value::before {
+        content: attr(data-label);
+        display: none;
+    }
+
+    /* Ajustes para los botones fuera de la tabla en móvil */
+    .button-group {
+        text-align: center;
+        padding-right: 0;
+        margin-top: 25px;
+    }
+
+    .btn-warning {
+        display: block;
+        width: 80%;
+        margin: 0 auto;
+        padding: 12px 15px;
+    }
+
+
+    .checkout-link {
+        text-align: center;
+        padding-right: 0;
+        margin-top: 25px;
+    }
+
+    .checkout-link p {
+        margin-bottom: 15px;
+    }
+
+    .btn-success {
+        width: 80%;
+        margin: 0 auto;
+        display: block;
+    }
+
+
+    .empty-cart {
+        padding: 30px 15px;
+    }
+
+    .empty-cart-message {
+        margin-top: 10px;
+        font-size: 1.1em;
+    }
+}

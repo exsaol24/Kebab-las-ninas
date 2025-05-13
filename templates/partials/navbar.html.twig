@@ -1,4 +1,4 @@
-{% set page_css = 'navbar' %}
+{% set page_css = 'carrito' %}
 {% if app.request.attributes.get('_route') != 'app_login' %}
 <nav class="navbar">
     <div class="navbar-brand">
@@ -16,6 +16,20 @@
     </div>
     <div class="navbar-links" id="navbar-links">
         <button class="close-button" onclick="toggleMenu()">X</button>
+
+
+        {% set carrito_items = app.session.get('carrito', []) %}
+        {% set total_productos_carrito = 0 %}
+        {% for id, cantidad in carrito_items %}
+            {% set total_productos_carrito = total_productos_carrito + cantidad %}
+        {% endfor %}
+
+            <a href="{{ path('app_carrito_index') }}" class="navbar-link cart-icon-link">
+            <img src="{{ asset('img/cart-icon.png') }}" alt="Carrito" class="cart-icon">
+            {% if total_productos_carrito > 0 %}
+                <span class="cart-count">{{ total_productos_carrito }}</span>
+            {% endif %}
+        </a>
 
         {% if app.session is not null and app.session.get('user_name') is not null %}
             <span class="welcome-message">Bienvenido, {{ app.session.get('user_name') }}!</span>

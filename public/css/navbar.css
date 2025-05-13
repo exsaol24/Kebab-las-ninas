@@ -12,6 +12,7 @@
     padding: 16px;
     box-sizing: border-box;
     transition: transform 0.3s ease-in-out;
+    height: 80px;
 }
 
 .navbar.hidden {
@@ -64,7 +65,6 @@
 /* Botón para mostrar/ocultar menú en móviles */
 .navbar-toggle {
     display: none;
-    /* Oculto en escritorio */
     position: relative;
     z-index: 1100;
 }
@@ -213,4 +213,71 @@
     font-size: 1.5rem;
     font-weight: bold;
     color: #ffffff;
+}
+/* CSS para el ícono del carrito en el navbar */
+
+.cart-icon-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    margin-left: 15px;
+}
+
+.cart-icon {
+    width: 25px;
+    height: auto;
+    display: block;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 1px 5px;
+    font-size: 0.7em;
+    font-weight: bold;
+    line-height: 1.2;
+    min-width: 16px;
+    text-align: center;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 16px;
+}
+
+/* Asegúrate de que estos estilos no sean anulados por otros estilos */
+/* CSS para la sección de platos (en tu archivo inicio.css o similar) */
+
+.plato-card {
+
+    position: relative;
+    overflow: hidden;
+}
+
+.plato-info {
+    padding: 10px;
+}
+
+.btn-add-to-cart {
+    display: block;
+}
+
+.plato-card:hover .btn-add-to-cart {
+    display: block;
+}
+
+
+.btn-add-to-cart {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.plato-card:hover .btn-add-to-cart {
+    opacity: 1;
 }

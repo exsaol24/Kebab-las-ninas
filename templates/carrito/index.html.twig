@@ -1,0 +1,87 @@
+{# templates/carrito/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% set page_css = 'carrito' %}
+
+{% block title %}Tu Carrito - Kebab Las Niñas{% endblock %}
+
+{% block body %}
+
+    <div class="container cart-container">
+
+        <h1>Tu Carrito de Compra</h1>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('warning') %}
+            <div class="alert alert-warning">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% if carritoData is not empty %}
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Plato</th>
+                        <th>Precio Unitario</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in carritoData %}
+                        <tr>
+                            <td data-label="Plato">{{ item.plato.nombre }}</td>
+                            <td data-label="Precio Unitario">{{ item.plato.precio | number_format(2, '.', ',') }} €</td>
+                            <td data-label="Cantidad">
+                                <form action="{{ path('app_carrito_actualizar', {'id': item.plato.id}) }}" method="post" class="quantity-form">
+                                    <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1">
+                                    <button type="submit" class="update-btn">Actualizar</button>
+                                </form>
+                            </td>
+                            <td data-label="Subtotal">{{ (item.plato.precio * item.cantidad) | number_format(2, '.', ',') }} €</td>
+                            <td data-label="Acciones">
+                                <a href="{{ path('app_carrito_eliminar', {'id': item.plato.id}) }}" class="btn btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="3" data-label="Total:" class="total-label">Total:</td>
+                        <td data-label="Valor Total" class="total-value">{{ total | number_format(2, '.', ',') }} €</td>
+                        <td>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="button-group">
+                <a href="{{ path('app_carrito_vaciar') }}" class="btn btn-warning">Vaciar Carrito</a>
+            </div>
+
+
+            <div class="checkout-link">
+                <p>Aquí irá el enlace para proceder al pago (Finalizar Pedido)</p>
+            </div>
+
+        {% else %}
+            <div class="empty-cart">
+                <p class="empty-cart-message">Tu carrito está vacío.</p>
+                <p class="empty-cart-message"><a href="{{ path('app_inicio') }}">Volver a la tienda</a></p>
+            </div>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
