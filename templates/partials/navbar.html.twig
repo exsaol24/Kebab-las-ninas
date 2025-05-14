@@ -8,15 +8,20 @@
     </div>
     <div class="navbar-toggle">
         <button class="navbar-button" onclick="toggleMenu()">
-            <svg class="navbar-icon" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <title>Menu</title>
-                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
-            </svg>
+            <div class="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </button>
     </div>
     <div class="navbar-links" id="navbar-links">
-        <button class="close-button" onclick="toggleMenu()">X</button>
-
+        <button class="close-button" onclick="toggleMenu()">
+            <div class="close-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </button>
 
         {% set carrito_items = app.session.get('carrito', []) %}
         {% set total_productos_carrito = 0 %}
@@ -24,7 +29,7 @@
             {% set total_productos_carrito = total_productos_carrito + cantidad %}
         {% endfor %}
 
-            <a href="{{ path('app_carrito_index') }}" class="navbar-link cart-icon-link">
+        <a href="{{ path('app_carrito_index') }}" class="navbar-link cart-icon-link">
             <img src="{{ asset('img/cart-icon.png') }}" alt="Carrito" class="cart-icon">
             {% if total_productos_carrito > 0 %}
                 <span class="cart-count">{{ total_productos_carrito }}</span>
@@ -32,13 +37,15 @@
         </a>
 
         {% if app.session is not null and app.session.get('user_name') is not null %}
-            <span class="welcome-message">Bienvenido, {{ app.session.get('user_name') }}!</span>
+            <span class="welcome-message">Hola, {{ app.session.get('user_name') }}!</span>
             <a href="{{ path('app_logout') }}" class="navbar-link">Cerrar sesión</a>
         {% else %}
             <a href="{{ path('app_login') }}" class="navbar-link">Iniciar sesión</a>
         {% endif %}
-
     </div>
+    
+    <!-- Overlay para cerrar el menú al hacer clic fuera -->
+    <div class="menu-overlay" id="menu-overlay" onclick="toggleMenu()"></div>
 </nav>
 <script src="{{ asset('js/navbar.js') }}"></script>
-{% endif %}
+{% endif %}```
