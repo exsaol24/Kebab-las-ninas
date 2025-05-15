@@ -39,52 +39,57 @@ class CarritoController extends AbstractController
         ]);
     }
 
-
-    // Acción para añadir un plato al carrito
     #[Route('/agregar/{id}', name: 'agregar')]
-    public function agregar(int $id, SessionInterface $session, PlatosRepository $platosRepository): Response
+    public function agregar(int $id, SessionInterface $session, PlatosRepository $platosRepository, Request $request): Response
     {
-        // --- VERIFICAR SI EL USUARIO ESTÁ LOGEADO ---
-        // app.session.get('user_name') verifica si la clave 'user_name' existe en la sesión
-        // que es donde guardas el nombre del usuario al logearse.
         if (null === $session->get('user_name')) {
-            // Si el usuario NO está logeado
+            if ($request->isXmlHttpRequest()) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Debes iniciar sesión para añadir productos al carrito.'
+                ], 401);
+            }
             $this->addFlash('warning', 'Debes iniciar sesión para añadir productos al carrito.');
-
-            // Redirigir a la página de login
             return $this->redirectToRoute('app_login');
         }
-        // --- FIN VERIFICACIÓN ---
 
-
-        // Si el usuario SÍ está logeado, procedemos con la lógica para añadir al carrito
-
-        // Verificar si el plato existe antes de añadirlo
         $plato = $platosRepository->find($id);
         if (!$plato) {
+            if ($request->isXmlHttpRequest()) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'El plato solicitado no existe.'
+                ], 404);
+            }
             $this->addFlash('error', 'El plato solicitado no existe.');
             return $this->redirectToRoute('app_inicio');
         }
 
         $carrito = $session->get('carrito', []);
-
         if (!empty($carrito[$id])) {
             $carrito[$id]++;
         } else {
             $carrito[$id] = 1;
         }
-
         $session->set('carrito', $carrito);
 
-        $this->addFlash('success', 'Plato añadido al carrito.');
+        // Calcular total productos en carrito
+        $total_productos_carrito = 0;
+        foreach ($carrito as $cantidad) {
+            $total_productos_carrito += $cantidad;
+        }
 
-        // Redirigir de vuelta a la página de inicio (o a donde prefieras después de añadir)
+        if ($request->isXmlHttpRequest()) {
+            return $this->json([
+                'success' => true,
+                'total_productos_carrito' => $total_productos_carrito
+            ]);
+        }
+
+        $this->addFlash('success', 'Plato añadido al carrito.');
         return $this->redirectToRoute('app_inicio');
-        // O para redirigir al carrito:
-        // return $this->redirectToRoute('app_carrito_index');
     }
 
-    // ... (Tus acciones eliminar, actualizar y vaciar permanecen igual) ...
     #[Route('/eliminar/{id}', name: 'eliminar')]
     public function eliminar(int $id, SessionInterface $session): Response
     {

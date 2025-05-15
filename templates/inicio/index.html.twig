@@ -59,7 +59,11 @@
                         <p class="plato-precio">{{ plato.precio | number_format(2, '.', ',') }} €</p>
 
                         {% if app.session.get('user_name') is not null %}
-                            <a href="{{ path('app_carrito_agregar', {'id': plato.id}) }}" class="btn btn-add-to-cart">Añadir al carrito</a>
+                            <a href="{{ path('app_carrito_agregar', {'id': plato.id}) }}"
+                               class="btn btn-add-to-cart js-add-to-cart"
+                               data-plato-id="{{ plato.id }}">
+                                Añadir al carrito
+                            </a>
                         {% else %}
                             <span class="btn btn-add-to-cart js-login-required"
                                 data-login-message="Debes iniciar sesión para añadir productos al carrito.">
@@ -88,17 +92,55 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Manejo para usuarios no logueados
             const loginRequiredButtons = document.querySelectorAll('.js-login-required');
-
             loginRequiredButtons.forEach(button => {
                 button.addEventListener('click', function (event) {
                     event.preventDefault();
-
                     const message = this.dataset.loginMessage || 'Debes iniciar sesión.';
-
                     alert(message);
+                });
+            });
 
-
+            // AJAX para añadir al carrito
+            const addToCartButtons = document.querySelectorAll('.js-add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const platoId = this.dataset.platoId;
+                    fetch('{{ path('app_carrito_agregar', {'id': 'PLATO_ID'}) }}'.replace('PLATO_ID', platoId), {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Plato añadido al carrito.');
+                            // Actualizar contador carrito en navbar
+                            let cartCount = document.querySelector('.cart-count');
+                            if (!cartCount) {
+                                // Buscar el enlace del carrito
+                                const cartLink = document.querySelector('.cart-icon-link');
+                                if (cartLink) {
+                                    cartCount = document.createElement('span');
+                                    cartCount.className = 'cart-count';
+                                    cartLink.appendChild(cartCount);
+                                }
+                            }
+                            if (cartCount) {
+                                cartCount.textContent = data.total_productos_carrito;
+                                cartCount.style.display = data.total_productos_carrito > 0 ? 'inline-block' : 'none';
+                            }
+                        } else {
+                            alert(data.message || 'Error al añadir al carrito.');
+                        }
+                    })
+                    .catch(() => {
+                        alert('Error de red al añadir al carrito.');
+                    });
                 });
             });
         });
