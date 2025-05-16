@@ -7,25 +7,74 @@
 
 {% block body %}
 
-
-
-
-    <section class="banner">
+    <section class="banner" style="margin-top: 0;">
         <div class="banner-content">
             <h2>¡El mejor sabor en cada bocado!</h2>
             <p>Disfruta de nuestros kebabs únicos y deliciosos.</p>
-            <a href="#about" class="btn btn-primary">Conócenos</a>
+            <a href="sobrenosotros" class="btn btn-primary">Conócenos</a>
         </div>
         <div class="banner-image">
-            <img src="{{ asset('img/prueba1.png') }}" alt="Deliciosos Kebabs">
+            <img src="{{ asset('img/sobrekebab1.png') }}" alt="Deliciosos Kebabs">
         </div>
     </section>
 
-    <section id="about" class="about-us">
-        <h2>Sobre Nosotros</h2>
-        <p>En Kebab Las Niñas nos especializamos en ofrecer comida rápida de calidad, con un toque único que encanta a nuestros clientes.</p>
-        <div class="about-image">
-            <img src="{{ asset('img/prueba3.png') }}" alt="Sobre Nosotros">
+    {# Carrusel de Ofertas #}
+    <section class="ofertas-carousel-section">
+        <div class="ofertas-carousel-container">
+            <div class="ofertas-carousel" id="ofertasCarousel">
+                <div class="oferta-slide active">
+                    <img src="{{ asset('img/oferta1.jpg') }}" alt="Oferta 1">
+                    <div class="oferta-info">
+                        <h3>2x1 en Kebabs Clásicos</h3>
+                        <p>¡Solo los miércoles! Ven con un amigo y paga solo uno.</p>
+                    </div>
+                </div>
+                <div class="oferta-slide">
+                    <img src="{{ asset('img/oferta2.jpg') }}" alt="Oferta 2">
+                    <div class="oferta-info">
+                        <h3>Menú Familiar</h3>
+                        <p>4 kebabs + patatas + bebida grande por solo 19,90€.</p>
+                    </div>
+                </div>
+                <div class="oferta-slide">
+                    <img src="{{ asset('img/oferta3.jpg') }}" alt="Oferta 3">
+                    <div class="oferta-info">
+                        <h3>Bebida gratis</h3>
+                        <p>Con cada kebab XL, llévate una bebida gratis.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="ofertas-carousel-btn prev" id="ofertasPrev">❮</button>
+            <button class="ofertas-carousel-btn next" id="ofertasNext">❯</button>
+             <div class="ofertas-carousel-dots">
+                <span class="ofertas-carousel-dot active" data-slide="0"></span>
+                <span class="ofertas-carousel-dot" data-slide="1"></span>
+                <span class="ofertas-carousel-dot" data-slide="2"></span>
+            </div>
+        </div>
+    </section>
+
+    {# Zona de mapa  #}
+    <section class="ubicacion-section">
+        <div class="ubicacion-container">
+            <div class="ubicacion-info">
+                <h2>¿Dónde estamos?</h2>
+                <p>
+                    <strong>Av. Arias de Velasco, 58, 29601 Marbella, Málaga</strong><br>
+                    ¡Ven a visitarnos y disfruta del mejor kebab de la ciudad!
+                </p>
+            </div>
+            <div class="ubicacion-mapa">
+                <iframe
+                    src="https://www.google.com/maps?q=Av.+Arias+de+Velasco,+58,+29601+Marbella,+M%C3%A1laga&hl=es&output=embed"
+                    width="400"
+                    height="250"
+                    style="border:0; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.15); width:100%;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
         </div>
     </section>
 
@@ -34,15 +83,15 @@
         <div class="testimonials-grid">
             <div class="testimonial-card">
                 <p>"¡El mejor kebab que he probado! Definitivamente volveré."</p>
-                <span>- Juan Pérez</span>
+                <span>- Albertito Pérez</span>
             </div>
             <div class="testimonial-card">
                 <p>"Excelente servicio y comida deliciosa. Muy recomendado."</p>
-                <span>- María López</span>
+                <span>- Marina López</span>
             </div>
             <div class="testimonial-card">
                 <p>"Un lugar perfecto para disfrutar con amigos y familia."</p>
-                <span>- Carlos García</span>
+                <span>- Kevin Soto</span>
             </div>
         </div>
     </section>
@@ -84,14 +133,55 @@
         <p>Contacto: <a href="mailto:info@kebablasniñas.com">info@kebablasniñas.com</a></p>
         <p>Síguenos en nuestras redes sociales:</p>
         <div class="social-links">
-            <a href="#"><img src="{{ asset('img/facebook.png') }}" alt="Facebook"></a>
-            <a href="#"><img src="{{ asset('img/instagram.png') }}" alt="Instagram"></a>
-            <a href="#"><img src="{{ asset('img/x.png') }}" alt="Twitter"></a>
+            <a href="https://es-es.facebook.com/"><img src="{{ asset('img/facebook.png') }}" alt="Facebook"></a>
+            <a href="https://www.instagram.com/kebab_lasninas/"><img src="{{ asset('img/instagram.png') }}" alt="Instagram"></a>
+            <a href="https://x.com/"><img src="{{ asset('img/x.png') }}" alt="Twitter"></a>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Carrusel de ofertas
+            let currentOferta = 0;
+            const slides = document.querySelectorAll('.oferta-slide');
+            const totalOfertas = slides.length;
+            const prevBtn = document.getElementById('ofertasPrev');
+            const nextBtn = document.getElementById('ofertasNext');
+            const dots = document.querySelectorAll('.ofertas-carousel-dot');
+
+            function showOferta(idx) {
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === idx);
+                });
+                 dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === idx);
+                });
+            }
+            function nextOferta() {
+                currentOferta = (currentOferta + 1) % totalOfertas;
+                showOferta(currentOferta);
+            }
+            function prevOferta() {
+                currentOferta = (currentOferta - 1 + totalOfertas) % totalOfertas;
+                showOferta(currentOferta);
+            }
+            if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', prevOferta);
+                nextBtn.addEventListener('click', nextOferta);
+            }
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const slideIndex = parseInt(this.dataset.slide);
+                    currentOferta = slideIndex;
+                    showOferta(currentOferta);
+                });
+            });
+
+            // Auto-slide cada 6 segundos
+            setInterval(nextOferta, 6000);
+            showOferta(currentOferta);
+
             // Manejo para usuarios no logueados
             const loginRequiredButtons = document.querySelectorAll('.js-login-required');
             loginRequiredButtons.forEach(button => {

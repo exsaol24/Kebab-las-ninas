@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sobre Nosotros - Kebab Las Niñas{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/sobrenosotros.css') }}">
+{% endblock %}
+
+{% block body %}
+<section class="about-us-page">
+    <div class="about-hero">
+        <div class="container hero-content">
+            <div class="hero-logo">
+                <img src="{{ asset('img/logo.png') }}" alt="Logo Kebab Las Niñas">
+            </div>
+            <div class="hero-text">
+                <h1>¡Bienvenidos a Kebab Las Niñas!</h1>
+                <p class="about-slogan">Donde cada bocado cuenta una historia de sabor y alegría.</p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="about-section about-history">
+            <div class="about-icon">
+                <img src="{{ asset('img/icono-historia.svg') }}" alt="Historia de Kebab Las Niñas" loading="lazy"/>
+            </div>
+            <div class="about-content">
+                <h2>Nuestra Historia</h2>
+                <p>
+                    Fundado en <span class="highlight">2021</span> en el vibrante corazón de Marbella, Kebab Las Niñas nació de un sueño: <span class="highlight">revolucionar la comida rápida</span> fusionando <span class="highlight">recetas tradicionales auténticas</span> con un enfoque moderno y lleno de frescura. Inspirados por la energía contagiosa y el espíritu cálido de nuestro talentoso equipo, hemos cultivado más que un restaurante; hemos creado un lugar donde <span class="highlight">cada cliente se siente como en familia</span> desde el primer momento.
+                </p>
+            </div>
+        </div>
+        <div class="about-section about-values">
+            <div class="about-content">
+                <h2>Valores que nos impulsan</h2>
+                <ul class="values-list">
+                    <li><span class="about-bullet"><i class="fas fa-check-circle"></i></span> Calidad excepcional en cada plato</li>
+                    <li><span class="about-bullet"><i class="fas fa-smile"></i></span> Servicio rápido, atento y siempre amable</li>
+                    <li><span class="about-bullet"><i class="fas fa-leaf"></i></span> Ingredientes frescos, locales y cuidadosamente seleccionados</li>
+                    <li><span class="about-bullet"><i class="fas fa-heart"></i></span> Compromiso genuino con nuestra querida comunidad de Marbella</li>
+                </ul>
+            </div>
+            <div class="about-icon">
+                <img src="{{ asset('img/icono-valores.svg') }}" alt="Valores de Kebab Las Niñas" loading="lazy"/>
+            </div>
+        </div>
+        <div class="about-section about-team">
+            <h2>Conoce a Nuestro Apasionado Equipo</h2>
+            <div class="team-members">
+                <div class="team-member">
+                    <img src="{{ asset('img/equipo1.jpg') }}" alt="Foto de Sofía, Fundadora y Chef" loading="lazy"/>
+                    <div class="team-info">
+                        <div class="team-name">Sofía</div>
+                        <div class="team-role">Fundadora & Chef Ejecutiva</div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <img src="{{ asset('img/equipo2.jpg') }}" alt="Foto de Lucía, Encargada de Atención al Cliente" loading="lazy"/>
+                     <div class="team-info">
+                        <div class="team-name">Lucía</div>
+                        <div class="team-role">Jefa de Experiencia del Cliente</div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <img src="{{ asset('img/equipo3.jpg') }}" alt="Foto de Carlos, Coordinador de Reparto" loading="lazy"/>
+                     <div class="team-info">
+                        <div class="team-name">Carlos</div>
+                        <div class="team-role">Maestro del Reparto Rápido</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="about-section about-cta">
+            <h2>¡Tu Próxima Experiencia Culinaria Te Espera!</h2>
+            <p>¿Listo para probar el sabor que nos hace únicos? Descubre por qué somos el kebab favorito en Marbella. <strong><span class="highlight">¡Visítanos hoy mismo!</span> Te esperamos con una sonrisa y el kebab más delicioso que probarás.</strong></p>
+        </div>
+        <div class="about-section about-map">
+            <h2>Encuéntranos Fácilmente</h2>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3207.793467928502!2d-4.8882746!3d36.513808299999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd7325e698525e9f%3A0x4d7f91b909d5f3a!2sAv.%20Arias%20de%20Velasco%2C%2058%2C%2029601%20Marbella%2C%20M%C3%A1laga!5e0!3m2!1ses!2ses!4v1678987654321!5m2!1ses!2ses"
+                width="800"
+                height="450"
+                style="border:0; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            <div class="address">
+                Av. Arias de Velasco, 58, 29601 Marbella, Málaga
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

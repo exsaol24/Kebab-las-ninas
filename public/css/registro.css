@@ -10,7 +10,7 @@ html, body {
 
 /* Fondo del body */
 body {
-    background-image: url('/img/fondoregisrer.png');
+    background-image: url('/img/fondoregistro.png');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;

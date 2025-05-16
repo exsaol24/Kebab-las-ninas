@@ -9,7 +9,12 @@ body {
     scroll-behavior: smooth;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-weight: 700;
     color: #333;
     margin-top: 0;
@@ -66,48 +71,325 @@ a:hover {
 /* Padding uniforme para secciones principales */
 section {
     padding: 60px 20px;
+    /* Mantenemos padding vertical y añadimos horizontal */
 }
 
-/* Sección Banner */
+/* Banner tipo hero pantalla completa */
 .banner {
     background-color: #007acc;
     color: #fff;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    padding: 80px 20px;
+    justify-content: center;
+    /* padding: 0;  <- Eliminamos padding aquí ya que lo añadimos en la regla 'section' */
+    padding: 80px 40px;
+    /* Añadimos padding específico para el banner */
+    margin-top: 0;
+    min-height: 110vh;
+    width: 100%;
+    /* Cambiado de 100vw para respetar el padding */
+    box-sizing: border-box;
+    /* Asegura que el padding no aumente el ancho total */
+    position: relative;
+    overflow: hidden;
 }
 
 .banner-content {
-    max-width: 500px;
-    margin-right: 40px;
+    max-width: 700px;
+    margin-right: 80px;
     flex-grow: 1;
+    z-index: 2;
 }
 
 .banner-content h2 {
-    font-size: 3.5rem;
-    margin-bottom: 20px;
+    font-size: 4.8rem;
+    margin-bottom: 28px;
     color: #fff;
     text-align: left;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+    line-height: 1.1;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
 }
 
 .banner-content p {
-    font-size: 1.3rem;
-    margin-bottom: 30px;
+    font-size: 1.9rem;
+    margin-bottom: 38px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+}
+
+.banner-image {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
 }
 
 .banner-image img {
-    max-width: 100%;
+    max-width: 650px;
+    /* Hacemos la imagen más grande (antes 520px) */
+    width: 90%;
+    /* Ajustamos el ancho relativo */
     height: auto;
-    max-height: 400px;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    max-height: 80vh;
+    /* Permitimos que sea un poco más alta */
+    border-radius: 18px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
     display: block;
     object-fit: cover;
+    background: none;
+    margin-top: 0;
+    margin-left: 32px;
 }
 
-/* Sección Sobre Nosotros */
+/* Efecto de degradado en el fondo del banner (lo mantenemos como un sutil overlay) */
+.banner::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(120deg, #007acc 70%, #ffd700 100%);
+    opacity: 0.18;
+    z-index: 1;
+}
+
+/* Carrusel de Ofertas estilo McDonald's */
+.ofertas-carousel-section {
+    background: linear-gradient(180deg, #fffbe7 80%, #f9f9f9 100%);
+    padding: 0 0 60px 0;
+    margin-top: 80px;
+    /* Aumentamos el margen superior para separar del banner */
+    position: relative;
+    z-index: 3;
+}
+
+.ofertas-carousel-container {
+    position: relative;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: -80px;
+    /* Mantenemos este margen negativo para que el contenedor 'suba' */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
+    border-radius: 32px;
+    background: #fff;
+    padding-top: 40px;
+}
+
+.ofertas-carousel {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    min-height: 420px;
+    border-radius: 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    background: #fff;
+}
+
+.oferta-slide {
+    min-width: 100%;
+    transition: opacity 0.7s, transform 0.7s;
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: row;
+    border-radius: 32px;
+    box-shadow: none;
+    padding: 0;
+    height: 420px;
+    overflow: hidden;
+}
+
+.oferta-slide.active {
+    opacity: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.oferta-slide img {
+    width: 60%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 32px 0 0 32px;
+    box-shadow: none;
+    margin: 0;
+    background: #fff;
+    display: block;
+}
+
+.oferta-info {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 50px 50px 38px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.96) 80%, rgba(255, 251, 231, 0.85) 100%);
+    /* Mantenemos un ligero degradado aquí si quieres */
+    border-radius: 0 32px 32px 0;
+    position: relative;
+}
+
+.oferta-info h3 {
+    font-size: 2.5rem;
+    color: #d32f2f;
+    margin-bottom: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.oferta-info p {
+    font-size: 1.35rem;
+    color: #333;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+.ofertas-carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #ffd700;
+    border: none;
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    font-size: 2.2rem;
+    color: #d32f2f;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    z-index: 10;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ofertas-carousel-btn:hover {
+    background: #d32f2f;
+    color: #fffbe7;
+    transform: scale(1.08);
+}
+
+.ofertas-carousel-btn.prev {
+    left: -27px;
+}
+
+.ofertas-carousel-btn.next {
+    right: -27px;
+}
+
+/* Indicadores tipo dots */
+.ofertas-carousel-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 18px;
+    gap: 10px;
+}
+
+.ofertas-carousel-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ffd700;
+    opacity: 0.5;
+    border: 2px solid #d32f2f;
+    cursor: pointer;
+    transition: opacity 0.2s, background 0.2s;
+}
+
+.ofertas-carousel-dot.active {
+    opacity: 1;
+    background: #d32f2f;
+    border-color: #ffd700;
+}
+
+/* Zona de ubicación/mapa mejorada y visual */
+.ubicacion-section {
+    background-color: #f0f4ff;
+    /* Cambiado a color sólido */
+    padding: 70px 20px 60px 20px;
+    /* Aseguramos padding horizontal */
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.ubicacion-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 50px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
+    padding: 40px 50px;
+    overflow: hidden;
+}
+
+.ubicacion-info {
+    flex: 1;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ubicacion-info h2 {
+    color: #007acc;
+    margin-bottom: 18px;
+    font-size: 2.3rem;
+    font-weight: 800;
+}
+
+.ubicacion-info p {
+    font-size: 1.25rem;
+    color: #444;
+    margin-bottom: 0;
+}
+
+.ubicacion-mapa {
+    flex: 1.2;
+    min-width: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.13);
+    background: #f0f4ff;
+    /* Fondo del contenedor del mapa */
+    margin-left: 10px;
+}
+
+.ubicacion-mapa iframe {
+    width: 100%;
+    height: 340px;
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+    min-width: 0;
+    min-height: 220px;
+}
+
+/* Sección Sobre Nosotros (se mantiene igual) */
 .about-us {
     background-color: #f0f0f0;
     text-align: center;
@@ -128,7 +410,7 @@ section {
     object-fit: cover;
 }
 
-/* Sección Testimonios */
+/* Sección Testimonios (se mantiene igual) */
 .testimonials {
     background-color: #fff;
     text-align: center;
@@ -172,7 +454,7 @@ section {
     margin-top: auto;
 }
 
-/* Sección Platos */
+/* Sección Platos (se mantiene igual) */
 .platos {
     background-color: #f9f9f9;
 }
@@ -248,7 +530,7 @@ section {
     margin-top: auto;
 }
 
-/* Footer */
+/* Footer (se mantiene igual) */
 .footer {
     background-color: #333;
     color: #f0f0f0;
@@ -284,89 +566,371 @@ section {
 }
 
 /* Responsividad */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
+    .banner {
+        padding: 60px 30px;
+        /* Ajustamos padding en pantallas medianas */
+    }
+
+    .banner-content {
+        margin-right: 30px;
+        /* Ajustamos margen */
+    }
+
+    .banner-image img {
+        max-width: 500px;
+        /* Ajustamos tamaño de imagen */
+        width: 80%;
+    }
+
+    .ofertas-carousel-container {
+        max-width: 98vw;
+    }
+
+    .ubicacion-container {
+        padding: 25px 10px;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 900px) {
+    .banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 50px 20px;
+        /* Ajustamos padding */
+        min-height: 80vh;
+    }
+
+    .banner-content {
+        margin: 0 0 40px 0;
+        /* Ajustamos margen inferior y centramos texto */
+        text-align: center;
+    }
+
+    .banner-content h2 {
+        text-align: center;
+        font-size: 2.8rem;
+    }
+
+    .banner-content p {
+        font-size: 1.2rem;
+    }
+
+    .banner-image img {
+        max-width: 90vw;
+        margin: 0 auto;
+        /* Centramos imagen */
+    }
+
+    .ofertas-carousel-section {
+        margin-top: 40px;
+        /* Ajustamos margen superior para pantallas más pequeñas */
+    }
+
+    .ofertas-carousel-container {
+        margin-top: -60px;
+        /* Ajustamos margen negativo */
+    }
+
+    .ofertas-carousel,
+    .oferta-slide,
+    .oferta-slide img {
+        min-height: 220px;
+        height: 220px;
+        border-radius: 18px;
+    }
+
+    .oferta-slide {
+        flex-direction: row;
+        /* Mantenemos fila si hay espacio, ajustaremos en móvil */
+        align-items: stretch;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .oferta-slide img {
+        width: 60%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 18px 0 0 18px;
+        margin-bottom: 0;
+        /* Eliminamos margen inferior */
+        margin-right: 10px;
+        /* Añadimos margen a la derecha */
+    }
+
+    .oferta-info {
+        width: 40%;
+        padding: 14px 10px 14px 10px;
+        border-radius: 0 18px 18px 0;
+    }
+
+    .ubicacion-container {
+        flex-direction: column;
+        padding: 18px 4px;
+        gap: 18px;
+    }
+
+    .ubicacion-mapa iframe {
+        height: 220px;
+    }
+
+    .ubicacion-mapa {
+        margin-left: 0;
+        /* Eliminamos margen */
+    }
+}
+
+@media (max-width: 600px) {
     h2 {
         font-size: 2rem;
         margin-bottom: 30px;
     }
+
     .banner {
-        flex-direction: column;
-        text-align: center;
-        padding: 60px 20px;
+        padding: 40px 15px;
+        /* Ajustamos padding */
+        min-height: 70vh;
     }
-    .banner-content {
-        max-width: 100%;
-        margin-right: 0;
-        margin-bottom: 30px;
-    }
+
     .banner-content h2 {
-        font-size: 2.8rem;
-        text-align: center;
+        font-size: 2.2rem;
     }
+
     .banner-content p {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
-    .banner-image img {
-        max-width: 90%;
-        margin: 0 auto;
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 1rem;
     }
+
     section {
         padding: 40px 15px;
+        /* Ajustamos padding general */
     }
+
+    .ofertas-carousel-section {
+        margin-top: 30px;
+        /* Ajustamos margen superior */
+    }
+
+    .ofertas-carousel-container {
+        margin-top: -40px;
+        /* Ajustamos margen negativo */
+    }
+
+    .ofertas-carousel,
+    .oferta-slide,
+    .oferta-slide img {
+        min-height: 180px;
+        /* Ajustamos altura */
+        height: 180px;
+        border-radius: 10px;
+    }
+
+    .oferta-slide {
+        flex-direction: column;
+        /* Apilamos imagen e info en móvil */
+        align-items: center;
+        gap: 10px;
+        padding: 15px 10px;
+    }
+
+    .oferta-slide img {
+        width: 90%;
+        /* Hacemos la imagen más ancha */
+        max-width: 280px;
+        /* Limitamos el ancho máximo */
+        height: 110px;
+        object-fit: cover;
+        border-radius: 8px;
+        /* Ajustamos bordes */
+        margin-right: 0;
+        /* Eliminamos margen */
+        margin-bottom: 10px;
+        /* Añadimos margen inferior */
+    }
+
+    .oferta-info {
+        width: 100%;
+        /* Ocupa todo el ancho disponible */
+        padding: 10px;
+        /* Ajustamos padding */
+        text-align: center;
+        /* Centramos texto */
+        align-items: center;
+        /* Centramos contenido */
+        border-radius: 8px;
+        /* Ajustamos bordes */
+    }
+
+    .oferta-info h3 {
+        font-size: 1.8rem;
+        /* Ajustamos tamaño de fuente */
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .oferta-info p {
+        font-size: 1rem;
+        /* Ajustamos tamaño de fuente */
+        text-align: center;
+    }
+
     .testimonial-card,
     .plato-card {
-        padding: 20px;
+        padding: 15px;
+        /* Ajustamos padding */
     }
+
     .testimonial-card span {
         text-align: center;
     }
+
     .platos-grid,
     .testimonials-grid {
-        gap: 20px;
+        gap: 15px;
         max-width: 100%;
     }
+
     .plato-card .plato-imagen {
-        height: 180px;
+        height: 150px;
+        /* Ajustamos altura */
     }
+
     .footer {
         padding: 30px 15px;
     }
+
     .footer p {
         margin-bottom: 8px;
     }
+
     .footer .social-links img {
         height: 30px;
         margin: 0 8px;
+    }
+
+    .ubicacion-section {
+        padding: 30px 15px;
+        /* Ajustamos padding */
+    }
+
+    .ubicacion-container {
+        padding: 15px;
+        /* Ajustamos padding */
+        gap: 15px;
+    }
+
+    .ubicacion-mapa iframe {
+        height: 200px;
+        /* Ajustamos altura */
     }
 }
 
 @media (max-width: 480px) {
     h2 {
-        font-size: 1.8rem;
-        margin-bottom: 25px;
+        font-size: 1.6rem;
+        margin-bottom: 20px;
     }
+
+    .banner {
+        padding: 30px 10px;
+        /* Ajustamos padding */
+        min-height: 60vh;
+    }
+
     .banner-content h2 {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
+        /* Ajustamos tamaño de fuente */
     }
+
+    .banner-content p {
+        font-size: 0.9rem;
+    }
+
     .btn {
-        padding: 10px 20px;
-        font-size: 1rem;
+        padding: 8px 15px;
+        font-size: 0.9rem;
     }
+
     section {
         padding: 30px 10px;
+        /* Ajustamos padding general */
     }
-    .platos-grid,
-    .testimonials-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
+
+    .ofertas-carousel-section {
+        margin-top: 20px;
+        /* Ajustamos margen superior */
     }
+
+    .ofertas-carousel-container {
+        margin-top: -30px;
+        /* Ajustamos margen negativo */
+    }
+
+    .ofertas-carousel,
+    .oferta-slide,
+    .oferta-slide img {
+        min-height: 140px;
+        /* Ajustamos altura */
+        height: 140px;
+        border-radius: 8px;
+    }
+
+    .oferta-slide img {
+        width: 95%;
+        max-width: 240px;
+        height: 90px;
+    }
+
+    .oferta-info h3 {
+        font-size: 1.5rem;
+        /* Ajustamos tamaño de fuente */
+        margin-bottom: 8px;
+    }
+
+    .oferta-info p {
+        font-size: 0.9rem;
+    }
+
     .plato-card .plato-imagen {
-        height: 160px;
+        height: 120px;
+        /* Ajustamos altura */
     }
-    .testimonial-card span {
-        text-align: center;
+
+    .plato-card h3 {
+        font-size: 1.3rem;
     }
-    .footer p {
-        margin-bottom: 6px;
+
+    .plato-card .plato-descripcion {
+        font-size: 0.85rem;
+    }
+
+    .plato-card .plato-precio {
+        font-size: 1.1rem;
+    }
+
+    .footer {
+        padding: 25px 10px;
+    }
+
+    .ubicacion-section {
+        padding: 20px 10px;
+        /* Ajustamos padding */
+    }
+
+    .ubicacion-container {
+        padding: 10px;
+        /* Ajustamos padding */
+        gap: 10px;
+    }
+
+    .ubicacion-mapa iframe {
+        height: 180px;
+        /* Ajustamos altura */
     }
 }

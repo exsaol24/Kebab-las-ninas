@@ -23,6 +23,8 @@
             </div>
         </button>
 
+        <a href="{{ path('app_sobrenosotros') }}" class="navbar-link">Sobre Nosotros</a>
+
         {% set carrito_items = app.session.get('carrito', []) %}
         {% set total_productos_carrito = 0 %}
         {% for id, cantidad in carrito_items %}
@@ -48,4 +50,4 @@
     <div class="menu-overlay" id="menu-overlay" onclick="toggleMenu()"></div>
 </nav>
 <script src="{{ asset('js/navbar.js') }}"></script>
-{% endif %}```
+{% endif %}
