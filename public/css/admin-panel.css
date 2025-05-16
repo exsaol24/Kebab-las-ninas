@@ -1,0 +1,164 @@
+:root {
+    --primary-color: #fbbf24;
+    --secondary-color: #f59e42;
+    --background: #23272f;
+    --card-bg: #2d323c;
+    --text: #f3f3f3;
+    --danger: #e53e3e;
+    --success: #38a169;
+    --border: #444851;
+    --header-bg: #1a1d23;
+}
+
+body.admin-panel {
+    background: var(--background);
+    font-family: 'Poppins', Arial, sans-serif;
+    color: var(--text);
+}
+
+.admin-panel-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    background: var(--card-bg);
+    border-radius: 14px;
+    box-shadow: 0 6px 32px rgba(0,0,0,0.22);
+    padding: 32px 36px 36px 36px;
+}
+
+.admin-panel-container h1 {
+    color: var(--primary-color);
+    font-size: 2.1em;
+    margin-bottom: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.admin-panel-container p {
+    color: #000000;
+}
+
+.admin-panel-container table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    margin-bottom: 2em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.admin-panel-container th, .admin-panel-container td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-panel-container th {
+    background: var(--header-bg);
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.05em;
+    letter-spacing: 0.5px;
+    border-top: 1px solid var(--border);
+}
+
+.admin-panel-container tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-panel-container tr {
+    transition: background 0.2s;
+}
+
+.admin-panel-container tr:hover {
+    background: #23272f;
+}
+
+.admin-panel-container .btn {
+    padding: 6px 18px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    margin-right: 6px;
+    font-size: 1em;
+    outline: none;
+}
+
+.admin-panel-container .btn-edit {
+    background: var(--primary-color);
+    color: #23272f;
+}
+
+.admin-panel-container .btn-edit:hover {
+    background: var(--secondary-color);
+    color: #fff;
+}
+
+.admin-panel-container .btn-delete {
+    background: var(--danger);
+    color: #fff;
+}
+
+.admin-panel-container .btn-delete:hover {
+    background: #a82323;
+}
+
+.admin-panel-container .btn-cancel {
+    background: #444851;
+    color: #f3f3f3;
+}
+
+.admin-panel-container .btn-cancel:hover {
+    background: #23272f;
+}
+
+.admin-panel-container form {
+    display: inline;
+}
+
+.admin-panel-container .admin-label {
+    font-weight: 700;
+    color: var(--success);
+}
+
+.admin-panel-container .no-admin-label {
+    color: #bdbdbd;
+    font-weight: 500;
+}
+
+.admin-panel-container input[type="text"],
+.admin-panel-container input[type="email"],
+.admin-panel-container select {
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    font-size: 1em;
+    background: #23272f;
+    color: var(--text);
+}
+
+.admin-panel-container label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-top: 10px;
+    display: block;
+}
+
+.admin-panel-container input[type="text"]:focus,
+.admin-panel-container input[type="email"]:focus,
+.admin-panel-container select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    background: #23272f;
+}
+
+@media (max-width: 700px) {
+    .admin-panel-container {
+        padding: 12px 4px;
+    }
+    .admin-panel-container table, .admin-panel-container th, .admin-panel-container td {
+        font-size: 0.95em;
+    }
+}

@@ -39,6 +39,9 @@
         </a>
 
         {% if app.session is not null and app.session.get('user_name') is not null %}
+            {% if app.session.get('es_admin') is same as(true) %}
+                <a href="{{ path('admin_panel') }}" class="navbar-link">Panel de administrador</a>
+            {% endif %}
             <span class="welcome-message">Hola, {{ app.session.get('user_name') }}!</span>
             <a href="{{ path('app_logout') }}" class="navbar-link">Cerrar sesión</a>
         {% else %}

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Usuario{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin-panel.css') }}">
+{% endblock %}
+
+{% block body %}
+<body class="admin-panel">
+    <div class="admin-panel-container">
+        <h1>Editar Usuario</h1>
+        <form method="post">
+            <label>Nombre:</label>
+            <input type="text" name="nombre" value="{{ usuario.nombre }}" required>
+            <label>Email:</label>
+            <input type="email" name="email" value="{{ usuario.email }}" required>
+            <label>Dirección:</label>
+            <input type="text" name="direccion" value="{{ usuario.direccion }}" required>
+            <label>Teléfono:</label>
+            <input type="text" name="telefono" value="{{ usuario.telefono }}" required>
+            <label>Administrador:</label>
+            <select name="administrador">
+                <option value="0" {% if not usuario.administrador %}selected{% endif %}>No</option>
+                <option value="1" {% if usuario.administrador %}selected{% endif %}>Sí</option>
+            </select>
+            <br>
+            <button type="submit" class="btn btn-edit">Guardar</button>
+            <a href="{{ path('admin_panel') }}" class="btn btn-cancel">Cancelar</a>
+        </form>
+    </div>
+</body>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel de Administrador{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin-panel.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/administrador.css') }}">
+{% endblock %}
+
+{% block body %}
+<body class="admin-panel">
+
+    <div class="admin-panel-bg">
+        <h1 class="admin-panel-title">Panel de Administrador</h1>
+        <p class="admin-panel-desc">Aquí puedes gestionar los usuarios.</p>
+
+        <div class="admin-table-responsive" style="overflow-x:auto;">
+            <table class="admin-table" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Administrador</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.id }}</td>
+                        <td>{{ usuario.nombre }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>{{ usuario.direccion }}</td>
+                        <td>{{ usuario.telefono }}</td>
+                        <td>
+                            {% if usuario.administrador %}
+                                <span class="admin-label">Sí</span>
+                            {% else %}
+                                <span class="no-admin-label">No</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('admin_usuario_editar', {'id': usuario.id}) }}" class="btn-edit">Editar</a>
+                            <form action="{{ path('admin_usuario_eliminar', {'id': usuario.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
+                                <button type="submit" class="btn-delete">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="7" style="text-align:center;">No hay usuarios.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </body>
+{% endblock %}

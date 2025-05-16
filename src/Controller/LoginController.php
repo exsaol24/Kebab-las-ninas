@@ -32,9 +32,10 @@ final class LoginController extends AbstractController
 
             // Verificar si el usuario existe, está verificado y la contraseña coincide
             if ($usuario && $usuario->getContrasena() === $password && $usuario->isVerificado() == 1) {
-                // Guardar el nombre del usuario en la sesión
                 $session = $request->getSession();
                 $session->set('user_name', $usuario->getNombre());
+                // Guardar correctamente el valor de admin
+                $session->set('es_admin', intval($usuario->getAdministrador()) === 1);
 
                 return $this->redirectToRoute('app_inicio');
             }
@@ -50,8 +51,9 @@ final class LoginController extends AbstractController
     #[Route('/logout', name: 'app_logout', methods: ['GET'])]
     public function logout(Request $request): Response
     {
-        // Obtener la sesión y limpiarla
         $session = $request->getSession();
+        $session->remove('user_name');
+        $session->remove('es_admin');
         $session->clear();
 
         return $this->redirectToRoute('app_login');
