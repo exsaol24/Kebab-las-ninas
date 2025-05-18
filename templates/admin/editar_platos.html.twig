@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Plato{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin-panel.css') }}">
+{% endblock %}
+
+{% block body %}
+<body class="admin-panel">
+<div class="admin-edit-bg">
+    <h1 class="admin-panel-title">Editar Plato</h1>
+    <div class="admin-edit-form">
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            {{ form_row(form.categoria) }}
+            {{ form_row(form.nombre) }}
+            {{ form_row(form.descripcion) }}
+            {{ form_row(form.precio) }}
+            {{ form_row(form.imagen) }}
+            {{ form_row(form.ingredientes) }}
+            {{ form_row(form.alergenos) }}
+            {{ form_row(form.disponible) }}
+            {{ form_row(form.creadoen) }}
+            <button class="btn btn-primary" type="submit">Guardar cambios</button>
+        {{ form_end(form) }}
+        <a href="{{ path('admin_platos') }}" class="btn btn-secondary" style="margin-top: 15px;">Volver al listado</a>
+    </div>
+</div>
+</body>
+{% endblock %}

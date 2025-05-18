@@ -6,6 +6,34 @@
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/admin-panel.css') }}">
     <link rel="stylesheet" href="{{ asset('css/administrador.css') }}">
+    <style>
+        .admin-tabs { margin-bottom: 20px; }
+        .admin-tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #eee;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .admin-tab-btn.active { background: #ccc; }
+        .admin-tab-content { display: none; }
+        .admin-tab-content.active { display: block; }
+        .admin-table-responsive {
+            width: 100%;
+        }
+        .admin-table th, .admin-table td {
+            font-size: 1em;
+            vertical-align: middle;
+        }
+        .admin-table img {
+            max-width: 60px;
+            max-height: 60px;
+        }
+        .admin-table {
+            table-layout: auto;
+            width: 100%;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
@@ -13,49 +41,119 @@
 
     <div class="admin-panel-bg">
         <h1 class="admin-panel-title">Panel de Administrador</h1>
-        <p class="admin-panel-desc">Aquí puedes gestionar los usuarios.</p>
+        <div class="admin-tabs">
+            <button class="admin-tab-btn active" onclick="showTab('usuarios')">Usuarios</button>
+            <button class="admin-tab-btn" onclick="showTab('platos')">Platos</button>
+        </div>
 
-        <div class="admin-table-responsive" style="overflow-x:auto;">
-            <table class="admin-table" style="width:100%;">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Dirección</th>
-                        <th>Teléfono</th>
-                        <th>Administrador</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for usuario in usuarios %}
-                    <tr>
-                        <td>{{ usuario.id }}</td>
-                        <td>{{ usuario.nombre }}</td>
-                        <td>{{ usuario.email }}</td>
-                        <td>{{ usuario.direccion }}</td>
-                        <td>{{ usuario.telefono }}</td>
-                        <td>
-                            {% if usuario.administrador %}
-                                <span class="admin-label">Sí</span>
-                            {% else %}
-                                <span class="no-admin-label">No</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{{ path('admin_usuario_editar', {'id': usuario.id}) }}" class="btn-edit">Editar</a>
-                            <form action="{{ path('admin_usuario_eliminar', {'id': usuario.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
-                                <button type="submit" class="btn-delete">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr><td colspan="7" style="text-align:center;">No hay usuarios.</td></tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <div id="tab-usuarios" class="admin-tab-content active">
+            <p class="admin-panel-desc">Aquí puedes gestionar los usuarios.</p>
+            <div class="admin-table-responsive" style="overflow-x:auto;">
+                <table class="admin-table" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            <th>Administrador</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{ usuario.id }}</td>
+                            <td>{{ usuario.nombre }}</td>
+                            <td>{{ usuario.email }}</td>
+                            <td>{{ usuario.direccion }}</td>
+                            <td>{{ usuario.telefono }}</td>
+                            <td>
+                                {% if usuario.administrador %}
+                                    <span class="admin-label">Sí</span>
+                                {% else %}
+                                    <span class="no-admin-label">No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_usuario_editar', {'id': usuario.id}) }}" class="btn-edit">Editar</a>
+                                <form action="{{ path('admin_usuario_eliminar', {'id': usuario.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
+                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="7" style="text-align:center;">No hay usuarios.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-platos" class="admin-tab-content">
+            <p class="admin-panel-desc">Aquí puedes gestionar los platos.</p>
+            <a href="{{ path('admin_plato_nuevo') }}" class="btn-add" style="margin-bottom:10px;display:inline-block;">Añadir Plato</a>
+            <div class="admin-table-responsive">
+                <table class="admin-table" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Imagen</th>
+                            <th>Ingredientes</th>
+                            <th>Alergenos</th>
+                            <th>Disponible</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for plato in platos %}
+                        <tr>
+                            <td>
+                                {{ plato.categoria ? plato.categoria.nombre : '' }}
+                            </td>
+                            <td>{{ plato.nombre }}</td>
+                            <td>{{ plato.descripcion }}</td>
+                            <td>{{ plato.precio }}</td>
+                            <td>
+                                {% if plato.imagen %}
+                                    <img src="{{ asset('uploads/platos/' ~ plato.imagen) }}" alt="Imagen" style="max-width:60px;max-height:60px;">
+                                {% endif %}
+                            </td>
+                            <td>{{ plato.ingredientes }}</td>
+                            <td>{{ plato.alergenos }}</td>
+                            <td>{{ plato.disponible ? 'Sí' : 'No' }}</td>
+                            <td style="min-width:120px;">
+                                <a href="{{ path('admin_plato_editar', {'id': plato.id}) }}" class="btn-edit">Editar</a>
+                                <form action="{{ path('admin_plato_eliminar', {'id': plato.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este plato?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ plato.id) }}">
+                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="9" style="text-align:center;">No hay platos.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+    <script>
+        function showTab(tab) {
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.admin-tab-content').forEach(tabContent => tabContent.classList.remove('active'));
+            if(tab === 'usuarios') {
+                document.querySelector('.admin-tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('tab-usuarios').classList.add('active');
+            } else {
+                document.querySelector('.admin-tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('tab-platos').classList.add('active');
+            }
+        }
+    </script>
     </body>
 {% endblock %}

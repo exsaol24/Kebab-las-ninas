@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin-panel.css') }}">
+    <style>
+        .admin-panel-container {
+            background: #23272f !important;
+            color: #f3f3f3;
+        }
+        .admin-panel-container label,
+        .admin-panel-container input,
+        .admin-panel-container textarea,
+        .admin-panel-container select {
+            color: #f3f3f3;
+            background: #23272f;
+        }
+        .admin-panel-container input,
+        .admin-panel-container textarea,
+        .admin-panel-container select {
+            border: 1px solid #444851;
+        }
+        .admin-panel-title {
+            color: #fbbf24;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<body class="admin-panel">
+<div class="admin-panel-container">
+    <h1 class="admin-panel-title">{{ editar ? 'Editar Plato' : 'Añadir Plato' }}</h1>
+    <div class="admin-edit-form">
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            {{ form_widget(form) }}
+            <button class="btn btn-edit">{{ editar ? 'Guardar cambios' : 'Crear' }}</button>
+        {{ form_end(form) }}
+        <a href="{{ path('admin_platos') }}" class="btn btn-cancel" style="margin-top:15px;">Volver al listado</a>
+    </div>
+</div>
+</body>
+{% endblock %}

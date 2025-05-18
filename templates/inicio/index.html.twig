@@ -101,12 +101,11 @@
         <div class="platos-grid">
             {% for plato in platos %}
                 <div class="plato-card">
-                    <img src="{{ asset(plato.imagen) }}" alt="{{ plato.nombre }}" class="plato-imagen">
+                    <img src="{{ asset('uploads/platos/' ~ plato.imagen) }}" alt="{{ plato.nombre }}" class="plato-imagen">
                     <div class="plato-info">
                         <h3 class="plato-nombre">{{ plato.nombre }}</h3>
                         <p class="plato-descripcion">{{ plato.descripcion }}</p>
                         <p class="plato-precio">{{ plato.precio | number_format(2, '.', ',') }} €</p>
-
                         {% if app.session.get('user_name') is not null %}
                             <a href="{{ path('app_carrito_agregar', {'id': plato.id}) }}"
                                class="btn btn-add-to-cart js-add-to-cart"
@@ -119,7 +118,6 @@
                                 Añadir al carrito
                             </span>
                         {% endif %}
-
                     </div>
                 </div>
             {% else %}
