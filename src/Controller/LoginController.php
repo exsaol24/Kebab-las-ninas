@@ -34,8 +34,9 @@ final class LoginController extends AbstractController
             if ($usuario && $usuario->getContrasena() === $password && $usuario->isVerificado() == 1) {
                 $session = $request->getSession();
                 $session->set('user_name', $usuario->getNombre());
-                // Guardar correctamente el valor de admin
                 $session->set('es_admin', intval($usuario->getAdministrador()) === 1);
+                // Guarda el ID del usuario en la sesión para el carrito
+                $session->set('user_id', $usuario->getId());
 
                 return $this->redirectToRoute('app_inicio');
             }
@@ -54,6 +55,7 @@ final class LoginController extends AbstractController
         $session = $request->getSession();
         $session->remove('user_name');
         $session->remove('es_admin');
+        $session->remove('user_id'); // Limpia también el id de usuario
         $session->clear();
 
         return $this->redirectToRoute('app_login');

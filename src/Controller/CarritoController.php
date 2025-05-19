@@ -2,35 +2,41 @@
 
 namespace App\Controller;
 
+use App\Entity\Pedidos;
+use App\Entity\Detallespedidos;
+use App\Entity\Platos;
+use App\Entity\Historialventas;
 use App\Repository\PlatosRepository;
+use App\Repository\PedidosRepository;
+use App\Repository\EstadospedidosRepository;
+use App\Repository\UsuariosRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/carrito', name: 'app_carrito_')]
 class CarritoController extends AbstractController
 {
-    #[Route('/', name: 'index')]
-    public function index(SessionInterface $session, PlatosRepository $platosRepository): Response
+    #[Route('/carrito', name: 'app_carrito')]
+    public function index(Request $request, PlatosRepository $platosRepository): Response
     {
-        $carrito = $session->get('carrito', []);
+        $carrito = $request->getSession()->get('carrito', []);
         $carritoData = [];
+        $total = 0;
 
-        foreach ($carrito as $id => $cantidad) {
+        foreach ($carrito as $id => $item) {
             $plato = $platosRepository->find($id);
             if ($plato) {
+                $cantidad = is_array($item['cantidad']) ? 1 : (int)$item['cantidad'];
+                $personalizacion = $item['personalizacion'] ?? [];
                 $carritoData[] = [
                     'plato' => $plato,
                     'cantidad' => $cantidad,
+                    'personalizacion' => $personalizacion,
                 ];
+                $total += $plato->getPrecio() * $cantidad;
             }
-        }
-
-        $total = 0;
-        foreach ($carritoData as $item) {
-            $total += $item['plato']->getPrecio() * $item['cantidad'];
         }
 
         return $this->render('carrito/index.html.twig', [
@@ -39,102 +45,155 @@ class CarritoController extends AbstractController
         ]);
     }
 
-    #[Route('/agregar/{id}', name: 'agregar')]
-    public function agregar(int $id, SessionInterface $session, PlatosRepository $platosRepository, Request $request): Response
+    #[Route('/carrito/agregar/{id}', name: 'app_carrito_agregar', methods: ['GET', 'POST'])]
+    public function agregar($id, Request $request, PlatosRepository $platosRepository): Response
     {
-        if (null === $session->get('user_name')) {
-            if ($request->isXmlHttpRequest()) {
-                return $this->json([
-                    'success' => false,
-                    'message' => 'Debes iniciar sesión para añadir productos al carrito.'
-                ], 401);
-            }
-            $this->addFlash('warning', 'Debes iniciar sesión para añadir productos al carrito.');
-            return $this->redirectToRoute('app_login');
-        }
-
-        $plato = $platosRepository->find($id);
-        if (!$plato) {
-            if ($request->isXmlHttpRequest()) {
-                return $this->json([
-                    'success' => false,
-                    'message' => 'El plato solicitado no existe.'
-                ], 404);
-            }
-            $this->addFlash('error', 'El plato solicitado no existe.');
-            return $this->redirectToRoute('app_inicio');
-        }
-
+        $session = $request->getSession();
         $carrito = $session->get('carrito', []);
-        if (!empty($carrito[$id])) {
-            $carrito[$id]++;
+        if (!isset($carrito[$id])) {
+            $carrito[$id] = [
+                'cantidad' => 1,
+                'personalizacion' => [],
+            ];
         } else {
-            $carrito[$id] = 1;
+            $carrito[$id]['cantidad']++;
         }
         $session->set('carrito', $carrito);
-
-        // Calcular total productos en carrito
-        $total_productos_carrito = 0;
-        foreach ($carrito as $cantidad) {
-            $total_productos_carrito += $cantidad;
-        }
 
         if ($request->isXmlHttpRequest()) {
             return $this->json([
                 'success' => true,
-                'total_productos_carrito' => $total_productos_carrito
+                'total_productos_carrito' => array_sum(array_column($carrito, 'cantidad')),
             ]);
         }
 
-        $this->addFlash('success', 'Plato añadido al carrito.');
-        return $this->redirectToRoute('app_inicio');
+        $this->addFlash('success', 'Producto añadido al carrito.');
+        return $this->redirectToRoute('app_carrito');
     }
 
-    #[Route('/eliminar/{id}', name: 'eliminar')]
-    public function eliminar(int $id, SessionInterface $session): Response
+    #[Route('/carrito/actualizar/{id}', name: 'app_carrito_actualizar', methods: ['POST'])]
+    public function actualizar($id, Request $request): Response
     {
+        $cantidad = max(1, (int)$request->request->get('cantidad', 1));
+        $session = $request->getSession();
         $carrito = $session->get('carrito', []);
-
-        if (!empty($carrito[$id])) {
-            unset($carrito[$id]);
-            $session->set('carrito', $carrito);
-            $this->addFlash('success', 'Plato eliminado del carrito.');
-        } else {
-            $this->addFlash('warning', 'El plato no se encontraba en el carrito.');
-        }
-
-        return $this->redirectToRoute('app_carrito_index');
-    }
-
-    #[Route('/actualizar/{id}', name: 'actualizar', methods: ['POST'])]
-    public function actualizar(int $id, Request $request, SessionInterface $session, PlatosRepository $platosRepository): Response
-    {
-        $carrito = $session->get('carrito', []);
-        $nuevaCantidad = $request->request->get('cantidad');
-
-        $nuevaCantidad = (int) $nuevaCantidad;
-
-        if ($nuevaCantidad > 0 && $platosRepository->find($id)) {
-            $carrito[$id] = $nuevaCantidad;
+        if (isset($carrito[$id])) {
+            $carrito[$id]['cantidad'] = $cantidad;
             $session->set('carrito', $carrito);
             $this->addFlash('success', 'Cantidad actualizada.');
-        } elseif ($nuevaCantidad === 0 && !empty($carrito[$id])) {
-            unset($carrito[$id]);
-            $session->set('carrito', $carrito);
-            $this->addFlash('success', 'Plato eliminado.');
-        } else {
-            $this->addFlash('error', 'Cantidad no válida o plato no encontrado.');
         }
-
-        return $this->redirectToRoute('app_carrito_index');
+        return $this->redirectToRoute('app_carrito');
     }
 
-    #[Route('/vaciar', name: 'vaciar')]
-    public function vaciar(SessionInterface $session): Response
+    #[Route('/carrito/eliminar/{id}', name: 'app_carrito_eliminar')]
+    public function eliminar($id, Request $request): Response
     {
-        $session->remove('carrito');
-        $this->addFlash('success', 'El carrito ha sido vaciado.');
+        $session = $request->getSession();
+        $carrito = $session->get('carrito', []);
+        if (isset($carrito[$id])) {
+            unset($carrito[$id]);
+            $session->set('carrito', $carrito);
+            $this->addFlash('success', 'Producto eliminado del carrito.');
+        }
+        return $this->redirectToRoute('app_carrito');
+    }
 
-        return $this->redirectToRoute('app_carrito_index');
+    #[Route('/carrito/vaciar', name: 'app_carrito_vaciar')]
+    public function vaciar(Request $request): Response
+    {
+        $request->getSession()->remove('carrito');
+        $this->addFlash('success', 'Carrito vaciado.');
+        return $this->redirectToRoute('app_carrito');
+    }
+
+    #[Route('/carrito/finalizar', name: 'app_carrito_finalizar', methods: ['POST'])]
+    public function finalizar(
+        Request $request,
+        PlatosRepository $platosRepository,
+        EntityManagerInterface $em,
+        EstadospedidosRepository $estadospedidosRepository,
+        UsuariosRepository $usuariosRepository
+    ): Response {
+        $session = $request->getSession();
+        $carrito = $session->get('carrito', []);
+        $personalizaciones = $request->request->all('personalizacion');
+        if (empty($carrito)) {
+            $this->addFlash('error', 'El carrito está vacío.');
+            return $this->redirectToRoute('app_carrito');
+        }
+
+        // Obtener usuario desde la sesión
+        $usuarioId = $session->get('user_id');
+        if (!$usuarioId) {
+            $this->addFlash('error', 'Debes iniciar sesión para finalizar el pedido.');
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        $usuario = $usuariosRepository->find($usuarioId);
+        if (!$usuario || !$usuario->getDireccion()) {
+            $this->addFlash('error', 'Debes tener una dirección registrada para finalizar el pedido.');
+            return $this->redirectToRoute('app_carrito');
+        }
+
+        // Crear pedido
+        $pedido = new Pedidos();
+        $pedido->setUsuarios($usuario);
+        // Obtener el estado del pedido
+        $estado = $estadospedidosRepository->findOneBy(['nombre' => 'Pendiente']);
+        if (!$estado) {
+            // Si no existe, busca el primero disponible
+            $estado = $estadospedidosRepository->findOneBy([]);
+        }
+        if (!$estado) {
+            $this->addFlash('error', 'No se ha encontrado un estado válido para el pedido. Contacta con el administrador.');
+            return $this->redirectToRoute('app_carrito');
+        }
+        $pedido->setEstado($estado);
+        $pedido->setDireccionentrega($usuario->getDireccion());
+        $pedido->setMetodopago('Efectivo');
+        $pedido->setFechapedido(new \DateTime());
+
+        $total = 0;
+        foreach ($carrito as $id => $item) {
+            $plato = $platosRepository->find($id);
+            if ($plato) {
+                $cantidad = isset($item['cantidad']) && !is_array($item['cantidad']) ? (int)$item['cantidad'] : 1;
+                $total += $plato->getPrecio() * $cantidad;
+            }
+        }
+        $pedido->setTotal($total);
+
+        $em->persist($pedido);
+
+        // Guardar detalles del pedido
+        foreach ($carrito as $id => $item) {
+            $plato = $platosRepository->find($id);
+            if ($plato) {
+                $detalle = new Detallespedidos();
+                $detalle->setPedido($pedido);
+                $detalle->setPlatos($plato);
+                $cantidad = isset($item['cantidad']) && !is_array($item['cantidad']) ? (int)$item['cantidad'] : 1;
+                $detalle->setCantidad($cantidad);
+                $detalle->setPreciounitario($plato->getPrecio());
+                $pers = isset($personalizaciones[$id]) ? $personalizaciones[$id] : [];
+                $detalle->setPersonalizacion(json_encode($pers));
+                $em->persist($detalle);
+            }
+        }
+
+        $em->flush();
+        $session->remove('carrito');
+
+        // Registrar en historialventas
+        $historial = new Historialventas();
+        $historial->setPedido($pedido);
+        $historial->setFechaventa(new \DateTime());
+        $historial->setTotal($pedido->getTotal());
+        $em->persist($historial);
+        $em->flush();
+
+        $this->addFlash('success', 'Pedido realizado correctamente.');
+        return $this->redirectToRoute('app_inicio');
     }
 }

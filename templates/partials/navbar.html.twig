@@ -27,11 +27,19 @@
 
         {% set carrito_items = app.session.get('carrito', []) %}
         {% set total_productos_carrito = 0 %}
-        {% for id, cantidad in carrito_items %}
+        {% for id, item in carrito_items %}
+            {% set cantidad = 1 %}
+            {% if item.cantidad is defined %}
+                {% if item.cantidad is iterable %}
+                    {% set cantidad = 1 %}
+                {% else %}
+                    {% set cantidad = item.cantidad|default(1) + 0 %}
+                {% endif %}
+            {% endif %}
             {% set total_productos_carrito = total_productos_carrito + cantidad %}
         {% endfor %}
 
-        <a href="{{ path('app_carrito_index') }}" class="navbar-link cart-icon-link">
+        <a href="{{ path('app_carrito') }}" class="navbar-link cart-icon-link">
             <img src="{{ asset('img/cart-icon.png') }}" alt="Carrito" class="cart-icon">
             {% if total_productos_carrito > 0 %}
                 <span class="cart-count">{{ total_productos_carrito }}</span>

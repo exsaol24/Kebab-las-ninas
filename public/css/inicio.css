@@ -76,7 +76,7 @@ section {
 
 /* Banner tipo hero pantalla completa */
 .banner {
-    background-color: #007acc;
+    background-image: url('../img/fondo.png');
     color: #fff;
     display: flex;
     flex-wrap: wrap;

@@ -28,12 +28,14 @@
         {% endfor %}
 
         {% if carritoData is not empty %}
+            <form action="{{ path('app_carrito_finalizar') }}" method="post">
             <table class="cart-table">
                 <thead>
                     <tr>
                         <th>Plato</th>
                         <th>Precio Unitario</th>
                         <th>Cantidad</th>
+                        <th>Personalización</th>
                         <th>Subtotal</th>
                         <th>Acciones</th>
                     </tr>
@@ -49,6 +51,38 @@
                                     <button type="submit" class="update-btn">Actualizar</button>
                                 </form>
                             </td>
+                            <td data-label="Personalización">
+                                {% set categoria = item.plato.categoria.nombre|lower %}
+                                {% if categoria == 'entrantes' %}
+                                    <label>
+                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][salsa_blanca]" value="1"
+                                            {% if item.personalizacion and item.personalizacion.salsa_blanca %}checked{% endif %}>
+                                        Salsa blanca
+                                        {% if item.personalizacion and item.personalizacion.salsa_blanca %}
+                                            ✔
+                                        {% endif %}
+                                    </label>
+                                {% elseif categoria == 'kebabs' %}
+                                    <label>
+                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][cebolla]" value="1"
+                                            {% if item.personalizacion and item.personalizacion.cebolla %}checked{% endif %}>
+                                        Cebolla
+                                        {% if item.personalizacion and item.personalizacion.cebolla %}
+                                            ✔
+                                        {% endif %}
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][salsa_blanca]" value="1"
+                                            {% if item.personalizacion and item.personalizacion.salsa_blanca %}checked{% endif %}>
+                                        Salsa blanca
+                                        {% if item.personalizacion and item.personalizacion.salsa_blanca %}
+                                            ✔
+                                        {% endif %}
+                                    </label>
+                                {% else %}
+                                    <span>No disponible</span>
+                                {% endif %}
+                            </td>
                             <td data-label="Subtotal">{{ (item.plato.precio * item.cantidad) | number_format(2, '.', ',') }} €</td>
                             <td data-label="Acciones">
                                 <a href="{{ path('app_carrito_eliminar', {'id': item.plato.id}) }}" class="btn btn-danger">Eliminar</a>
@@ -58,10 +92,9 @@
                 </tbody>
                 <tfoot>
                     <tr class="total-row">
-                        <td colspan="3" data-label="Total:" class="total-label">Total:</td>
+                        <td colspan="4" data-label="Total:" class="total-label">Total:</td>
                         <td data-label="Valor Total" class="total-value">{{ total | number_format(2, '.', ',') }} €</td>
-                        <td>
-                        </td>
+                        <td></td>
                     </tr>
                 </tfoot>
             </table>
@@ -70,11 +103,10 @@
                 <a href="{{ path('app_carrito_vaciar') }}" class="btn btn-warning">Vaciar Carrito</a>
             </div>
 
-
             <div class="checkout-link">
-                <p>Aquí irá el enlace para proceder al pago (Finalizar Pedido)</p>
+                <button type="submit" class="btn btn-success">Finalizar Pedido</button>
             </div>
-
+            </form>
         {% else %}
             <div class="empty-cart">
                 <p class="empty-cart-message">Tu carrito está vacío.</p>
