@@ -27,9 +27,11 @@ final class PlatosController extends AbstractController
     {
         $platos = $em->getRepository(Platos::class)->findAll();
         $usuarios = $em->getRepository(Usuarios::class)->findAll();
+        $pedidos = $em->getRepository(\App\Entity\Pedidos::class)->findAll();
         return $this->render('admin/panel.html.twig', [
             'platos' => $platos,
             'usuarios' => $usuarios,
+            'pedidos' => $pedidos,
         ]);
     }
 

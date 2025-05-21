@@ -46,7 +46,7 @@
                             <td data-label="Plato">{{ item.plato.nombre }}</td>
                             <td data-label="Precio Unitario">{{ item.plato.precio | number_format(2, '.', ',') }} €</td>
                             <td data-label="Cantidad">
-                                <form action="{{ path('app_carrito_actualizar', {'id': item.plato.id}) }}" method="post" class="quantity-form">
+                                <form action="{{ path('app_carrito_actualizar', {'key': item.key}) }}" method="post" class="quantity-form">
                                     <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1">
                                     <button type="submit" class="update-btn">Actualizar</button>
                                 </form>
@@ -56,26 +56,74 @@
                                 {% if categoria == 'entrantes' %}
                                     <label>
                                         <input type="checkbox" name="personalizacion[{{ item.plato.id }}][salsa_blanca]" value="1"
-                                            {% if item.personalizacion and item.personalizacion.salsa_blanca %}checked{% endif %}>
+                                            {% if (item.personalizacion.salsa_blanca|default(false)) %}checked{% endif %}>
                                         Salsa blanca
-                                        {% if item.personalizacion and item.personalizacion.salsa_blanca %}
+                                        {% if (item.personalizacion.salsa_blanca|default(false)) %}
                                             ✔
                                         {% endif %}
                                     </label>
-                                {% elseif categoria == 'kebabs' %}
+                                {% elseif categoria == 'kebabs' or categoria == 'falafel' %}
+                                    <label>
+                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][salsa_yogurt]" value="1"
+                                            {% if (item.personalizacion.salsa_yogurt|default(false)) %}checked{% endif %}>
+                                        Salsa yogurt
+                                        {% if (item.personalizacion.salsa_yogurt|default(false)) %}
+                                            ✔
+                                        {% endif %}
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][lechuga]" value="1"
+                                            {% if (item.personalizacion.lechuga|default(false)) %}checked{% endif %}>
+                                        Lechuga
+                                        {% if (item.personalizacion.lechuga|default(false)) %}
+                                            ✔
+                                        {% endif %}
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][tomate]" value="1"
+                                            {% if (item.personalizacion.tomate|default(false)) %}checked{% endif %}>
+                                        Tomate
+                                        {% if (item.personalizacion.tomate|default(false)) %}
+                                            ✔
+                                        {% endif %}
+                                    </label>
                                     <label>
                                         <input type="checkbox" name="personalizacion[{{ item.plato.id }}][cebolla]" value="1"
-                                            {% if item.personalizacion and item.personalizacion.cebolla %}checked{% endif %}>
+                                            {% if (item.personalizacion.cebolla|default(false)) %}checked{% endif %}>
                                         Cebolla
-                                        {% if item.personalizacion and item.personalizacion.cebolla %}
+                                        {% if (item.personalizacion.cebolla|default(false)) %}
                                             ✔
                                         {% endif %}
                                     </label>
                                     <label>
-                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][salsa_blanca]" value="1"
-                                            {% if item.personalizacion and item.personalizacion.salsa_blanca %}checked{% endif %}>
-                                        Salsa blanca
-                                        {% if item.personalizacion and item.personalizacion.salsa_blanca %}
+                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][maiz]" value="1"
+                                            {% if (item.personalizacion.maiz|default(false)) %}checked{% endif %}>
+                                        Maíz
+                                        {% if (item.personalizacion.maiz|default(false)) %}
+                                            ✔
+                                        {% endif %}
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][queso_feta]" value="1"
+                                            {% if (item.personalizacion.queso_feta|default(false)) %}checked{% endif %}>
+                                        Queso feta
+                                        {% if (item.personalizacion.queso_feta|default(false)) %}
+                                            ✔
+                                        {% endif %}
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][lombarda]" value="1"
+                                            {% if (item.personalizacion.lombarda|default(false)) %}checked{% endif %}>
+                                        Lombarda
+                                        {% if (item.personalizacion.lombarda|default(false)) %}
+                                            ✔
+                                        {% endif %}
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][salsa_picante]" value="1"
+                                            {% if (item.personalizacion.salsa_picante|default(false)) %}checked{% endif %}>
+                                        Salsa picante
+                                        {% if (item.personalizacion.salsa_picante|default(false)) %}
                                             ✔
                                         {% endif %}
                                     </label>
@@ -85,7 +133,7 @@
                             </td>
                             <td data-label="Subtotal">{{ (item.plato.precio * item.cantidad) | number_format(2, '.', ',') }} €</td>
                             <td data-label="Acciones">
-                                <a href="{{ path('app_carrito_eliminar', {'id': item.plato.id}) }}" class="btn btn-danger">Eliminar</a>
+                                <a href="{{ path('app_carrito_eliminar', {'key': item.key}) }}" class="btn btn-danger">Eliminar</a>
                             </td>
                         </tr>
                     {% endfor %}

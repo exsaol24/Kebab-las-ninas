@@ -107,11 +107,9 @@
                         <p class="plato-descripcion">{{ plato.descripcion }}</p>
                         <p class="plato-precio">{{ plato.precio | number_format(2, '.', ',') }} €</p>
                         {% if app.session.get('user_name') is not null %}
-                            <a href="{{ path('app_carrito_agregar', {'id': plato.id}) }}"
-                               class="btn btn-add-to-cart js-add-to-cart"
-                               data-plato-id="{{ plato.id }}">
+                            <button class="btn btn-add-to-cart" onclick="abrirPersonalizacion({{ plato.id }}, '{{ plato.nombre|e('js') }}', '{{ plato.categoria.nombre|lower }}')">
                                 Añadir al carrito
-                            </a>
+                            </button>
                         {% else %}
                             <span class="btn btn-add-to-cart js-login-required"
                                 data-login-message="Debes iniciar sesión para añadir productos al carrito.">
@@ -124,6 +122,122 @@
                 <p>No hay platos disponibles en este momento.</p>
             {% endfor %}
         </div>
+
+        {# Modal de personalización #}
+        <div id="personalizacion-modal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="cerrarPersonalizacion()">&times;</span>
+                <h2 id="modal-titulo"></h2>
+                <form id="personalizacion-form" method="post">
+                    <div class="modal-cantidad">
+                        <label for="modal-cantidad-input">Cantidad:</label>
+                        <input type="number" id="modal-cantidad-input" name="cantidad" value="1" min="1" required>
+                    </div>
+                    <div id="modal-opciones"></div>
+                    <div class="modal-botones">
+                        <button type="submit" class="btn btn-success">Añadir</button>
+                        <button type="button" class="btn btn-secondary" onclick="cerrarPersonalizacion()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <style>
+            .modal {
+                display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh;
+                background: rgba(0,0,0,0.4); justify-content: center; align-items: center;
+            }
+            .modal-content {
+                background: #fff; padding: 2rem; border-radius: 16px; max-width: 350px; margin: auto; box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+                position: relative; animation: modalIn .2s;
+            }
+            @keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+            .close { position: absolute; right: 1rem; top: 1rem; font-size: 2rem; cursor: pointer; color: #888; }
+            .modal-cantidad { margin-bottom: 1rem; }
+            .modal-botones { display: flex; gap: 1rem; margin-top: 1rem; }
+            #modal-opciones label { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 1.1em; }
+            #modal-opciones input[type="checkbox"] { accent-color: #e67e22; width: 18px; height: 18px; }
+        </style>
+        <script>
+            let currentPlatoId = null;
+            let currentCategoria = null;
+            function abrirPersonalizacion(platoId, platoNombre, categoria) {
+                currentPlatoId = platoId;
+                currentCategoria = categoria;
+                document.getElementById('modal-titulo').textContent = platoNombre;
+                document.getElementById('personalizacion-modal').style.display = 'flex';
+                document.getElementById('personalizacion-form').action = '{{ path('app_carrito_agregar_personalizado', {'id': 'PLATO_ID'}) }}'.replace('PLATO_ID', platoId);
+
+                // Opciones según categoría
+                let opciones = '';
+                if (categoria === 'kebabs' || categoria === 'falafel') {
+                    opciones += '<label><input type="checkbox" name="personalizacion[cebolla]" value="1"> Cebolla</label>';
+                    opciones += '<label><input type="checkbox" name="personalizacion[salsa_yogurt]" value="1"> Salsa yogurt</label>';
+                    opciones += '<label><input type="checkbox" name="personalizacion[lechuga]" value="1"> Lechuga</label>';
+                    opciones += '<label><input type="checkbox" name="personalizacion[tomate]" value="1"> Tomate</label>';
+                    opciones += '<label><input type="checkbox" name="personalizacion[maiz]" value="1"> Maíz</label>';
+                    opciones += '<label><input type="checkbox" name="personalizacion[queso_feta]" value="1"> Queso feta</label>';
+                    opciones += '<label><input type="checkbox" name="personalizacion[lombarda]" value="1"> Lombarda</label>';
+                    opciones += '<label><input type="checkbox" name="personalizacion[salsa_picante]" value="1"> Salsa picante</label>';
+                } else if (categoria === 'entrantes') {
+                    opciones += '<label><input type="checkbox" name="personalizacion[salsa_blanca]" value="1"> Salsa blanca</label>';
+                }
+                document.getElementById('modal-opciones').innerHTML = opciones;
+            }
+            function cerrarPersonalizacion() {
+                document.getElementById('personalizacion-modal').style.display = 'none';
+                document.getElementById('personalizacion-form').reset();
+            }
+            // Cierra el modal si se hace click fuera del contenido
+            window.onclick = function(event) {
+                const modal = document.getElementById('personalizacion-modal');
+                if (event.target === modal) {
+                    cerrarPersonalizacion();
+                }
+            }
+
+            // AJAX para añadir producto personalizado al carrito
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('personalizacion-form');
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const action = form.action;
+                    const formData = new FormData(form);
+
+                    fetch(action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            cerrarPersonalizacion();
+                            // Actualizar contador carrito en navbar
+                            let cartCount = document.querySelector('.cart-count');
+                            if (!cartCount) {
+                                const cartLink = document.querySelector('.cart-icon-link');
+                                if (cartLink) {
+                                    cartCount = document.createElement('span');
+                                    cartCount.className = 'cart-count';
+                                    cartLink.appendChild(cartCount);
+                                }
+                            }
+                            if (cartCount) {
+                                cartCount.textContent = data.total_productos_carrito;
+                                cartCount.style.display = data.total_productos_carrito > 0 ? 'inline-block' : 'none';
+                            }
+                        } else {
+                            alert(data.message || 'Error al añadir al carrito.');
+                        }
+                    })
+                    .catch(() => {
+                        alert('Error de red al añadir al carrito.');
+                    });
+                });
+            });
+        </script>
     </section>
 
     <footer id="contact" class="footer">

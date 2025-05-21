@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Usuarios;
 use App\Entity\Platos;
+use App\Entity\Pedidos;
+use App\Entity\Historialventas;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,10 +24,14 @@ class AdminController extends AbstractController
 
         $usuarios = $em->getRepository(Usuarios::class)->findAll();
         $platos = $em->getRepository(Platos::class)->findAll();
+        $pedidos = $em->getRepository(Pedidos::class)->findAll();
+        $historialventas = $em->getRepository(Historialventas::class)->findAll();
 
         return $this->render('admin/panel.html.twig', [
             'usuarios' => $usuarios,
             'platos' => $platos,
+            'pedidos' => $pedidos,
+            'historialventas' => $historialventas,
         ]);
     }
 

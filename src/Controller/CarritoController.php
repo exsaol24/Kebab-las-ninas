@@ -25,12 +25,13 @@ class CarritoController extends AbstractController
         $carritoData = [];
         $total = 0;
 
-        foreach ($carrito as $id => $item) {
-            $plato = $platosRepository->find($id);
+        foreach ($carrito as $key => $item) {
+            $plato = $platosRepository->find($item['id']);
             if ($plato) {
-                $cantidad = is_array($item['cantidad']) ? 1 : (int)$item['cantidad'];
+                $cantidad = isset($item['cantidad']) && !is_array($item['cantidad']) ? (int)$item['cantidad'] : 1;
                 $personalizacion = $item['personalizacion'] ?? [];
                 $carritoData[] = [
+                    'key' => $key,
                     'plato' => $plato,
                     'cantidad' => $cantidad,
                     'personalizacion' => $personalizacion,
@@ -50,20 +51,18 @@ class CarritoController extends AbstractController
     {
         $session = $request->getSession();
         $carrito = $session->get('carrito', []);
-        if (!isset($carrito[$id])) {
-            $carrito[$id] = [
-                'cantidad' => 1,
-                'personalizacion' => [],
-            ];
-        } else {
-            $carrito[$id]['cantidad']++;
-        }
+        // Añade como nueva línea siempre (sin personalización)
+        $carrito[] = [
+            'id' => $id,
+            'cantidad' => 1,
+            'personalizacion' => [],
+        ];
         $session->set('carrito', $carrito);
 
         if ($request->isXmlHttpRequest()) {
             return $this->json([
                 'success' => true,
-                'total_productos_carrito' => array_sum(array_column($carrito, 'cantidad')),
+                'total_productos_carrito' => count($carrito),
             ]);
         }
 
@@ -71,27 +70,57 @@ class CarritoController extends AbstractController
         return $this->redirectToRoute('app_carrito');
     }
 
-    #[Route('/carrito/actualizar/{id}', name: 'app_carrito_actualizar', methods: ['POST'])]
-    public function actualizar($id, Request $request): Response
+    #[Route('/carrito/agregar-personalizado/{id}', name: 'app_carrito_agregar_personalizado', methods: ['POST'])]
+    public function agregarPersonalizado($id, Request $request, PlatosRepository $platosRepository): Response
+    {
+        $session = $request->getSession();
+        $carrito = $session->get('carrito', []);
+
+        $cantidad = max(1, (int)$request->request->get('cantidad', 1));
+        $personalizacion = $request->request->all('personalizacion');
+
+        $carrito[] = [
+            'id' => $id,
+            'cantidad' => $cantidad,
+            'personalizacion' => $personalizacion,
+        ];
+
+        $session->set('carrito', $carrito);
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->json([
+                'success' => true,
+                'total_productos_carrito' => count($carrito),
+            ]);
+        }
+
+        $this->addFlash('success', 'Producto añadido al carrito con personalización.');
+        return $this->redirectToRoute('app_inicio');
+    }
+
+    #[Route('/carrito/actualizar/{key}', name: 'app_carrito_actualizar', methods: ['POST'])]
+    public function actualizar($key, Request $request): Response
     {
         $cantidad = max(1, (int)$request->request->get('cantidad', 1));
         $session = $request->getSession();
         $carrito = $session->get('carrito', []);
-        if (isset($carrito[$id])) {
-            $carrito[$id]['cantidad'] = $cantidad;
+        if (isset($carrito[$key])) {
+            $carrito[$key]['cantidad'] = $cantidad;
             $session->set('carrito', $carrito);
             $this->addFlash('success', 'Cantidad actualizada.');
         }
         return $this->redirectToRoute('app_carrito');
     }
 
-    #[Route('/carrito/eliminar/{id}', name: 'app_carrito_eliminar')]
-    public function eliminar($id, Request $request): Response
+    #[Route('/carrito/eliminar/{key}', name: 'app_carrito_eliminar')]
+    public function eliminar($key, Request $request): Response
     {
         $session = $request->getSession();
         $carrito = $session->get('carrito', []);
-        if (isset($carrito[$id])) {
-            unset($carrito[$id]);
+        if (isset($carrito[$key])) {
+            unset($carrito[$key]);
+            // Reindexar el array para evitar huecos en los índices
+            $carrito = array_values($carrito);
             $session->set('carrito', $carrito);
             $this->addFlash('success', 'Producto eliminado del carrito.');
         }
