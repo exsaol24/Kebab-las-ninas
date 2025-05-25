@@ -31,6 +31,7 @@ class Categorias
     public function __construct()
     {
         $this->platos = new ArrayCollection();
+        $this->creadoen = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ editar ? 'Editar Detalle de Pedido' : 'Nuevo Detalle de Pedido' }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin-panel.css') }}">
+{% endblock %}
+
+{% block body %}
+<body class="admin-panel">
+<div class="admin-edit-bg">
+    <h1 class="admin-panel-title">{{ editar ? 'Editar Detalle de Pedido' : 'Nuevo Detalle de Pedido' }}</h1>
+    <div class="admin-edit-form">
+        {{ form_start(form) }}
+            {{ form_row(form.pedido) }}
+            {{ form_row(form.platos) }}
+            {{ form_row(form.cantidad) }}
+            {{ form_row(form.preciounitario) }}
+            <button class="btn btn-primary" type="submit">Guardar</button>
+        {{ form_end(form) }}
+        <a href="{{ path('admin_detallespedidos') }}" class="btn btn-secondary" style="margin-top: 15px;">Volver al listado</a>
+    </div>
+</div>
+</body>
+{% endblock %}

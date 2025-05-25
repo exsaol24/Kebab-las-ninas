@@ -110,6 +110,9 @@
             <button class="admin-tab-btn" onclick="showTab('platos')">Platos</button>
             <button class="admin-tab-btn" onclick="showTab('pedidos')">Pedidos</button>
             <button class="admin-tab-btn" onclick="showTab('historialventas')">Historial Ventas</button>
+            <button class="admin-tab-btn" onclick="showTab('estadospedidos')">Estados de Pedidos</button>
+            <button class="admin-tab-btn" onclick="showTab('detallespedidos')">Detalles de Pedidos</button>
+            <button class="admin-tab-btn" onclick="showTab('categorias')">Categorías</button>
         </div>
 
         <div id="tab-usuarios" class="admin-tab-content active">
@@ -285,6 +288,109 @@
                 </table>
             </div>
         </div>
+
+        <div id="tab-estadospedidos" class="admin-tab-content">
+            <p class="admin-panel-desc">Aquí puedes gestionar los estados de los pedidos.</p>
+            <div class="admin-table-responsive">
+                <table class="admin-table" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for estado in estadospedidos %}
+                        <tr>
+                            <td>{{ estado.id }}</td>
+                            <td>{{ estado.nombre }}</td>
+                            <td style="min-width:120px;">
+                                <a href="{{ path('admin_estadopedido_editar', {'id': estado.id}) }}" class="btn-edit">Editar</a>
+                                <form action="{{ path('admin_estadopedido_eliminar', {'id': estado.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este estado?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ estado.id) }}">
+                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="3" style="text-align:center;">No hay estados de pedidos.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-detallespedidos" class="admin-tab-content">
+            <p class="admin-panel-desc">Aquí puedes gestionar los detalles de los pedidos.</p>
+            <div class="admin-table-responsive">
+                <table class="admin-table" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Pedido</th>
+                            <th>Plato</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for detalle in detallespedidos %}
+                        <tr>
+                            <td>{{ detalle.id }}</td>
+                            <td>{{ detalle.pedido ? detalle.pedido.id : '' }}</td>
+                            <td>{{ detalle.platos ? detalle.platos.nombre : '' }}</td>
+                            <td>{{ detalle.cantidad }}</td>
+                            <td>{{ detalle.preciounitario }}</td>
+                            <td style="min-width:120px;">
+                                <a href="{{ path('admin_detallespedido_editar', {'id': detalle.id}) }}" class="btn-edit">Editar</a>
+                                <form action="{{ path('admin_detallespedido_eliminar', {'id': detalle.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este detalle?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ detalle.id) }}">
+                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="6" style="text-align:center;">No hay detalles de pedidos.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-categorias" class="admin-tab-content">
+            <p class="admin-panel-desc">Aquí puedes gestionar las categorías.</p>
+            <a href="{{ path('admin_categoria_nuevo') }}" class="btn-add" style="margin-bottom:10px;display:inline-block;">Añadir Categoría</a>
+            <div class="admin-table-responsive">
+                <table class="admin-table" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for categoria in categorias %}
+                        <tr>
+                            <td>{{ categoria.id }}</td>
+                            <td>{{ categoria.nombre }}</td>
+                            <td style="min-width:120px;">
+                                <a href="{{ path('admin_categoria_editar', {'id': categoria.id}) }}" class="btn-edit">Editar</a>
+                                <form action="{{ path('admin_categoria_eliminar', {'id': categoria.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar esta categoría?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ categoria.id) }}">
+                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="3" style="text-align:center;">No hay categorías.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <script>
         function showTab(tab) {
@@ -302,6 +408,15 @@
             } else if(tab === 'historialventas') {
                 document.querySelector('.admin-tab-btn:nth-child(4)').classList.add('active');
                 document.getElementById('tab-historialventas').classList.add('active');
+            } else if(tab === 'estadospedidos') {
+                document.querySelector('.admin-tab-btn:nth-child(5)').classList.add('active');
+                document.getElementById('tab-estadospedidos').classList.add('active');
+            } else if(tab === 'detallespedidos') {
+                document.querySelector('.admin-tab-btn:nth-child(6)').classList.add('active');
+                document.getElementById('tab-detallespedidos').classList.add('active');
+            } else if(tab === 'categorias') {
+                document.querySelector('.admin-tab-btn:nth-child(7)').classList.add('active');
+                document.getElementById('tab-categorias').classList.add('active');
             }
         }
     </script>
