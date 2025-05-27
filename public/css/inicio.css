@@ -53,295 +53,301 @@ a:hover {
     font-weight: 600;
     text-align: center;
     border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
-    border: none;
+    text-decoration: none;
 }
 
 .btn-primary {
     background-color: #ffd700;
     color: #333;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover {
-    background-color: #e6c200;
+    background-color: #ffc107;
     transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Padding uniforme para secciones principales */
+/* Secciones generales */
 section {
     padding: 60px 20px;
-    /* Mantenemos padding vertical y añadimos horizontal */
 }
 
-/* Banner tipo hero pantalla completa */
+/* Banner (Hero Section) */
 .banner {
-    background-image: url('../img/fondo.png');
-    color: #fff;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    /* padding: 0;  <- Eliminamos padding aquí ya que lo añadimos en la regla 'section' */
-    padding: 80px 40px;
-    /* Añadimos padding específico para el banner */
-    margin-top: 0;
-    min-height: 110vh;
-    width: 100%;
-    /* Cambiado de 100vw para respetar el padding */
-    box-sizing: border-box;
-    /* Asegura que el padding no aumente el ancho total */
     position: relative;
-    overflow: hidden;
-}
-
-.banner-content {
-    max-width: 700px;
-    margin-right: 80px;
-    flex-grow: 1;
-    z-index: 2;
-}
-
-.banner-content h2 {
-    font-size: 4.8rem;
-    margin-bottom: 28px;
-    color: #fff;
-    text-align: left;
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
-    line-height: 1.1;
-    overflow-wrap: break-word;
-    word-break: break-word;
-    padding-top: 0.2em;
-    padding-bottom: 0.2em;
-}
-
-.banner-content p {
-    font-size: 1.9rem;
-    margin-bottom: 38px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
-}
-
-.banner-image {
-    flex: 1;
+    background-image: url('../img/fondo.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
     display: flex;
-    align-items: center;
     justify-content: center;
-    z-index: 2;
-}
-
-.banner-image img {
-    max-width: 650px;
-    /* Hacemos la imagen más grande (antes 520px) */
-    width: 90%;
-    /* Ajustamos el ancho relativo */
-    height: auto;
-    max-height: 80vh;
-    /* Permitimos que sea un poco más alta */
-    border-radius: 18px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
-    display: block;
-    object-fit: cover;
-    background: none;
+    align-items: center;
+    padding: 80px 20px;
+    min-height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
     margin-top: 0;
-    margin-left: 32px;
 }
 
-/* Efecto de degradado en el fondo del banner (lo mantenemos como un sutil overlay) */
 .banner::before {
-    content: "";
+    content: '';
     position: absolute;
-    left: 0;
     top: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(120deg, #007acc 70%, #ffd700 100%);
-    opacity: 0.18;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2));
     z-index: 1;
 }
 
-/* Carrusel de Ofertas estilo McDonald's */
-.ofertas-carousel-section {
-    background: linear-gradient(180deg, #fffbe7 80%, #f9f9f9 100%);
-    padding: 0 0 60px 0;
-    margin-top: 80px;
-    /* Aumentamos el margen superior para separar del banner */
+.banner-content {
     position: relative;
-    z-index: 3;
+    z-index: 2;
+    max-width: 600px;
+    text-align: left;
+    margin-right: 40px;
+}
+
+.banner-content h2 {
+    font-size: 3.8rem;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    line-height: 1.2;
+    text-align: left;
+}
+
+.banner-content p {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    text-align: left;
+}
+
+.banner-image {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    width: 100%;
+    margin-left: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    min-width: 0;
+    padding-bottom: 0;
+}
+
+.banner-image img {
+    width: 100%;
+    height: auto;
+    max-height: 700px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    object-fit: cover;
+    display: block;
+}
+
+/* Mejora en pantallas medianas y pequeñas */
+@media (max-width: 900px) {
+    .banner-image {
+        max-width: 90vw;
+        margin-left: 0;
+    }
+}
+@media (max-width: 600px) {
+    .banner-image {
+        max-width: 100vw;
+    }
+    .banner-image img {
+        max-height: 300px;
+    }
+}
+
+/* Carrusel de Ofertas */
+.ofertas-carousel-section {
+    background: linear-gradient(to bottom, #f9f9f9, #f0f0f0);
+    padding: 80px 20px 40px;
+    margin-top: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .ofertas-carousel-container {
+    max-width: 900px;
+    margin: -60px auto 0;
+    background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    padding: 30px;
     position: relative;
-    max-width: 1100px;
-    width: 100%;
-    margin: 0 auto;
-    margin-top: -80px;
-    /* Mantenemos este margen negativo para que el contenedor 'suba' */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
-    border-radius: 32px;
-    background: #fff;
-    padding-top: 40px;
+    z-index: 10;
 }
 
 .ofertas-carousel {
     display: flex;
     overflow: hidden;
     position: relative;
-    min-height: 420px;
-    border-radius: 32px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
-    background: #fff;
+    min-height: 300px;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.05);
 }
 
 .oferta-slide {
     min-width: 100%;
-    transition: opacity 0.7s, transform 0.7s;
-    opacity: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 1;
     display: flex;
-    align-items: stretch;
     justify-content: center;
-    flex-direction: row;
-    border-radius: 32px;
-    box-shadow: none;
-    padding: 0;
-    height: 420px;
-    overflow: hidden;
+    align-items: stretch;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateX(100%);
+    backface-visibility: hidden;
 }
 
 .oferta-slide.active {
     opacity: 1;
+    transform: translateX(0);
     position: relative;
-    z-index: 2;
+    display: flex;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
+
 .oferta-slide img {
-    width: 60%;
+    width: 55%;
+    max-width: 450px;
     height: 100%;
     object-fit: cover;
-    border-radius: 32px 0 0 32px;
-    box-shadow: none;
-    margin: 0;
-    background: #fff;
-    display: block;
+    border-radius: 15px 0 0 15px;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.oferta-slide.active img {
+    transform: scale(1.02) rotate(1deg);
+    box-shadow: 8px 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .oferta-info {
-    width: 40%;
+    width: 45%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 50px 50px 50px 38px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.96) 80%, rgba(255, 251, 231, 0.85) 100%);
-    /* Mantenemos un ligero degradado aquí si quieres */
-    border-radius: 0 32px 32px 0;
-    position: relative;
+    padding: 30px;
+    background: linear-gradient(135deg, #ffe0b2 0%, #ffc107 100%);
+    border-radius: 0 15px 15px 0;
+    color: #333;
+    text-align: left;
 }
 
 .oferta-info h3 {
-    font-size: 2.5rem;
-    color: #d32f2f;
-    margin-bottom: 22px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    font-size: 2.2rem;
+    color: #e67e22;
+    font-weight: 900;
+    margin-bottom: 15px;
+    letter-spacing: -1px;
+    background: -webkit-linear-gradient(45deg, #e67e22, #c0392b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .oferta-info p {
-    font-size: 1.35rem;
-    color: #333;
+    font-size: 1.1rem;
+    color: #555;
     margin-bottom: 0;
-    font-weight: 500;
 }
 
 .ofertas-carousel-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: #ffd700;
+    background: linear-gradient(45deg, #e67e22, #f8b500);
+    color: white;
     border: none;
-    border-radius: 50%;
-    width: 54px;
-    height: 54px;
-    font-size: 2.2rem;
-    color: #d32f2f;
+    padding: 15px;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
-    z-index: 10;
-    transition: background 0.2s, color 0.2s, transform 0.1s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    line-height: 1;
+    z-index: 100;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .ofertas-carousel-btn:hover {
-    background: #d32f2f;
-    color: #fffbe7;
-    transform: scale(1.08);
+    background: linear-gradient(45deg, #f8b500, #e67e22);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 .ofertas-carousel-btn.prev {
-    left: -27px;
+    left: -20px;
 }
 
 .ofertas-carousel-btn.next {
-    right: -27px;
+    right: -20px;
 }
 
-/* Indicadores tipo dots */
 .ofertas-carousel-dots {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-top: 18px;
+    margin-top: 25px;
     gap: 10px;
 }
 
 .ofertas-carousel-dot {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
+    background-color: #ccc;
     border-radius: 50%;
-    background: #ffd700;
-    opacity: 0.5;
-    border: 2px solid #d32f2f;
     cursor: pointer;
-    transition: opacity 0.2s, background 0.2s;
+    border: 2px solid #ccc;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .ofertas-carousel-dot.active {
-    opacity: 1;
-    background: #d32f2f;
-    border-color: #ffd700;
+    background-color: #e67e22;
+    border-color: #e67e22;
+    transform: scale(1.2);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Zona de ubicación/mapa mejorada y visual */
+
+/* Sección de Ubicación/Mapa */
 .ubicacion-section {
-    background-color: #f0f4ff;
-    /* Cambiado a color sólido */
-    padding: 70px 20px 60px 20px;
-    /* Aseguramos padding horizontal */
+    background-color: #f0f0f0;
+    padding: 80px 20px;
     display: flex;
     justify-content: center;
-    position: relative;
-    z-index: 2;
+    align-items: center;
+    text-align: center;
 }
 
 .ubicacion-container {
     display: flex;
     flex-direction: row;
     align-items: stretch;
-    gap: 50px;
-    max-width: 1100px;
+    gap: 40px;
+    max-width: 1000px;
     width: 100%;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 24px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
-    padding: 40px 50px;
-    overflow: hidden;
+    margin: auto;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
 }
 
 .ubicacion-info {
@@ -350,69 +356,49 @@ section {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-right: 20px;
 }
 
 .ubicacion-info h2 {
-    color: #007acc;
-    margin-bottom: 18px;
-    font-size: 2.3rem;
-    font-weight: 800;
+    color: #e67e22;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-align: left;
 }
 
 .ubicacion-info p {
-    font-size: 1.25rem;
-    color: #444;
-    margin-bottom: 0;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+}
+
+.ubicacion-info strong {
+    color: #333;
 }
 
 .ubicacion-mapa {
-    flex: 1.2;
-    min-width: 320px;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 18px;
+    border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.13);
-    background: #f0f4ff;
-    /* Fondo del contenedor del mapa */
-    margin-left: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background-color: #eee;
 }
 
 .ubicacion-mapa iframe {
     width: 100%;
-    height: 340px;
-    border: none;
-    border-radius: 18px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
-    min-width: 0;
-    min-height: 220px;
+    height: 350px;
+    border: 0;
+    border-radius: 15px;
+    box-shadow: none;
 }
 
-/* Sección Sobre Nosotros (se mantiene igual) */
-.about-us {
-    background-color: #f0f0f0;
-    text-align: center;
-}
-
-.about-us .about-image {
-    margin-top: 30px;
-}
-
-.about-us img {
-    max-width: 100%;
-    height: auto;
-    max-height: 350px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    display: block;
-    margin: 20px auto 0 auto;
-    object-fit: cover;
-}
-
-/* Sección Testimonios (se mantiene igual) */
+/* Testimonios */
 .testimonials {
-    background-color: #fff;
+    background-color: #f9f9f9;
+    padding: 80px 20px;
     text-align: center;
 }
 
@@ -421,46 +407,43 @@ section {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: auto;
 }
 
 .testimonial-card {
-    background-color: #f0f0f0;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    border-top: 5px solid #ffd700;
 }
 
 .testimonial-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
 .testimonial-card p {
     font-style: italic;
+    color: #555;
     margin-bottom: 15px;
+    font-size: 1.05rem;
 }
 
 .testimonial-card span {
-    font-weight: 600;
-    color: #555;
     display: block;
-    text-align: right;
-    margin-top: auto;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
 }
 
-/* Sección Platos (se mantiene igual) */
+/* Sección de Platos */
 .platos {
-    background-color: #f9f9f9;
-}
-
-.platos h2 {
-    margin-bottom: 40px;
+    background-color: #f0f0f0;
+    padding: 80px 20px;
+    text-align: center;
 }
 
 .platos-grid {
@@ -468,33 +451,30 @@ section {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 30px;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: auto;
 }
 
 .plato-card {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: left;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    overflow: hidden;
 }
 
 .plato-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
 .plato-card .plato-imagen {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    border-radius: 8px 8px 0 0;
-    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
     transition: transform 0.3s ease;
 }
 
@@ -502,204 +482,417 @@ section {
     transform: scale(1.05);
 }
 
-.plato-card .plato-info {
-    flex-grow: 1;
+.plato-info {
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 100%;
+    flex-grow: 1;
 }
 
-.plato-card h3 {
-    font-size: 1.6rem;
-    margin-bottom: 10px;
+.plato-nombre {
+    font-size: 1.5rem;
     color: #333;
+    margin-bottom: 10px;
 }
 
-.plato-card .plato-descripcion {
+.plato-descripcion {
     font-size: 0.95rem;
-    color: #555;
+    color: #666;
     margin-bottom: 15px;
     flex-grow: 1;
 }
 
-.plato-card .plato-precio {
+.plato-precio {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #007acc;
+    color: #e67e22;
     margin-top: auto;
+    margin-bottom: 15px;
 }
 
-/* Footer (se mantiene igual) */
+.btn-add-to-cart {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+}
+
+.btn-add-to-cart:hover {
+    background-color: #45a049;
+    transform: none;
+    box-shadow: none;
+}
+
+
+/* --- Sección de Reserva de Mesas (Mejorada) --- */
+.reserva-mesas-section {
+    position: relative;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 550px;
+    text-align: center;
+}
+
+.reserva-bg-decor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/fondoregistro.png');
+    background-size: cover;
+    opacity: 0.1;
+    z-index: 1;
+}
+
+.reserva-card {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    border: 2px solid #e67e22;
+    animation: fadeInScale 0.5s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.reserva-card h2 {
+    font-size: 2.8rem;
+    color: #e67e22;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.reserva-card h2 .icono-mesa {
+    font-size: 3.5rem;
+    line-height: 1;
+}
+
+.reserva-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.input-group {
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-group .input-icon {
+    font-size: 1.3rem;
+    color: #e67e22;
+}
+
+.input-group input[type="text"],
+.input-group input[type="tel"],
+.input-group input[type="number"],
+.input-group input[type="date"],
+.input-group select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: #e67e22;
+    box-shadow: 0 0 8px rgba(230, 126, 34, 0.3);
+    outline: none;
+}
+
+.input-group input::placeholder {
+    color: #aaa;
+}
+
+.btn-reserva {
+    width: 100%;
+    padding: 15px 30px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-top: 20px;
+    background: linear-gradient(45deg, #e67e22, #f8b500);
+    border: none;
+    color: white;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.btn-reserva:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.reserva-mensaje {
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(10px);
+}
+
+.reserva-mensaje.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reserva-mensaje.error {
+    background-color: #ffe0e0;
+    color: #d32f2f;
+    border: 1px solid #d32f2f;
+}
+
+.reserva-mensaje:not(.error) {
+    background-color: #e6ffe6;
+    color: #4caf50;
+    border: 1px solid #4caf50;
+}
+
+.reserva-decor-icon {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    opacity: 0.6;
+    width: 120px;
+    height: 120px;
+    pointer-events: none;
+    animation: rotateAndFloat 8s linear infinite;
+    z-index: 0;
+}
+
+.reserva-decor-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+@keyframes rotateAndFloat {
+    0% {
+        transform: rotate(0deg) translateY(0);
+    }
+    50% {
+        transform: rotate(180deg) translateY(-10px);
+    }
+    100% {
+        transform: rotate(360deg) translateY(0);
+    }
+}
+
+
+/* Footer */
 .footer {
-    background-color: #333;
-    color: #f0f0f0;
+    background-color: #222;
+    color: white;
     text-align: center;
     padding: 40px 20px;
+    font-size: 0.9rem;
 }
 
 .footer p {
     margin-bottom: 10px;
-    font-size: 0.95rem;
+    color: #bbb;
 }
 
 .footer a {
     color: #ffd700;
+    font-weight: 600;
 }
 
 .footer a:hover {
-    color: #e6c200;
+    color: #ffc107;
 }
 
-.footer .social-links {
+.social-links {
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }
 
-.footer .social-links img {
+.social-links img {
+    width: 35px;
     height: 35px;
-    margin: 0 12px;
     transition: transform 0.3s ease;
 }
 
-.footer .social-links img:hover {
-    transform: scale(1.2);
+.social-links img:hover {
+    transform: scale(1.15);
 }
 
-/* Responsividad */
-@media (max-width: 1200px) {
-    .banner {
-        padding: 60px 30px;
-        /* Ajustamos padding en pantallas medianas */
-    }
+/* --- Media Queries para Responsividad --- */
 
+@media (min-width: 1201px) {
     .banner-content {
-        margin-right: 30px;
-        /* Ajustamos margen */
+        max-width: 700px;
     }
-
-    .banner-image img {
-        max-width: 500px;
-        /* Ajustamos tamaño de imagen */
-        width: 80%;
-    }
-
-    .ofertas-carousel-container {
-        max-width: 98vw;
-    }
-
-    .ubicacion-container {
-        padding: 25px 10px;
-        gap: 20px;
-    }
-}
-
-@media (max-width: 900px) {
-    .banner {
-        flex-direction: column;
-        text-align: center;
-        padding: 50px 20px;
-        /* Ajustamos padding */
-        min-height: 80vh;
-    }
-
-    .banner-content {
-        margin: 0 0 40px 0;
-        /* Ajustamos margen inferior y centramos texto */
-        text-align: center;
-    }
-
     .banner-content h2 {
-        text-align: center;
-        font-size: 2.8rem;
+        font-size: 4.5rem;
     }
-
     .banner-content p {
-        font-size: 1.2rem;
-    }
-
-    .banner-image img {
-        max-width: 90vw;
-        margin: 0 auto;
-        /* Centramos imagen */
-    }
-
-    .ofertas-carousel-section {
-        margin-top: 40px;
-        /* Ajustamos margen superior para pantallas más pequeñas */
-    }
-
-    .ofertas-carousel-container {
-        margin-top: -60px;
-        /* Ajustamos margen negativo */
-    }
-
-    .ofertas-carousel,
-    .oferta-slide,
-    .oferta-slide img {
-        min-height: 220px;
-        height: 220px;
-        border-radius: 18px;
-    }
-
-    .oferta-slide {
-        flex-direction: row;
-        /* Mantenemos fila si hay espacio, ajustaremos en móvil */
-        align-items: stretch;
-        justify-content: center;
-        padding: 0;
-    }
-
-    .oferta-slide img {
-        width: 60%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 18px 0 0 18px;
-        margin-bottom: 0;
-        /* Eliminamos margen inferior */
-        margin-right: 10px;
-        /* Añadimos margen a la derecha */
-    }
-
-    .oferta-info {
-        width: 40%;
-        padding: 14px 10px 14px 10px;
-        border-radius: 0 18px 18px 0;
-    }
-
-    .ubicacion-container {
-        flex-direction: column;
-        padding: 18px 4px;
-        gap: 18px;
-    }
-
-    .ubicacion-mapa iframe {
-        height: 220px;
-    }
-
-    .ubicacion-mapa {
-        margin-left: 0;
-        /* Eliminamos margen */
+        font-size: 1.5rem;
     }
 }
 
-@media (max-width: 600px) {
+/* Pantallas medianas (hasta 900px) */
+@media (max-width: 900px) {
     h2 {
-        font-size: 2rem;
+        font-size: 2.2rem;
         margin-bottom: 30px;
     }
 
+    /* Banner */
     .banner {
-        padding: 40px 15px;
-        /* Ajustamos padding */
-        min-height: 70vh;
+        flex-direction: column;
+        text-align: center;
+        padding: 60px 20px;
+        min-height: auto;
     }
 
-    .banner-content h2 {
-        font-size: 2.2rem;
+    .banner-content {
+        margin-right: 0;
+        margin-bottom: 40px;
+        text-align: center;
     }
-
+    .banner-content h2,
     .banner-content p {
+        text-align: center;
+    }
+
+    .banner-image {
+        margin-left: 0;
+        max-width: 50vw;
+        width: 100%;
+        height: auto;
+        min-width: unset;
+    }
+
+    /* Carrusel de Ofertas */
+    .ofertas-carousel-container {
+        padding: 20px;
+        margin-top: -40px;
+    }
+    .ofertas-carousel {
+        min-height: 250px;
+    }
+    .oferta-slide {
+        flex-direction: column;
+        align-items: center;
+    }
+    .oferta-slide img {
+        width: 80%;
+        height: 150px;
+        border-radius: 15px 15px 0 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+    .oferta-info {
+        width: 100%;
+        padding: 20px;
+        border-radius: 0 0 15px 15px;
+        align-items: center;
+        text-align: center;
+    }
+    .oferta-info h3 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+    .oferta-info p {
         font-size: 1rem;
+    }
+    .ofertas-carousel-btn {
+        padding: 10px;
+        font-size: 1.2rem;
+    }
+    .ofertas-carousel-btn.prev {
+        left: 5px;
+    }
+    .ofertas-carousel-btn.next {
+        right: 5px;
+    }
+
+    .ubicacion-container {
+        flex-direction: column;
+        gap: 30px;
+        padding: 30px;
+    }
+    .ubicacion-info {
+        padding-right: 0;
+        text-align: center;
+    }
+    .ubicacion-info h2 {
+        text-align: center;
+    }
+    .ubicacion-mapa iframe {
+        height: 300px;
+    }
+
+    .platos-grid,
+    .testimonials-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+}
+
+/* Pantallas pequeñas (hasta 600px) */
+@media (max-width: 600px) {
+    body {
+        font-size: 0.95rem;
+    }
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+    }
+    h3 {
+        font-size: 1.5rem;
+    }
+    section {
+        padding: 40px 15px;
     }
 
     .btn {
@@ -707,189 +900,142 @@ section {
         font-size: 1rem;
     }
 
-    section {
+    /* Banner */
+    .banner {
         padding: 40px 15px;
-        /* Ajustamos padding general */
+    }
+    .banner-content h2 {
+        font-size: 2.5rem;
+    }
+    .banner-content p {
+        font-size: 1.1rem;
+    }
+    .banner-image {
+        max-width: 90%;
+        height: auto;
     }
 
-    .ofertas-carousel-section {
-        margin-top: 30px;
-        /* Ajustamos margen superior */
-    }
-
+    /* Carrusel de Ofertas */
     .ofertas-carousel-container {
-        margin-top: -40px;
-        /* Ajustamos margen negativo */
-    }
-
-    .ofertas-carousel,
-    .oferta-slide,
-    .oferta-slide img {
-        min-height: 180px;
-        /* Ajustamos altura */
-        height: 180px;
-        border-radius: 10px;
-    }
-
-    .oferta-slide {
-        flex-direction: column;
-        /* Apilamos imagen e info en móvil */
-        align-items: center;
-        gap: 10px;
-        padding: 15px 10px;
-    }
-
-    .oferta-slide img {
-        width: 90%;
-        /* Hacemos la imagen más ancha */
-        max-width: 280px;
-        /* Limitamos el ancho máximo */
-        height: 110px;
-        object-fit: cover;
-        border-radius: 8px;
-        /* Ajustamos bordes */
-        margin-right: 0;
-        /* Eliminamos margen */
-        margin-bottom: 10px;
-        /* Añadimos margen inferior */
-    }
-
-    .oferta-info {
-        width: 100%;
-        /* Ocupa todo el ancho disponible */
-        padding: 10px;
-        /* Ajustamos padding */
-        text-align: center;
-        /* Centramos texto */
-        align-items: center;
-        /* Centramos contenido */
-        border-radius: 8px;
-        /* Ajustamos bordes */
-    }
-
-    .oferta-info h3 {
-        font-size: 1.8rem;
-        /* Ajustamos tamaño de fuente */
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    .oferta-info p {
-        font-size: 1rem;
-        /* Ajustamos tamaño de fuente */
-        text-align: center;
-    }
-
-    .testimonial-card,
-    .plato-card {
         padding: 15px;
-        /* Ajustamos padding */
+        margin-top: -30px;
+    }
+    .ofertas-carousel {
+        min-height: 200px;
+    }
+    .oferta-slide img {
+        height: 120px;
+    }
+    .oferta-info {
+        padding: 15px;
+    }
+    .oferta-info h3 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+    .oferta-info p {
+        font-size: 0.9rem;
+    }
+    .ofertas-carousel-btn {
+        padding: 8px;
+        font-size: 1rem;
+    }
+    .ofertas-carousel-btn.prev {
+        left: 0px;
+    }
+    .ofertas-carousel-btn.next {
+        right: 0px;
     }
 
-    .testimonial-card span {
-        text-align: center;
+    /* Ubicación */
+    .ubicacion-container {
+        padding: 25px;
+        gap: 20px;
+    }
+    .ubicacion-info h2 {
+        font-size: 2rem;
+    }
+    .ubicacion-info p {
+        font-size: 1rem;
+    }
+    .ubicacion-mapa iframe {
+        height: 250px;
     }
 
-    .platos-grid,
-    .testimonials-grid {
-        gap: 15px;
-        max-width: 100%;
-    }
-
+    /* Platos */
     .plato-card .plato-imagen {
         height: 150px;
-        /* Ajustamos altura */
+    }
+    .plato-nombre {
+        font-size: 1.3rem;
+    }
+    .plato-descripcion {
+        font-size: 0.85rem;
+    }
+    .plato-precio {
+        font-size: 1.1rem;
     }
 
-    .footer {
-        padding: 30px 15px;
+    /* Reserva de mesas (ajustes específicos) */
+    .reserva-card {
+        padding: 25px;
+        border-radius: 15px;
     }
-
-    .footer p {
-        margin-bottom: 8px;
+    .reserva-card h2 {
+        font-size: 2rem;
+        gap: 10px;
     }
-
-    .footer .social-links img {
-        height: 30px;
-        margin: 0 8px;
+    .reserva-card h2 .icono-mesa {
+        font-size: 2.5rem;
     }
-
-    .ubicacion-section {
-        padding: 30px 15px;
-        /* Ajustamos padding */
+    .input-group input,
+    .input-group select,
+    .btn-reserva {
+        font-size: 1rem;
+        padding: 12px 15px;
     }
-
-    .ubicacion-container {
-        padding: 15px;
-        /* Ajustamos padding */
-        gap: 15px;
-    }
-
-    .ubicacion-mapa iframe {
-        height: 200px;
-        /* Ajustamos altura */
+    .reserva-decor-icon {
+        width: 80px;
+        height: 80px;
+        bottom: -10px;
+        right: -10px;
     }
 }
 
+/* Pantallas muy pequeñas (hasta 480px) */
 @media (max-width: 480px) {
-    h2 {
-        font-size: 1.6rem;
-        margin-bottom: 20px;
-    }
-
-    .banner {
-        padding: 30px 10px;
-        /* Ajustamos padding */
-        min-height: 60vh;
-    }
-
-    .banner-content h2 {
-        font-size: 1.8rem;
-        /* Ajustamos tamaño de fuente */
-    }
-
-    .banner-content p {
-        font-size: 0.9rem;
-    }
-
-    .btn {
-        padding: 8px 15px;
+    body {
         font-size: 0.9rem;
     }
 
     section {
         padding: 30px 10px;
-        /* Ajustamos padding general */
     }
 
     .ofertas-carousel-section {
         margin-top: 20px;
-        /* Ajustamos margen superior */
     }
 
     .ofertas-carousel-container {
         margin-top: -30px;
-        /* Ajustamos margen negativo */
     }
 
     .ofertas-carousel,
     .oferta-slide,
     .oferta-slide img {
         min-height: 140px;
-        /* Ajustamos altura */
         height: 140px;
         border-radius: 8px;
     }
 
     .oferta-slide img {
-        width: 95%;
+        width: 100%;
         max-width: 240px;
         height: 90px;
     }
 
     .oferta-info h3 {
         font-size: 1.5rem;
-        /* Ajustamos tamaño de fuente */
         margin-bottom: 8px;
     }
 
@@ -899,38 +1045,19 @@ section {
 
     .plato-card .plato-imagen {
         height: 120px;
-        /* Ajustamos altura */
     }
 
     .plato-card h3 {
-        font-size: 1.3rem;
-    }
-
-    .plato-card .plato-descripcion {
-        font-size: 0.85rem;
-    }
-
-    .plato-card .plato-precio {
         font-size: 1.1rem;
     }
-
-    .footer {
-        padding: 25px 10px;
+    .plato-card p {
+        font-size: 0.8rem;
     }
-
-    .ubicacion-section {
-        padding: 20px 10px;
-        /* Ajustamos padding */
+    .plato-precio {
+        font-size: 1rem;
     }
-
-    .ubicacion-container {
-        padding: 10px;
-        /* Ajustamos padding */
-        gap: 10px;
-    }
-
-    .ubicacion-mapa iframe {
-        height: 180px;
-        /* Ajustamos altura */
+    .btn-add-to-cart {
+        padding: 8px 12px;
+        font-size: 0.9rem;
     }
 }

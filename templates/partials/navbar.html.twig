@@ -7,7 +7,7 @@
         </a>
     </div>
     <div class="navbar-toggle">
-        <button class="navbar-button" onclick="toggleMenu()">
+        <button class="navbar-button" type="button">
             <div class="hamburger-icon">
                 <span></span>
                 <span></span>
@@ -16,7 +16,7 @@
         </button>
     </div>
     <div class="navbar-links" id="navbar-links">
-        <button class="close-button" onclick="toggleMenu()">
+        <button class="close-button" type="button">
             <div class="close-icon">
                 <span></span>
                 <span></span>
@@ -58,7 +58,7 @@
     </div>
     
     <!-- Overlay para cerrar el menú al hacer clic fuera -->
-    <div class="menu-overlay" id="menu-overlay" onclick="toggleMenu()"></div>
+    <div class="menu-overlay" id="menu-overlay"></div>
 </nav>
 <script src="{{ asset('js/navbar.js') }}"></script>
 {% endif %}

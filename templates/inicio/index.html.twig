@@ -23,21 +23,21 @@
         <div class="ofertas-carousel-container">
             <div class="ofertas-carousel" id="ofertasCarousel">
                 <div class="oferta-slide active">
-                    <img src="{{ asset('img/oferta1.jpg') }}" alt="Oferta 1">
+                    <img src="{{ asset('img/oferta1.png') }}" alt="Oferta 1">
                     <div class="oferta-info">
                         <h3>2x1 en Kebabs Clásicos</h3>
                         <p>¡Solo los miércoles! Ven con un amigo y paga solo uno.</p>
                     </div>
                 </div>
                 <div class="oferta-slide">
-                    <img src="{{ asset('img/oferta2.jpg') }}" alt="Oferta 2">
+                    <img src="{{ asset('img/oferta2.png') }}" alt="Oferta 2">
                     <div class="oferta-info">
                         <h3>Menú Familiar</h3>
                         <p>4 kebabs + patatas + bebida grande por solo 19,90€.</p>
                     </div>
                 </div>
                 <div class="oferta-slide">
-                    <img src="{{ asset('img/oferta3.jpg') }}" alt="Oferta 3">
+                    <img src="{{ asset('img/oferta3.png') }}" alt="Oferta 3">
                     <div class="oferta-info">
                         <h3>Bebida gratis</h3>
                         <p>Con cada kebab XL, llévate una bebida gratis.</p>
@@ -240,6 +240,44 @@
         </script>
     </section>
 
+    {# Apartado de reserva de mesas #}
+    <section id="reserva-mesas" class="reserva-mesas-section mejorada kebab-theme">
+        <div class="reserva-bg-decor"></div>
+        <div class="reserva-card kebab-theme">
+            <h2>
+                <span class="icono-mesa">🍽️</span>
+                Reserva tu mesa
+            </h2>
+            <form id="reserva-form" class="reserva-form mejorada">
+                <div class="input-group">
+                    <label for="nombre"><span class="input-icon">👤</span> Nombre</label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="¿Cómo te llamas?">
+                </div>
+                <div class="input-group">
+                    <label for="telefono"><span class="input-icon">📞</span> Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" required pattern="[0-9]{9,}" placeholder="Ej: 612345678">
+                </div>
+                <div class="input-group">
+                    <label for="personas"><span class="input-icon">👥</span> Nº de personas</label>
+                    <input type="number" id="personas" name="personas" min="1" max="20" required placeholder="Ej: 4">
+                </div>
+                <div class="input-group">
+                    <label for="fecha"><span class="input-icon">📅</span> Fecha</label>
+                    <input type="date" id="fecha" name="fecha" required>
+                </div>
+                <div class="input-group">
+                    <label for="hora"><span class="input-icon">⏰</span> Hora</label>
+                    <select id="hora" name="hora" required>
+                        <!-- Opciones generadas por JS -->
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-reserva kebab-theme">Reservar mesa</button>
+            </form>
+            <div id="reserva-mensaje" class="reserva-mensaje"></div>
+            <div class="reserva-decor-icon"><img src="{{ asset('img/logo2.png') }}" alt="Kebab" /></div>
+        </div>
+    </section>
+
     <footer id="contact" class="footer">
         <p>© 2025 Kebab Las Niñas. Todos los derechos reservados.</p>
         <p>Contacto: <a href="mailto:info@kebablasniñas.com">info@kebablasniñas.com</a></p>
@@ -343,6 +381,36 @@
                     .catch(() => {
                         alert('Error de red al añadir al carrito.');
                     });
+                });
+            });
+
+            // Envío AJAX
+            document.getElementById('reserva-form').addEventListener('submit', function(e){
+                e.preventDefault();
+                const form = this;
+                const formData = new FormData(form);
+                const mensajeDiv = document.getElementById('reserva-mensaje');
+                mensajeDiv.className = 'reserva-mensaje'; // Limpia clases previas
+
+                fetch('{{ path('reserva_mesa') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        mensajeDiv.textContent = '¡Reserva enviada! Nos pondremos en contacto contigo para confirmarla.';
+                        mensajeDiv.classList.add('visible');
+                        form.reset();
+                    } else {
+                        mensajeDiv.textContent = data.message || 'Error al reservar.';
+                        mensajeDiv.classList.add('error', 'visible');
+                    }
+                })
+                .catch(() => {
+                    mensajeDiv.textContent = 'Error de red al reservar.';
+                    mensajeDiv.classList.add('error', 'visible');
                 });
             });
         });
