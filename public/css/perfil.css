@@ -1,0 +1,111 @@
+body {
+    min-height: 100vh;
+    height: 100vh;
+    overflow-y: hidden;
+    background:
+        url('../img/fondo.png') no-repeat center center fixed;
+    background-size: cover, cover;
+    background-blend-mode: lighten;
+    margin: 0;
+    padding: 0;
+}
+
+.perfil-editar-container {
+    max-width: 520px;
+    margin: 180px auto 0 auto;
+    background: linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%);
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(160, 82, 45, 0.13), 0 2px 8px rgba(34, 49, 63, 0.07);
+    padding: 60px 40px 38px 40px;
+    border: 2px solid #ffb74d;
+    position: relative;
+}
+
+.perfil-editar-container::before {
+    content: "";
+    position: absolute;
+    top: -130px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 180px;
+    background: url('../img/logo.png') no-repeat center/contain;
+    opacity: 0.98;
+    z-index: 2;
+}
+
+.perfil-editar-container h2 {
+    text-align: center;
+    margin-bottom: 28px;
+    color: #ff9800;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 2rem;
+}
+
+.perfil-editar-container label {
+    font-weight: 600;
+    color: #a0522d;
+    margin-bottom: 6px;
+    display: block;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 1.05rem;
+}
+
+.perfil-editar-container input[type="text"],
+.perfil-editar-container input[type="tel"],
+.perfil-editar-container input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border: 1.5px solid #e0c9a6;
+    border-radius: 8px;
+    background: #fffdfa;
+    font-size: 1rem;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    transition: border 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 2px rgba(160, 82, 45, 0.04);
+}
+
+.perfil-editar-container input:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 0 2px #ffb74d44;
+    outline: none;
+}
+
+.perfil-editar-container button,
+.perfil-editar-container .btn.btn-primary {
+    width: 100%;
+    background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 13px;
+    font-size: 1.15rem;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    box-shadow: 0 2px 8px rgba(160, 82, 45, 0.07);
+    transition: background 0.2s, transform 0.15s;
+}
+
+.perfil-editar-container button:hover,
+.perfil-editar-container .btn.btn-primary:hover {
+    background: linear-gradient(90deg, #ffa726 0%, #ff9800 100%);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.perfil-editar-container .form-group {
+    margin-bottom: 18px;
+}
+
+@media (max-width: 600px) {
+    .perfil-editar-container {
+        padding: 22px 5vw 18px 5vw;
+    }
+    .perfil-editar-container h2 {
+        font-size: 1.3rem;
+    }
+}

@@ -155,7 +155,6 @@ class CarritoController extends AbstractController
         $usuarioId = $session->get('user_id');
         if (!$usuarioId) {
             $this->addFlash('error', 'Debes iniciar sesión para finalizar el pedido.');
-
             return $this->redirectToRoute('app_login');
         }
 
@@ -171,7 +170,6 @@ class CarritoController extends AbstractController
         // Obtener el estado del pedido
         $estado = $estadospedidosRepository->findOneBy(['nombre' => 'Pendiente']);
         if (!$estado) {
-            // Si no existe, busca el primero disponible
             $estado = $estadospedidosRepository->findOneBy([]);
         }
         if (!$estado) {
@@ -184,8 +182,8 @@ class CarritoController extends AbstractController
         $pedido->setFechapedido(new \DateTime());
 
         $total = 0;
-        foreach ($carrito as $id => $item) {
-            $plato = $platosRepository->find($id);
+        foreach ($carrito as $key => $item) {
+            $plato = $platosRepository->find($item['id']);
             if ($plato) {
                 $cantidad = isset($item['cantidad']) && !is_array($item['cantidad']) ? (int)$item['cantidad'] : 1;
                 $total += $plato->getPrecio() * $cantidad;
@@ -196,8 +194,8 @@ class CarritoController extends AbstractController
         $em->persist($pedido);
 
         // Guardar detalles del pedido
-        foreach ($carrito as $id => $item) {
-            $plato = $platosRepository->find($id);
+        foreach ($carrito as $key => $item) {
+            $plato = $platosRepository->find($item['id']);
             if ($plato) {
                 $detalle = new Detallespedidos();
                 $detalle->setPedido($pedido);
@@ -205,7 +203,7 @@ class CarritoController extends AbstractController
                 $cantidad = isset($item['cantidad']) && !is_array($item['cantidad']) ? (int)$item['cantidad'] : 1;
                 $detalle->setCantidad($cantidad);
                 $detalle->setPreciounitario($plato->getPrecio());
-                $pers = isset($personalizaciones[$id]) ? $personalizaciones[$id] : [];
+                $pers = isset($personalizaciones[$key]) ? $personalizaciones[$key] : [];
                 $detalle->setPersonalizacion(json_encode($pers));
                 $em->persist($detalle);
             }

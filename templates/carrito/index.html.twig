@@ -29,131 +29,102 @@
 
         {% if carritoData is not empty %}
             <form action="{{ path('app_carrito_finalizar') }}" method="post">
-            <table class="cart-table">
-                <thead>
-                    <tr>
-                        <th>Plato</th>
-                        <th>Precio Unitario</th>
-                        <th>Cantidad</th>
-                        <th>Personalización</th>
-                        <th>Subtotal</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <div class="cart-cards">
                     {% for item in carritoData %}
-                        <tr>
-                            <td data-label="Plato">{{ item.plato.nombre }}</td>
-                            <td data-label="Precio Unitario">{{ item.plato.precio | number_format(2, '.', ',') }} €</td>
-                            <td data-label="Cantidad">
-                                <form action="{{ path('app_carrito_actualizar', {'key': item.key}) }}" method="post" class="quantity-form">
-                                    <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1">
-                                    <button type="submit" class="update-btn">Actualizar</button>
-                                </form>
-                            </td>
-                            <td data-label="Personalización">
-                                {% set categoria = item.plato.categoria.nombre|lower %}
-                                {% if categoria == 'entrantes' %}
-                                    <label>
-                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][salsa_blanca]" value="1"
-                                            {% if (item.personalizacion.salsa_blanca|default(false)) %}checked{% endif %}>
-                                        Salsa blanca
-                                        {% if (item.personalizacion.salsa_blanca|default(false)) %}
-                                            ✔
+                        <div class="cart-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <span class="plato-icon">🍽️</span>
+                                    <span class="plato-nombre">{{ item.plato.nombre }}</span>
+                                </div>
+                                <a href="{{ path('app_carrito_eliminar', {'key': item.key}) }}" class="btn btn-danger btn-card">✖</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-info">
+                                    <div class="precio-unitario">
+                                        <span class="label">Precio:</span>
+                                        <span>{{ item.plato.precio | number_format(2, '.', ',') }} €</span>
+                                    </div>
+                                    <div class="cantidad">
+                                        <form action="{{ path('app_carrito_actualizar', {'key': item.key}) }}" method="post" class="quantity-form">
+                                            <span class="label">Cantidad:</span>
+                                            <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1">
+                                            <button type="submit" class="update-btn">Actualizar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="personalizacion">
+                                    <span class="label">Personalización:</span>
+                                    <div class="personalizacion-list">
+                                        {% set categoria = item.plato.categoria.nombre|lower %}
+                                        {% if categoria == 'entrantes' %}
+                                            <label class="perso-item">
+                                                <input type="checkbox" name="personalizacion[{{ item.key }}][salsa_blanca]" value="1"
+                                                    {% if (item.personalizacion.salsa_blanca|default(false)) %}checked{% endif %}>
+                                                <span class="perso-icon">🥛</span> Salsa blanca
+                                            </label>
+                                        {% elseif categoria == 'kebabs' or categoria == 'falafel' %}
+                                            <label class="perso-item">
+                                                <input type="checkbox" name="personalizacion[{{ item.key }}][salsa_yogurt]" value="1"
+                                                    {% if (item.personalizacion.salsa_yogurt|default(false)) %}checked{% endif %}>
+                                                <span class="perso-icon">🥛</span> Salsa yogurt
+                                            </label>
+                                            <label class="perso-item">
+                                                <input type="checkbox" name="personalizacion[{{ item.key }}][lechuga]" value="1"
+                                                    {% if (item.personalizacion.lechuga|default(false)) %}checked{% endif %}>
+                                                <span class="perso-icon">🥬</span> Lechuga
+                                            </label>
+                                            <label class="perso-item">
+                                                <input type="checkbox" name="personalizacion[{{ item.key }}][tomate]" value="1"
+                                                    {% if (item.personalizacion.tomate|default(false)) %}checked{% endif %}>
+                                                <span class="perso-icon">🍅</span> Tomate
+                                            </label>
+                                            <label class="perso-item">
+                                                <input type="checkbox" name="personalizacion[{{ item.key }}][cebolla]" value="1"
+                                                    {% if (item.personalizacion.cebolla|default(false)) %}checked{% endif %}>
+                                                <span class="perso-icon">🧅</span> Cebolla
+                                            </label>
+                                            <label class="perso-item">
+                                                <input type="checkbox" name="personalizacion[{{ item.key }}][maiz]" value="1"
+                                                    {% if (item.personalizacion.maiz|default(false)) %}checked{% endif %}>
+                                                <span class="perso-icon">🌽</span> Maíz
+                                            </label>
+                                            <label class="perso-item">
+                                                <input type="checkbox" name="personalizacion[{{ item.key }}][queso_feta]" value="1"
+                                                    {% if (item.personalizacion.queso_feta|default(false)) %}checked{% endif %}>
+                                                <span class="perso-icon">🧀</span> Queso feta
+                                            </label>
+                                            <label class="perso-item">
+                                                <input type="checkbox" name="personalizacion[{{ item.key }}][lombarda]" value="1"
+                                                    {% if (item.personalizacion.lombarda|default(false)) %}checked{% endif %}>
+                                                <span class="perso-icon">🥗</span> Lombarda
+                                            </label>
+                                            <label class="perso-item">
+                                                <input type="checkbox" name="personalizacion[{{ item.key }}][salsa_picante]" value="1"
+                                                    {% if (item.personalizacion.salsa_picante|default(false)) %}checked{% endif %}>
+                                                <span class="perso-icon">🌶️</span> Salsa picante
+                                            </label>
+                                        {% else %}
+                                            <span>No disponible</span>
                                         {% endif %}
-                                    </label>
-                                {% elseif categoria == 'kebabs' or categoria == 'falafel' %}
-                                    <label>
-                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][salsa_yogurt]" value="1"
-                                            {% if (item.personalizacion.salsa_yogurt|default(false)) %}checked{% endif %}>
-                                        Salsa yogurt
-                                        {% if (item.personalizacion.salsa_yogurt|default(false)) %}
-                                            ✔
-                                        {% endif %}
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][lechuga]" value="1"
-                                            {% if (item.personalizacion.lechuga|default(false)) %}checked{% endif %}>
-                                        Lechuga
-                                        {% if (item.personalizacion.lechuga|default(false)) %}
-                                            ✔
-                                        {% endif %}
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][tomate]" value="1"
-                                            {% if (item.personalizacion.tomate|default(false)) %}checked{% endif %}>
-                                        Tomate
-                                        {% if (item.personalizacion.tomate|default(false)) %}
-                                            ✔
-                                        {% endif %}
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][cebolla]" value="1"
-                                            {% if (item.personalizacion.cebolla|default(false)) %}checked{% endif %}>
-                                        Cebolla
-                                        {% if (item.personalizacion.cebolla|default(false)) %}
-                                            ✔
-                                        {% endif %}
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][maiz]" value="1"
-                                            {% if (item.personalizacion.maiz|default(false)) %}checked{% endif %}>
-                                        Maíz
-                                        {% if (item.personalizacion.maiz|default(false)) %}
-                                            ✔
-                                        {% endif %}
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][queso_feta]" value="1"
-                                            {% if (item.personalizacion.queso_feta|default(false)) %}checked{% endif %}>
-                                        Queso feta
-                                        {% if (item.personalizacion.queso_feta|default(false)) %}
-                                            ✔
-                                        {% endif %}
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][lombarda]" value="1"
-                                            {% if (item.personalizacion.lombarda|default(false)) %}checked{% endif %}>
-                                        Lombarda
-                                        {% if (item.personalizacion.lombarda|default(false)) %}
-                                            ✔
-                                        {% endif %}
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" name="personalizacion[{{ item.plato.id }}][salsa_picante]" value="1"
-                                            {% if (item.personalizacion.salsa_picante|default(false)) %}checked{% endif %}>
-                                        Salsa picante
-                                        {% if (item.personalizacion.salsa_picante|default(false)) %}
-                                            ✔
-                                        {% endif %}
-                                    </label>
-                                {% else %}
-                                    <span>No disponible</span>
-                                {% endif %}
-                            </td>
-                            <td data-label="Subtotal">{{ (item.plato.precio * item.cantidad) | number_format(2, '.', ',') }} €</td>
-                            <td data-label="Acciones">
-                                <a href="{{ path('app_carrito_eliminar', {'key': item.key}) }}" class="btn btn-danger">Eliminar</a>
-                            </td>
-                        </tr>
+                                    </div>
+                                </div>
+                                <div class="subtotal">
+                                    <span class="label">Subtotal:</span>
+                                    <span class="subtotal-value">{{ (item.plato.precio * item.cantidad) | number_format(2, '.', ',') }} €</span>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr class="total-row">
-                        <td colspan="4" data-label="Total:" class="total-label">Total:</td>
-                        <td data-label="Valor Total" class="total-value">{{ total | number_format(2, '.', ',') }} €</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
-
-            <div class="button-group">
-                <a href="{{ path('app_carrito_vaciar') }}" class="btn btn-warning">Vaciar Carrito</a>
-            </div>
-
-            <div class="checkout-link">
-                <button type="submit" class="btn btn-success">Finalizar Pedido</button>
-            </div>
+                </div>
+                <div class="cart-summary">
+                    <div class="total-label">Total:</div>
+                    <div class="total-value">{{ total | number_format(2, '.', ',') }} €</div>
+                </div>
+                <div class="cart-actions">
+                    <a href="{{ path('app_carrito_vaciar') }}" class="btn btn-warning">Vaciar Carrito</a>
+                    <button type="submit" class="btn btn-success">Finalizar Pedido</button>
+                </div>
             </form>
         {% else %}
             <div class="empty-cart">
