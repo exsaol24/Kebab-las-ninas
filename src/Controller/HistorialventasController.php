@@ -17,16 +17,22 @@ final class HistorialventasController extends AbstractController
     #[Route('/admin/historialventas', name: 'admin_historialventas')]
     public function adminIndex(EntityManagerInterface $em): Response
     {
-        $historialventas = $em->getRepository(Historialventas::class)->findAll();
-        $usuarios = $em->getRepository(Usuarios::class)->findAll();
-        $platos = $em->getRepository(Platos::class)->findAll();
-        $pedidos = $em->getRepository(Pedidos::class)->findAll();
+        $platos = $em->getRepository(\App\Entity\Platos::class)->findAll();
+        $usuarios = $em->getRepository(\App\Entity\Usuarios::class)->findAll();
+        $pedidos = $em->getRepository(\App\Entity\Pedidos::class)->findAll();
+        $historialventas = $em->getRepository(\App\Entity\Historialventas::class)->findAll();
+        $categorias = $em->getRepository(\App\Entity\Categorias::class)->findAll();
+        $estadospedidos = $em->getRepository(\App\Entity\Estadospedidos::class)->findAll();
+        $detallespedidos = $em->getRepository(\App\Entity\Detallespedidos::class)->findAll();
 
         return $this->render('admin/panel.html.twig', [
-            'historialventas' => $historialventas,
-            'usuarios' => $usuarios,
             'platos' => $platos,
+            'usuarios' => $usuarios,
             'pedidos' => $pedidos,
+            'historialventas' => $historialventas,
+            'estadospedidos' => $estadospedidos,
+            'detallespedidos' => $detallespedidos,
+            'categorias' => $categorias,
         ]);
     }
 

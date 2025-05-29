@@ -1,0 +1,148 @@
+{# templates/emails/pedido_confirmacion.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmación de Pedido - Kebab Las Niñas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #d9534f;
+        }
+        .order-details, .customer-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #d9534f;
+            color: white;
+        }
+        .total {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #777;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¡Gracias por tu pedido, {{ usuario.nombre }}!</h1>
+        <p>Tu pedido en Kebab Las Niñas ha sido recibido y está siendo procesado.</p>
+
+        <div class="customer-info">
+            <h2>Información del Pedido</h2>
+            <p><strong>Número de Pedido:</strong> {{ pedido.id }}</p>
+            <p><strong>Fecha del Pedido:</strong> {{ pedido.fechapedido|date('d/m/Y H:i') }}</p>
+            <p><strong>Estado:</strong> {{ pedido.estado.nombre }}</p>
+            <p><strong>Método de Pago:</strong> {{ pedido.metodopago }}</p>
+            <p><strong>Dirección de Entrega:</strong> {{ pedido.direccionentrega }}</p>
+        </div>
+
+        <div class="order-details">
+            <h2>Detalles de tu Pedido</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Plato</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Personalización</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in detallesPedidos %}
+                        <tr>
+                            <td>{{ item.plato.nombre }}</td>
+                            <td>{{ item.cantidad }}</td>
+                            <td>{{ item.precio_unitario|number_format(2, '.', ',') }} €</td>
+                            <td>
+                                {% if item.personalizacion is not empty %}
+                                    {% set personalizacion = item.personalizacion %}
+                                    {% set perso_display = [] %}
+                                    {% if personalizacion.salsa_yogurt is defined and personalizacion.salsa_yogurt == 1 %}
+                                        {% set perso_display = perso_display|merge(['Salsa yogurt']) %}
+                                    {% endif %}
+                                    {% if personalizacion.salsa_blanca is defined and personalizacion.salsa_blanca == 1 %}
+                                        {% set perso_display = perso_display|merge(['Salsa blanca']) %}
+                                    {% endif %}
+                                    {% if personalizacion.lechuga is defined and personalizacion.lechuga == 1 %}
+                                        {% set perso_display = perso_display|merge(['Lechuga']) %}
+                                    {% endif %}
+                                    {% if personalizacion.tomate is defined and personalizacion.tomate == 1 %}
+                                        {% set perso_display = perso_display|merge(['Tomate']) %}
+                                    {% endif %}
+                                    {% if personalizacion.cebolla is defined and personalizacion.cebolla == 1 %}
+                                        {% set perso_display = perso_display|merge(['Cebolla']) %}
+                                    {% endif %}
+                                    {% if personalizacion.maiz is defined and personalizacion.maiz == 1 %}
+                                        {% set perso_display = perso_display|merge(['Maíz']) %}
+                                    {% endif %}
+                                    {% if personalizacion.queso_feta is defined and personalizacion.queso_feta == 1 %}
+                                        {% set perso_display = perso_display|merge(['Queso Feta']) %}
+                                    {% endif %}
+                                    {% if personalizacion.lombarda is defined and personalizacion.lombarda == 1 %}
+                                        {% set perso_display = perso_display|merge(['Lombarda']) %}
+                                    {% endif %}
+                                    {% if personalizacion.salsa_picante is defined and personalizacion.salsa_picante == 1 %}
+                                        {% set perso_display = perso_display|merge(['Salsa picante']) %}
+                                    {% endif %}
+
+                                    {% if perso_display is not empty %}
+                                        {{ perso_display|join(', ') }}
+                                    {% else %}
+                                        Ninguna
+                                    {% endif %}
+                                {% else %}
+                                    Ninguna
+                                {% endif %}
+                            </td>
+                            <td>{{ (item.plato.precio * item.cantidad)|number_format(2, '.', ',') }} €</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="total">
+                Total del Pedido: {{ pedido.total|number_format(2, '.', ',') }} €
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Si tienes alguna pregunta, por favor contacta con nosotros.</p>
+            <p>&copy; {{ "now"|date("Y") }} Kebab Las Niñas. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</body>
+</html>

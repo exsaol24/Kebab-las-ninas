@@ -40,20 +40,9 @@ class PlatosType extends AbstractType
                 'currency' => 'EUR',
             ])
             ->add('imagen', FileType::class, [
-                'label' => 'Imagen (JPG, PNG, JPEG)',
+                'label' => 'Imagen (JPG, PNG, etc.)',
                 'mapped' => false,
                 'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '2M',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                            'image/jpg',
-                        ],
-                        'mimeTypesMessage' => 'Por favor sube una imagen válida (JPG o PNG)',
-                    ])
-                ],
             ])
             ->add('ingredientes', TextType::class, [
                 'label' => 'Ingredientes',

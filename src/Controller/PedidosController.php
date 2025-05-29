@@ -25,15 +25,22 @@ final class PedidosController extends AbstractController
     #[Route('/admin/pedidos', name: 'admin_pedidos')]
     public function adminIndex(EntityManagerInterface $em): Response
     {
-        $pedidos = $em->getRepository(Pedidos::class)->findAll();
-        $usuarios = $em->getRepository(Usuarios::class)->findAll();
         $platos = $em->getRepository(\App\Entity\Platos::class)->findAll();
+        $usuarios = $em->getRepository(\App\Entity\Usuarios::class)->findAll();
+        $pedidos = $em->getRepository(\App\Entity\Pedidos::class)->findAll();
         $historialventas = $em->getRepository(\App\Entity\Historialventas::class)->findAll();
+        $categorias = $em->getRepository(\App\Entity\Categorias::class)->findAll();
+        $estadospedidos = $em->getRepository(\App\Entity\Estadospedidos::class)->findAll();
+        $detallespedidos = $em->getRepository(\App\Entity\Detallespedidos::class)->findAll();
+
         return $this->render('admin/panel.html.twig', [
-            'pedidos' => $pedidos,
-            'usuarios' => $usuarios,
             'platos' => $platos,
+            'usuarios' => $usuarios,
+            'pedidos' => $pedidos,
             'historialventas' => $historialventas,
+            'estadospedidos' => $estadospedidos,
+            'detallespedidos' => $detallespedidos,
+            'categorias' => $categorias,
         ]);
     }
 

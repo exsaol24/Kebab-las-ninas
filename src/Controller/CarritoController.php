@@ -15,6 +15,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Twig\Environment;
 
 class CarritoController extends AbstractController
 {
@@ -51,7 +54,6 @@ class CarritoController extends AbstractController
     {
         $session = $request->getSession();
         $carrito = $session->get('carrito', []);
-        // Añade como nueva línea siempre (sin personalización)
         $carrito[] = [
             'id' => $id,
             'cantidad' => 1,
@@ -141,7 +143,9 @@ class CarritoController extends AbstractController
         PlatosRepository $platosRepository,
         EntityManagerInterface $em,
         EstadospedidosRepository $estadospedidosRepository,
-        UsuariosRepository $usuariosRepository
+        UsuariosRepository $usuariosRepository,
+        MailerInterface $mailer,
+        Environment $twig
     ): Response {
         $session = $request->getSession();
         $carrito = $session->get('carrito', []);
@@ -194,6 +198,7 @@ class CarritoController extends AbstractController
         $em->persist($pedido);
 
         // Guardar detalles del pedido
+        $detallesPedidos = [];
         foreach ($carrito as $key => $item) {
             $plato = $platosRepository->find($item['id']);
             if ($plato) {
@@ -206,6 +211,12 @@ class CarritoController extends AbstractController
                 $pers = isset($personalizaciones[$key]) ? $personalizaciones[$key] : [];
                 $detalle->setPersonalizacion(json_encode($pers));
                 $em->persist($detalle);
+                $detallesPedidos[] = [
+                    'plato' => $plato,
+                    'cantidad' => $cantidad,
+                    'personalizacion' => $pers,
+                    'precio_unitario' => $plato->getPrecio(),
+                ];
             }
         }
 
@@ -220,7 +231,26 @@ class CarritoController extends AbstractController
         $em->persist($historial);
         $em->flush();
 
-        $this->addFlash('success', 'Pedido realizado correctamente.');
+        // Send email to the user
+        try {
+            $emailContent = $twig->render('emails/pedido_confirmacion.html.twig', [
+                'pedido' => $pedido,
+                'usuario' => $usuario,
+                'detallesPedidos' => $detallesPedidos,
+            ]);
+
+            $email = (new Email())
+                ->from('your_email@example.com') // Replace with your sender email
+                ->to($usuario->getEmail())
+                ->subject('Confirmación de tu pedido en Kebab Las Niñas')
+                ->html($emailContent);
+
+            $mailer->send($email);
+            $this->addFlash('success', 'Pedido realizado correctamente y confirmación enviada a tu correo.');
+        } catch (\Exception $e) {
+            $this->addFlash('warning', 'Pedido realizado, pero no se pudo enviar el correo de confirmación. Error: ' . $e->getMessage());
+        }
+
         return $this->redirectToRoute('app_inicio');
     }
 }
