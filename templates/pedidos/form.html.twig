@@ -9,7 +9,7 @@
 
 {% block body %}
 <body class="admin-panel">
-<div class="admin-edit-bg">
+<div class="admin-panel-container">
     <h1 class="admin-panel-title">{{ editar ? 'Editar Pedido' : 'Nuevo Pedido' }}</h1>
     <div class="admin-edit-form">
         {{ form_start(form) }}
@@ -19,9 +19,9 @@
             {{ form_row(form.metodopago) }}
             {{ form_row(form.fechapedido) }}
             {{ form_row(form.estado) }}
-            <button class="btn btn-primary" type="submit">Guardar</button>
+            <button class="btn btn-edit" type="submit">{{ editar ? 'Guardar cambios' : 'Crear' }}</button>
         {{ form_end(form) }}
-        <a href="{{ path('admin_pedidos') }}" class="btn btn-secondary" style="margin-top: 15px;">Volver al listado</a>
+        <a href="{{ path('admin_pedidos') }}" class="btn btn-cancel" style="margin-top: 15px;">Volver al listado</a>
     </div>
 </div>
 </body>

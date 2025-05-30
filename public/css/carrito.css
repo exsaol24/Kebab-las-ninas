@@ -6,7 +6,7 @@ body {
     background-color: #f8f8f8;
     color: #333;
     margin: 0;
-    padding-top: 20px;
+    padding-top: 100px;
     padding-bottom: 50px;
     line-height: 1.6;
 }
@@ -18,9 +18,8 @@ body {
     padding: 0 15px;
 }
 
-/* Añadido margen superior para el contenedor principal del carrito */
 .cart-container {
-    margin-top: 80px;
+    margin-top: 20px;
 }
 
 
@@ -63,7 +62,6 @@ h1 {
     border-color: #ffeeba;
 }
 
-/* Estilos para la tabla del carrito */
 .cart-table {
     width: 100%;
     margin-bottom: 30px;
@@ -73,6 +71,7 @@ h1 {
     background-color: #fff;
     border-radius: 10px;
     overflow: hidden;
+    display: none;
 }
 
 .cart-table th,
@@ -90,7 +89,6 @@ h1 {
     letter-spacing: 0.05em;
 }
 
-/* Bordes redondeados para las esquinas de la tabla */
 .cart-table th:first-child {
     border-top-left-radius: 10px;
 }
@@ -112,13 +110,6 @@ h1 {
     transition: background-color 0.2s ease;
 }
 
-/* Estilo para el formulario de cantidad */
-.quantity-form {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
 .quantity-form input[type="number"] {
     width: 50px;
     padding: 8px;
@@ -128,7 +119,7 @@ h1 {
     font-size: 1em;
 }
 
-/* Estilos para los botones dentro de la tabla */
+/* Estilos para los botones dentro de la tabla (original) */
 .update-btn,
 .btn-danger {
     padding: 8px 15px;
@@ -170,7 +161,7 @@ h1 {
     transform: scale(0.98);
 }
 
-/* Estilos para la fila del total */
+/* Estilos para la fila del total (original) */
 .total-row td {
     font-weight: bold;
     font-size: 1.2em;
@@ -194,6 +185,7 @@ h1 {
     text-align: right;
     margin-top: 20px;
     padding-right: 15px;
+    display: none;
 }
 
 .btn-warning {
@@ -216,11 +208,11 @@ h1 {
     transform: scale(0.98);
 }
 
-/* Estilos para el enlace de checkout */
 .checkout-link {
     text-align: right;
     margin-top: 30px;
     padding-right: 15px;
+    display: none;
 }
 
 .checkout-link p {
@@ -279,244 +271,7 @@ h1 {
 }
 
 
-/* --- NUEVO DISEÑO DE TARJETAS PARA EL CARRITO --- */
-.cart-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    margin-bottom: 35px;
-}
-
-.cart-card {
-    background: linear-gradient(120deg, #fff7e6 0%, #fff 100%);
-    border-radius: 18px;
-    box-shadow: 0 4px 18px rgba(245, 158, 11, 0.10), 0 1.5px 6px rgba(0,0,0,0.04);
-    padding: 28px 22px 18px 22px;
-    position: relative;
-    transition: box-shadow 0.2s;
-    border: 2px solid #fbbf24;
-}
-
-.cart-card:hover {
-    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.18), 0 2px 8px rgba(0,0,0,0.08);
-    border-color: #f59e0b;
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.card-title {
-    font-size: 1.3em;
-    font-weight: bold;
-    color: #b45309;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.plato-icon {
-    font-size: 1.5em;
-}
-
-.btn-card {
-    background: #fff0e0;
-    color: #dc3545;
-    border: none;
-    font-size: 1.3em;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-}
-
-.btn-card:hover {
-    background: #ffe3b3;
-    color: #b71c1c;
-}
-
-.card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.card-info {
-    display: flex;
-    gap: 30px;
-    align-items: center;
-    margin-bottom: 8px;
-    flex-wrap: wrap;
-}
-
-.card-info .label {
-    color: #f59e0b;
-    font-weight: bold;
-    margin-right: 6px;
-}
-
-.precio-unitario, .cantidad {
-    font-size: 1.1em;
-}
-
-.quantity-form input[type="number"] {
-    width: 55px;
-    padding: 7px;
-    border: 1.5px solid #fbbf24;
-    border-radius: 7px;
-    text-align: center;
-    font-size: 1em;
-    margin: 0 6px;
-}
-
-.update-btn {
-    background-color: #fbbf24;
-    color: #fff;
-    font-weight: bold;
-    border: none;
-    border-radius: 7px;
-    padding: 7px 15px;
-    margin-left: 4px;
-    transition: background 0.2s;
-}
-
-.update-btn:hover {
-    background-color: #f59e0b;
-}
-
-.personalizacion {
-    margin: 10px 0 0 0;
-}
-
-.personalizacion .label {
-    color: #b45309;
-    font-weight: bold;
-    margin-right: 8px;
-}
-
-.personalizacion-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 18px;
-    margin-top: 6px;
-}
-
-.perso-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 1em;
-    background: #fff8e1;
-    border-radius: 6px;
-    padding: 4px 10px;
-    border: 1px solid #ffe3b3;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.perso-item input[type="checkbox"] {
-    accent-color: #f59e0b;
-    margin-right: 2px;
-}
-
-.perso-item .perso-icon {
-    font-size: 1.1em;
-}
-
-.perso-item:hover {
-    background: #fff3cd;
-}
-
-.subtotal {
-    margin-top: 10px;
-    font-size: 1.15em;
-    font-weight: bold;
-    color: #b45309;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.subtotal .label {
-    color: #f59e0b;
-}
-
-.subtotal-value {
-    background: #fff3cd;
-    border-radius: 6px;
-    padding: 3px 12px;
-    color: #b45309;
-    font-weight: bold;
-    font-size: 1.1em;
-}
-
-.cart-summary {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 18px;
-    margin: 30px 0 10px 0;
-    font-size: 1.3em;
-    font-weight: bold;
-}
-
-.cart-summary .total-label {
-    color: #f59e0b;
-}
-
-.cart-summary .total-value {
-    background: #fbbf24;
-    color: #fff;
-    border-radius: 8px;
-    padding: 8px 22px;
-    font-size: 1.2em;
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.10);
-}
-
-.cart-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 18px;
-    margin-bottom: 30px;
-}
-
-.cart-actions .btn-warning,
-.cart-actions .btn-success {
-    font-size: 1.1em;
-    padding: 12px 28px;
-    border-radius: 8px;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.10);
-}
-
-.cart-actions .btn-warning {
-    background: #ffc107;
-    color: #b45309;
-    border: none;
-}
-
-.cart-actions .btn-warning:hover {
-    background: #fbbf24;
-    color: #fff;
-}
-
-.cart-actions .btn-success {
-    background: #28a745;
-    color: #fff;
-    border: none;
-}
-
-.cart-actions .btn-success:hover {
-    background: #218838;
-}
-
-/* --- CARRITO PROFESIONAL --- */
+/* --- DISEÑO DE TARJETAS PARA EL CARRITO (Profesional y Responsivo) --- */
 .cart-cards {
     display: flex;
     flex-direction: column;
@@ -725,275 +480,47 @@ h1 {
     letter-spacing: 0.01em;
 }
 
-.cart-summary {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 22px;
-    margin: 36px 0 16px 0;
-    font-size: 1.35em;
-    font-weight: 700;
+.form-group {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 0 15px;
 }
 
-.cart-summary .total-label {
-    color: #f59e0b;
-}
-
-.cart-summary .total-value {
-    background: linear-gradient(90deg, #fbbf24 60%, #f59e0b 100%);
-    color: #fff;
-    border-radius: 12px;
-    padding: 10px 32px;
-    font-size: 1.18em;
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.13);
-}
-
-.cart-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 22px;
-    margin-bottom: 36px;
-}
-
-.cart-actions .btn-warning,
-.cart-actions .btn-success {
-    font-size: 1.13em;
-    padding: 14px 36px;
-    border-radius: 12px;
-    font-weight: 700;
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.13);
-    border: none;
-    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-}
-
-.cart-actions .btn-warning {
-    background: linear-gradient(90deg, #ffc107 60%, #fbbf24 100%);
-    color: #b45309;
-}
-
-.cart-actions .btn-warning:hover {
-    background: linear-gradient(90deg, #fbbf24 60%, #ffc107 100%);
-    color: #fff;
-}
-
-.cart-actions .btn-success {
-    background: linear-gradient(90deg, #28a745 60%, #218838 100%);
-    color: #fff;
-}
-
-.cart-actions .btn-success:hover {
-    background: linear-gradient(90deg, #218838 60%, #28a745 100%);
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(40, 167, 69, 0.13);
-}
-
-/* --- CARRITO PROFESIONAL Y RESPONSIVO --- */
-.cart-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    margin-bottom: 40px;
-}
-
-.cart-card {
-    background: #fff;
-    border-radius: 22px;
-    box-shadow: 0 6px 32px rgba(245, 158, 11, 0.13), 0 1.5px 6px rgba(0,0,0,0.06);
-    padding: 32px 28px 20px 28px;
-    border: none;
-    position: relative;
-    transition: box-shadow 0.18s, transform 0.18s;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.cart-card:hover {
-    box-shadow: 0 12px 40px rgba(245, 158, 11, 0.19), 0 2px 8px rgba(0,0,0,0.10);
-    transform: translateY(-2px) scale(1.01);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.form-group label {
+    display: block;
     margin-bottom: 8px;
-}
-
-.card-title {
-    font-size: 1.35em;
-    font-weight: 700;
-    color: #b45309;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    letter-spacing: 0.01em;
-}
-
-.plato-icon {
-    font-size: 1.7em;
-}
-
-.btn-card {
-    background: #fff7e6;
-    color: #dc3545;
-    border: none;
-    font-size: 1.3em;
-    border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.07);
-    transition: background 0.18s, color 0.18s;
-}
-
-.btn-card:hover {
-    background: #ffe3b3;
-    color: #b71c1c;
-}
-
-.card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.card-info {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-    margin-bottom: 0;
-    flex-wrap: wrap;
-}
-
-.card-info .label {
-    color: #f59e0b;
     font-weight: 600;
-    margin-right: 8px;
-    font-size: 1.05em;
+    color: #b45309;
+    font-size: 1.1em;
 }
 
-.precio-unitario, .cantidad {
-    font-size: 1.13em;
-}
-
-.quantity-form {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.quantity-form input[type="number"] {
-    width: 60px;
-    padding: 8px 0;
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
     border: 2px solid #fbbf24;
     border-radius: 8px;
-    text-align: center;
     font-size: 1.1em;
-    background: #fffbe8;
-    font-weight: 600;
-    color: #b45309;
-    outline: none;
-    transition: border 0.18s;
+    font-family: 'Poppins', Arial, sans-serif;
+    color: #333;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.quantity-form input[type="number"]:focus {
+.form-group input[type="text"]::placeholder {
+    color: #aaa;
+}
+
+.form-group input[type="text"]:focus {
     border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    outline: none;
 }
 
-.update-btn {
-    background: linear-gradient(90deg, #fbbf24 60%, #f59e0b 100%);
-    color: #fff;
-    font-weight: 700;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 20px;
-    margin-left: 4px;
-    font-size: 1em;
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.08);
-    transition: background 0.18s, box-shadow 0.18s;
-}
-
-.update-btn:hover {
-    background: linear-gradient(90deg, #f59e0b 60%, #fbbf24 100%);
-    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.13);
-}
-
-.personalizacion {
-    margin: 0;
-}
-
-.personalizacion .label {
-    color: #b45309;
-    font-weight: 700;
-    margin-right: 10px;
-    font-size: 1.05em;
-}
-
-.personalizacion-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 14px;
-    margin-top: 6px;
-}
-
-.perso-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 1em;
-    background: #fff8e1;
-    border-radius: 18px;
-    padding: 4px 16px 4px 8px;
-    border: 1.5px solid #ffe3b3;
-    cursor: pointer;
-    font-weight: 500;
-    box-shadow: 0 1px 4px rgba(245, 158, 11, 0.04);
-    transition: background 0.18s, border 0.18s;
-    position: relative;
-}
-
-.perso-item input[type="checkbox"] {
-    accent-color: #f59e0b;
-    margin-right: 2px;
-    width: 16px;
-    height: 16px;
-    opacity: 0.7;
-}
-
-.perso-item .perso-icon {
-    font-size: 1.15em;
-}
-
-.perso-item:hover {
-    background: #fff3cd;
-    border-color: #fbbf24;
-}
-
-.subtotal {
-    margin-top: 8px;
-    font-size: 1.18em;
-    font-weight: 700;
-    color: #b45309;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.subtotal .label {
-    color: #f59e0b;
-}
-
-.subtotal-value {
-    background: #fff3cd;
-    border-radius: 8px;
-    padding: 4px 16px;
-    color: #b45309;
-    font-weight: 700;
-    font-size: 1.08em;
-    letter-spacing: 0.01em;
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #dc3545;
 }
 
 .cart-summary {
@@ -1004,6 +531,7 @@ h1 {
     margin: 36px 0 16px 0;
     font-size: 1.35em;
     font-weight: 700;
+    padding-right: 15px;
 }
 
 .cart-summary .total-label {
@@ -1024,6 +552,7 @@ h1 {
     justify-content: flex-end;
     gap: 22px;
     margin-bottom: 36px;
+    padding-right: 15px;
 }
 
 .cart-actions .btn-warning,
@@ -1058,67 +587,143 @@ h1 {
     box-shadow: 0 4px 16px rgba(40, 167, 69, 0.13);
 }
 
-/* RESPONSIVE */
+
+/* RESPONSIVE DESIGN - Media Queries */
+
 @media (max-width: 900px) {
     .cart-card {
-        padding: 18px 8px 12px 8px;
+        padding: 24px 20px 16px 20px;
+    }
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .btn-card {
+        margin-left: auto;
+    }
+    .card-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .quantity-form {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    .personalizacion-list {
+        gap: 8px 12px;
     }
     .cart-summary {
         flex-direction: column;
         align-items: flex-end;
         gap: 10px;
+        font-size: 1.2em;
+    }
+    .cart-summary .total-value {
+        padding: 8px 25px;
+        font-size: 1.1em;
     }
     .cart-actions {
         flex-direction: column;
         align-items: stretch;
         gap: 14px;
     }
-}
-
-@media (max-width: 600px) {
-    .cart-card {
-        padding: 12px 4px 8px 4px;
-        border-radius: 14px;
-    }
-    .card-title {
-        font-size: 1.1em;
-        gap: 8px;
-    }
-    .plato-icon {
-        font-size: 1.2em;
-    }
-    .card-info {
-        gap: 12px;
-    }
-    .subtotal-value {
-        padding: 3px 8px;
-        font-size: 1em;
-    }
-    .cart-summary {
-        font-size: 1em;
-        gap: 8px;
-        margin: 18px 0 8px 0;
-    }
-    .cart-summary .total-value {
-        padding: 7px 16px;
-        font-size: 1em;
-    }
     .cart-actions .btn-warning,
     .cart-actions .btn-success {
-        padding: 10px 0;
-        font-size: 1em;
         width: 100%;
+        text-align: center;
+        padding: 12px 0;
+    }
+    .form-group input[type="text"] {
+        padding: 10px 12px;
+        font-size: 1em;
     }
 }
 
-/* Media Queries para Responsividad */
 @media (max-width: 768px) {
     h1 {
         font-size: 2em;
         margin-bottom: 20px;
     }
+    .cart-container {
+        margin-top: 10px;
+    }
+    .cart-card {
+        padding: 18px 15px 12px 15px;
+        border-radius: 18px;
+    }
+    .card-title {
+        font-size: 1.2em;
+        gap: 10px;
+    }
+    .plato-icon {
+        font-size: 1.5em;
+    }
+    .btn-card {
+        width: 34px;
+        height: 34px;
+        font-size: 1.2em;
+    }
+    .card-info {
+        gap: 10px;
+    }
+    .card-info .label {
+        font-size: 1em;
+    }
+    .precio-unitario, .cantidad {
+        font-size: 1.05em;
+    }
+    .quantity-form input[type="number"] {
+        width: 50px;
+        padding: 6px 0;
+        font-size: 1em;
+    }
+    .update-btn {
+        padding: 6px 15px;
+        font-size: 0.9em;
+    }
+    .personalizacion .label {
+        font-size: 1em;
+    }
+    .perso-item {
+        font-size: 0.95em;
+        padding: 3px 12px 3px 6px;
+        border-radius: 16px;
+    }
+    .subtotal {
+        font-size: 1.1em;
+        gap: 8px;
+    }
+    .subtotal-value {
+        padding: 3px 12px;
+        font-size: 1em;
+    }
+    .cart-summary {
+        font-size: 1.1em;
+        gap: 10px;
+        margin: 25px 0 12px 0;
+    }
+    .cart-summary .total-value {
+        padding: 7px 20px;
+        font-size: 1.05em;
+    }
+    .cart-actions {
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+    .cart-actions .btn-warning,
+    .cart-actions .btn-success {
+        font-size: 1.05em;
+        padding: 10px 0;
+    }
+    .empty-cart {
+        padding: 30px 15px;
+    }
+    .empty-cart-message {
+        font-size: 1.1em;
+    }
 
-    /* Transforma la tabla en un listado apilado en pantallas pequeñas */
     .cart-table,
     .cart-table thead,
     .cart-table tbody,
@@ -1127,13 +732,11 @@ h1 {
     .cart-table tr {
         display: block;
     }
-
     .cart-table thead tr {
         position: absolute;
         top: -9999px;
         left: -9999px;
     }
-
     .cart-table tbody tr {
         border: 1px solid #ccc;
         margin-bottom: 15px;
@@ -1142,7 +745,6 @@ h1 {
         background-color: #fff;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-
     .cart-table tbody td {
         border: none;
         border-bottom: 1px solid #eee;
@@ -1151,12 +753,9 @@ h1 {
         min-height: 30px;
         text-align: right;
     }
-
     .cart-table tbody td:last-child {
         border-bottom: 0;
     }
-
-    /* Crea la "etiqueta" para cada dato en móvil usando el atributo data-label */
     .cart-table tbody td::before {
         content: attr(data-label);
         position: absolute;
@@ -1168,36 +767,10 @@ h1 {
         color: #555;
         text-align: left;
     }
-
-    /* Ajustes para el formulario de cantidad en móvil */
     .quantity-form {
-        justify-content: flex-end;
+        justify-content: flex-start;
         margin-top: 5px;
     }
-
-    .quantity-form input[type="number"] {
-        width: 40px;
-        padding: 5px;
-        font-size: 0.9em;
-    }
-
-    .update-btn {
-        padding: 5px 10px;
-        font-size: 0.9em;
-    }
-
-
-    /* Ajustes para los botones Eliminar en móvil */
-    .btn-danger {
-        display: block;
-        margin-top: 10px;
-        text-align: center;
-        padding: 8px 10px;
-        font-size: 0.9em;
-        width: 100%;
-    }
-
-    /* Ajustes para la fila del Total en móvil */
     .cart-table tfoot tr {
         display: flex;
         flex-wrap: wrap;
@@ -1207,69 +780,168 @@ h1 {
         border-radius: 8px;
         padding: 10px;
     }
-
     .cart-table tfoot td {
         border: none;
         padding: 10px;
     }
-
-
     .total-label {
         flex: 1;
         text-align: left;
         padding-left: 15px;
     }
-
     .total-value {
         flex: 1;
         text-align: right;
         padding-right: 15px;
         position: relative;
     }
-
     .total-value::before {
         content: attr(data-label);
         display: none;
     }
-
-    /* Ajustes para los botones fuera de la tabla en móvil */
     .button-group {
         text-align: center;
         padding-right: 0;
         margin-top: 25px;
     }
-
     .btn-warning {
         display: block;
         width: 80%;
         margin: 0 auto;
         padding: 12px 15px;
     }
-
-
     .checkout-link {
         text-align: center;
         padding-right: 0;
         margin-top: 25px;
     }
-
     .checkout-link p {
         margin-bottom: 15px;
     }
-
     .btn-success {
         width: 80%;
         margin: 0 auto;
         display: block;
     }
+}
 
 
-    .empty-cart {
-        padding: 30px 15px;
+@media (max-width: 480px) {
+    body {
+        padding-top: 80px;
+        padding-bottom: 30px;
     }
-
-    .empty-cart-message {
-        margin-top: 10px;
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+    }
+    .cart-container {
+        margin-top: 0;
+    }
+    .alert {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+    .cart-cards {
+        gap: 20px;
+    }
+    .cart-card {
+        padding: 15px 10px 10px 10px;
+        border-radius: 12px;
+    }
+    .card-title {
         font-size: 1.1em;
+        gap: 8px;
+    }
+    .plato-icon {
+        font-size: 1.3em;
+    }
+    .btn-card {
+        width: 30px;
+        height: 30px;
+        font-size: 1.1em;
+    }
+    .card-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .card-info .label {
+        font-size: 0.95em;
+    }
+    .precio-unitario, .cantidad {
+        font-size: 1em;
+    }
+    .quantity-form input[type="number"] {
+        width: 45px;
+        padding: 5px 0;
+        font-size: 0.9em;
+    }
+    .update-btn {
+        padding: 5px 10px;
+        font-size: 0.85em;
+    }
+    .personalizacion .label {
+        font-size: 0.95em;
+    }
+    .personalizacion-list {
+        gap: 6px 10px;
+    }
+    .perso-item {
+        font-size: 0.9em;
+        padding: 3px 10px 3px 5px;
+        border-radius: 14px;
+    }
+    .perso-item input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+    }
+    .perso-item .perso-icon {
+        font-size: 1em;
+    }
+    .subtotal {
+        font-size: 1.05em;
+        gap: 6px;
+    }
+    .subtotal-value {
+        padding: 2px 10px;
+        font-size: 0.95em;
+    }
+    .form-group {
+        padding: 0 10px;
+    }
+    .form-group label {
+        font-size: 1em;
+    }
+    .form-group input[type="text"] {
+        padding: 8px 10px;
+        font-size: 1em;
+    }
+    .cart-summary {
+        font-size: 1em;
+        gap: 8px;
+        margin: 20px 0 10px 0;
+        padding-right: 10px;
+    }
+    .cart-summary .total-value {
+        padding: 6px 18px;
+        font-size: 1em;
+    }
+    .cart-actions {
+        gap: 10px;
+        margin-bottom: 20px;
+        padding-right: 10px;
+    }
+    .cart-actions .btn-warning,
+    .cart-actions .btn-success {
+        font-size: 1em;
+        padding: 10px 0;
+    }
+    .empty-cart {
+        padding: 25px 10px;
+        margin-top: 20px;
+    }
+    .empty-cart-message {
+        font-size: 1em;
     }
 }

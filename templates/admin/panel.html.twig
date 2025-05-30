@@ -5,77 +5,9 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/admin-panel.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/administrador.css') }}">
-    <style>
-        .admin-tabs { margin-bottom: 20px; }
-        .admin-tab-btn {
-            padding: 10px 20px;
-            border: none;
-            background: #eee;
-            cursor: pointer;
-            margin-right: 5px;
-        }
-        .admin-tab-btn.active { background: #ccc; }
-        .admin-tab-content { display: none; }
-        .admin-tab-content.active { display: block; }
-        .admin-table-responsive {
-            width: 100%;
-        }
-        .admin-table th, .admin-table td {
-            font-size: 1em;
-            vertical-align: middle;
-        }
-        .admin-table img {
-            max-width: 60px;
-            max-height: 60px;
-        }
-        .admin-table {
-            table-layout: auto;
-            width: 100%;
-        }
-        .flash-popup {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            min-width: 300px;
-            max-width: 90vw;
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-            border-radius: 8px;
-            padding: 18px 40px 18px 18px;
-            z-index: 9999;
-            font-size: 1.1em;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-            display: flex;
-            align-items: center;
-            animation: fadeInPopup 0.4s;
-        }
-        .flash-popup-error {
-            background: #f8d7da;
-            color: #721c24;
-            border-color: #f5c6cb;
-        }
-        .flash-popup-success {
-            background: #d4edda;
-            color: #155724;
-            border-color: #c3e6cb;
-        }
-        .flash-popup-close {
-            margin-left: 20px;
-            font-size: 1.5em;
-            cursor: pointer;
-            color: inherit;
-            background: none;
-            border: none;
-            outline: none;
-        }
-        @keyframes fadeInPopup {
-            from { opacity: 0; top: 0; }
-            to { opacity: 1; top: 30px; }
-        }
-    </style>
+    {# Si tienes estilos específicos adicionales en administrador.css que no deben estar en admin-panel.css, mantenlo.
+       De lo contrario, considera fusionarlos.
+    <link rel="stylesheet" href="{{ asset('css/administrador.css') }}"> #}
 {% endblock %}
 
 {% block body %}
@@ -84,41 +16,33 @@
     {# Popup para mensajes flash #}
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            <div id="flash-popup" class="flash-popup flash-popup-{{ label }}">
-                {{ message }}
-                <span class="flash-popup-close" onclick="document.getElementById('flash-popup').style.display='none'">&times;</span>
+            {# Usamos un ID único si hay múltiples mensajes, aunque el JS actual solo maneja uno.
+               Para múltiples, necesitarías JS más avanzado o simplemente permitir que se apilen.
+               Por ahora, asumiendo un solo popup visible a la vez con el JS actual. #}
+            <div id="flash-popup-{{ loop.index }}" class="flash-popup flash-popup-{{ label|lower }}">
+                <span>{{ message }}</span> {# Envolver mensaje en span para mejor control con flexbox si es necesario #}
+                <button class="flash-popup-close" onclick="this.parentElement.style.display='none'" aria-label="Cerrar">&times;</button>
             </div>
         {% endfor %}
     {% endfor %}
 
-    <script>
-        // Oculta automáticamente el popup después de 4 segundos
-        window.addEventListener('DOMContentLoaded', function() {
-            var popup = document.getElementById('flash-popup');
-            if (popup) {
-                setTimeout(function() {
-                    popup.style.display = 'none';
-                }, 4000);
-            }
-        });
-    </script>
-
-    <div class="admin-panel-bg">
+    <div class="admin-panel-container"> {# Usar admin-panel-container como principal wrapper #}
         <h1 class="admin-panel-title">Panel de Administrador</h1>
+
         <div class="admin-tabs">
-            <button class="admin-tab-btn active" onclick="showTab('usuarios')">Usuarios</button>
-            <button class="admin-tab-btn" onclick="showTab('platos')">Platos</button>
-            <button class="admin-tab-btn" onclick="showTab('pedidos')">Pedidos</button>
-            <button class="admin-tab-btn" onclick="showTab('historialventas')">Historial Ventas</button>
-            <button class="admin-tab-btn" onclick="showTab('estadospedidos')">Estados de Pedidos</button>
-            <button class="admin-tab-btn" onclick="showTab('detallespedidos')">Detalles de Pedidos</button>
-            <button class="admin-tab-btn" onclick="showTab('categorias')">Categorías</button>
+            <button class="admin-tab-btn active" data-tab="usuarios">Usuarios</button>
+            <button class="admin-tab-btn" data-tab="platos">Platos</button>
+            <button class="admin-tab-btn" data-tab="pedidos">Pedidos</button>
+            <button class="admin-tab-btn" data-tab="historialventas">Historial Ventas</button>
+            <button class="admin-tab-btn" data-tab="estadospedidos">Estados de Pedidos</button>
+            <button class="admin-tab-btn" data-tab="detallespedidos">Detalles de Pedidos</button>
+            <button class="admin-tab-btn" data-tab="categorias">Categorías</button>
         </div>
 
         <div id="tab-usuarios" class="admin-tab-content active">
             <p class="admin-panel-desc">Aquí puedes gestionar los usuarios.</p>
-            <div class="admin-table-responsive" style="overflow-x:auto;">
-                <table class="admin-table" style="width:100%;">
+            <div class="admin-table-responsive">
+                <table class="admin-table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -126,7 +50,7 @@
                             <th>Email</th>
                             <th>Dirección</th>
                             <th>Teléfono</th>
-                            <th>Administrador</th>
+                            <th>Admin</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -136,19 +60,24 @@
                             <td>{{ usuario.id }}</td>
                             <td>{{ usuario.nombre }}</td>
                             <td>{{ usuario.email }}</td>
-                            <td>{{ usuario.direccion }}</td>
-                            <td>{{ usuario.telefono }}</td>
+                            <td>{{ usuario.direccion | default('N/A') }}</td>
+                            <td>{{ usuario.telefono | default('N/A') }}</td>
                             <td>
                                 {% if usuario.administrador %}
-                                    <span class="admin-label">Sí</span>
+                                    <span class="status-label status-label-admin">Sí</span>
                                 {% else %}
-                                    <span class="no-admin-label">No</span>
+                                    <span class="status-label status-label-no-admin">No</span>
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{{ path('admin_usuario_editar', {'id': usuario.id}) }}" class="btn-edit">Editar</a>
-                                <form action="{{ path('admin_usuario_eliminar', {'id': usuario.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
-                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                <a href="{{ path('admin_usuario_editar', {'id': usuario.id}) }}" class="btn btn-edit">Editar</a>
+                                <form action="{{ path('admin_usuario_eliminar', {'id': usuario.id}) }}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
+                                    {# Symfony usa un campo _token por defecto para la protección CSRF en formularios,
+                                       pero si es una petición GET transformada a DELETE o un link, asegúrate de manejar el token
+                                       correctamente o usa el token específico como hiciste para platos.
+                                       Para consistencia, si usas forms, usa el token. #}
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ usuario.id) }}">
+                                    <button type="submit" class="btn btn-delete">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
@@ -162,9 +91,9 @@
 
         <div id="tab-platos" class="admin-tab-content">
             <p class="admin-panel-desc">Aquí puedes gestionar los platos.</p>
-            <a href="{{ path('admin_plato_nuevo') }}" class="btn-add" style="margin-bottom:10px;display:inline-block;">Añadir Plato</a>
+            <a href="{{ path('admin_plato_nuevo') }}" class="btn btn-add">Añadir Plato</a>
             <div class="admin-table-responsive">
-                <table class="admin-table" style="width:100%;">
+                <table class="admin-table">
                     <thead>
                         <tr>
                             <th>Categoría</th>
@@ -181,25 +110,31 @@
                     <tbody>
                     {% for plato in platos %}
                         <tr>
-                            <td>
-                                {{ plato.categoria ? plato.categoria.nombre : '' }}
-                            </td>
+                            <td>{{ plato.categoria ? plato.categoria.nombre : 'N/A' }}</td>
                             <td>{{ plato.nombre }}</td>
-                            <td>{{ plato.descripcion }}</td>
-                            <td>{{ plato.precio }}</td>
+                            <td>{{ plato.descripcion | slice(0, 50) }}{{ plato.descripcion|length > 50 ? '...' : '' }}</td>
+                            <td>{{ plato.precio | number_format(2, ',', '.') }} €</td>
                             <td>
                                 {% if plato.imagen %}
-                                    <img src="{{ asset('uploads/platos/' ~ plato.imagen) }}" alt="Imagen" style="max-width:60px;max-height:60px;">
+                                    <img src="{{ asset('uploads/platos/' ~ plato.imagen) }}" alt="Imagen de {{ plato.nombre }}">
+                                {% else %}
+                                    N/A
                                 {% endif %}
                             </td>
-                            <td>{{ plato.ingredientes }}</td>
-                            <td>{{ plato.alergenos }}</td>
-                            <td>{{ plato.disponible ? 'Sí' : 'No' }}</td>
-                            <td style="min-width:120px;">
-                                <a href="{{ path('admin_plato_editar', {'id': plato.id}) }}" class="btn-edit">Editar</a>
-                                <form action="{{ path('admin_plato_eliminar', {'id': plato.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este plato?');">
+                            <td>{{ plato.ingredientes | default('N/A') | slice(0, 40) }}{{ plato.ingredientes|length > 40 ? '...' : '' }}</td>
+                            <td>{{ plato.alergenos | default('N/A') }}</td>
+                            <td>
+                                {% if plato.disponible %}
+                                    <span class="status-label status-label-success">Sí</span>
+                                {% else %}
+                                    <span class="status-label status-label-neutral">No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_plato_editar', {'id': plato.id}) }}" class="btn btn-edit">Editar</a>
+                                <form action="{{ path('admin_plato_eliminar', {'id': plato.id}) }}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar este plato?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ plato.id) }}">
-                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                    <button type="submit" class="btn btn-delete">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
@@ -214,7 +149,7 @@
         <div id="tab-pedidos" class="admin-tab-content">
             <p class="admin-panel-desc">Aquí puedes gestionar los pedidos.</p>
             <div class="admin-table-responsive">
-                <table class="admin-table" style="width:100%;">
+                <table class="admin-table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -228,16 +163,16 @@
                     <tbody>
                     {% for pedido in pedidos %}
                         <tr>
-                            <td>{{ pedido.id }}</td>
-                            <td>{{ pedido.usuarios ? pedido.usuarios.nombre : '' }}</td>
-                            <td>{{ pedido.fechapedido ? pedido.fechapedido|date('d/m/Y H:i') : '' }}</td>
-                            <td>{{ pedido.total }}</td>
-                            <td>{{ pedido.estado.nombre }}</td>
-                            <td style="min-width:120px;">
-                                <a href="{{ path('admin_pedido_editar', {'id': pedido.id}) }}" class="btn-edit">Editar</a>
-                                <form action="{{ path('admin_pedido_eliminar', {'id': pedido.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este pedido?');">
+                            <td>#{{ pedido.id }}</td>
+                            <td>{{ pedido.usuarios ? pedido.usuarios.nombre : 'N/A' }}</td>
+                            <td>{{ pedido.fechapedido ? pedido.fechapedido|date('d/m/Y H:i') : 'N/A' }}</td>
+                            <td>{{ pedido.total | number_format(2, ',', '.') }} €</td>
+                            <td><span class="status-label status-label-neutral">{{ pedido.estado.nombre | default('N/A') }}</span></td>
+                            <td>
+                                <a href="{{ path('admin_pedido_editar', {'id': pedido.id}) }}" class="btn btn-edit">Editar</a>
+                                <form action="{{ path('admin_pedido_eliminar', {'id': pedido.id}) }}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar este pedido?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ pedido.id) }}">
-                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                    <button type="submit" class="btn btn-delete">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
@@ -250,15 +185,15 @@
         </div>
 
         <div id="tab-historialventas" class="admin-tab-content">
-            <p class="admin-panel-desc">Aquí puedes gestionar el historial de ventas.</p>
+            <p class="admin-panel-desc">Aquí puedes consultar el historial de ventas.</p>
             <div class="admin-table-responsive">
-                <table class="admin-table" style="width:100%;">
+                <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Pedido</th>
+                            <th>ID Venta</th>
+                            <th>ID Pedido</th>
                             <th>Usuario</th>
-                            <th>Fecha</th>
+                            <th>Fecha Venta</th>
                             <th>Total</th>
                             <th>Acciones</th>
                         </tr>
@@ -266,18 +201,15 @@
                     <tbody>
                     {% for venta in historialventas %}
                         <tr>
-                            <td>{{ venta.id }}</td>
-                            <td>{{ venta.pedido ? venta.pedido.id : '' }}</td>
+                            <td>#{{ venta.id }}</td>
+                            <td>{{ venta.pedido ? '#' ~ venta.pedido.id : 'N/A' }}</td>
+                            <td>{{ venta.pedido and venta.pedido.usuarios ? venta.pedido.usuarios.nombre : 'N/A' }}</td>
+                            <td>{{ venta.fechaventa ? venta.fechaventa|date('d/m/Y H:i') : 'N/A' }}</td>
+                            <td>{{ venta.total | number_format(2, ',', '.') }} €</td>
                             <td>
-                                {{ venta.pedido and venta.pedido.usuarios ? venta.pedido.usuarios.nombre : '' }}
-                            </td>
-                            <td>{{ venta.fechaventa ? venta.fechaventa|date('d/m/Y H:i') : '' }}</td>
-                            <td>{{ venta.total }}</td>
-                            <td style="min-width:120px;">
-                                <a href="{{ path('admin_historialventa_editar', {'id': venta.id}) }}" class="btn-edit">Editar</a>
-                                <form action="{{ path('admin_historialventa_eliminar', {'id': venta.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este registro?');">
+                                <form action="{{ path('admin_historialventa_eliminar', {'id': venta.id}) }}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar este registro de venta?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ venta.id) }}">
-                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                    <button type="submit" class="btn btn-delete">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
@@ -291,8 +223,9 @@
 
         <div id="tab-estadospedidos" class="admin-tab-content">
             <p class="admin-panel-desc">Aquí puedes gestionar los estados de los pedidos.</p>
+            {# Posiblemente añadir un botón "Añadir Estado" aquí si es CRUD completo #}
             <div class="admin-table-responsive">
-                <table class="admin-table" style="width:100%;">
+                <table class="admin-table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -305,11 +238,11 @@
                         <tr>
                             <td>{{ estado.id }}</td>
                             <td>{{ estado.nombre }}</td>
-                            <td style="min-width:120px;">
-                                <a href="{{ path('admin_estadopedido_editar', {'id': estado.id}) }}" class="btn-edit">Editar</a>
-                                <form action="{{ path('admin_estadopedido_eliminar', {'id': estado.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este estado?');">
+                            <td>
+                                <a href="{{ path('admin_estadopedido_editar', {'id': estado.id}) }}" class="btn btn-edit">Editar</a>
+                                <form action="{{ path('admin_estadopedido_eliminar', {'id': estado.id}) }}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar este estado?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ estado.id) }}">
-                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                    <button type="submit" class="btn btn-delete">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
@@ -324,35 +257,37 @@
         <div id="tab-detallespedidos" class="admin-tab-content">
             <p class="admin-panel-desc">Aquí puedes gestionar los detalles de los pedidos.</p>
             <div class="admin-table-responsive">
-                <table class="admin-table" style="width:100%;">
+                <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Pedido</th>
+                            <th>ID Detalle</th>
+                            <th>ID Pedido</th>
                             <th>Plato</th>
                             <th>Cantidad</th>
-                            <th>Precio</th>
+                            <th>Personalización</th> {# Anteriormente 'Precio', parece un error tipográfico #}
+                            <th>Precio Unitario</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                     {% for detalle in detallespedidos %}
                         <tr>
-                            <td>{{ detalle.id }}</td>
-                            <td>{{ detalle.pedido ? detalle.pedido.id : '' }}</td>
-                            <td>{{ detalle.platos ? detalle.platos.nombre : '' }}</td>
+                            <td>#{{ detalle.id }}</td>
+                            <td>{{ detalle.pedido ? '#' ~ detalle.pedido.id : 'N/A' }}</td>
+                            <td>{{ detalle.platos ? detalle.platos.nombre : 'N/A' }}</td>
                             <td>{{ detalle.cantidad }}</td>
-                            <td>{{ detalle.preciounitario }}</td>
-                            <td style="min-width:120px;">
-                                <a href="{{ path('admin_detallespedido_editar', {'id': detalle.id}) }}" class="btn-edit">Editar</a>
-                                <form action="{{ path('admin_detallespedido_eliminar', {'id': detalle.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este detalle?');">
+                            <td>{{ detalle.personalizacion | default('Ninguna') }}</td>
+                            <td>{{ detalle.preciounitario | number_format(2, ',', '.') }} €</td>
+                            <td>
+                                <a href="{{ path('admin_detallespedido_editar', {'id': detalle.id}) }}" class="btn btn-edit">Editar</a>
+                                <form action="{{ path('admin_detallespedido_eliminar', {'id': detalle.id}) }}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar este detalle de pedido?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ detalle.id) }}">
-                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                    <button type="submit" class="btn btn-delete">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
                     {% else %}
-                        <tr><td colspan="6" style="text-align:center;">No hay detalles de pedidos.</td></tr>
+                        <tr><td colspan="7" style="text-align:center;">No hay detalles de pedidos.</td></tr>
                     {% endfor %}
                     </tbody>
                 </table>
@@ -360,10 +295,10 @@
         </div>
 
         <div id="tab-categorias" class="admin-tab-content">
-            <p class="admin-panel-desc">Aquí puedes gestionar las categorías.</p>
-            <a href="{{ path('admin_categoria_nuevo') }}" class="btn-add" style="margin-bottom:10px;display:inline-block;">Añadir Categoría</a>
+            <p class="admin-panel-desc">Aquí puedes gestionar las categorías de platos.</p>
+            <a href="{{ path('admin_categoria_nuevo') }}" class="btn btn-add">Añadir Categoría</a>
             <div class="admin-table-responsive">
-                <table class="admin-table" style="width:100%;">
+                <table class="admin-table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -376,11 +311,11 @@
                         <tr>
                             <td>{{ categoria.id }}</td>
                             <td>{{ categoria.nombre }}</td>
-                            <td style="min-width:120px;">
-                                <a href="{{ path('admin_categoria_editar', {'id': categoria.id}) }}" class="btn-edit">Editar</a>
-                                <form action="{{ path('admin_categoria_eliminar', {'id': categoria.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar esta categoría?');">
+                            <td>
+                                <a href="{{ path('admin_categoria_editar', {'id': categoria.id}) }}" class="btn btn-edit">Editar</a>
+                                <form action="{{ path('admin_categoria_eliminar', {'id': categoria.id}) }}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar esta categoría?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ categoria.id) }}">
-                                    <button type="submit" class="btn-delete">Eliminar</button>
+                                    <button type="submit" class="btn btn-delete">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
@@ -391,34 +326,66 @@
                 </table>
             </div>
         </div>
-    </div>
+
+    </div> {# End of admin-panel-container #}
+
     <script>
-        function showTab(tab) {
-            document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.admin-tab-content').forEach(tabContent => tabContent.classList.remove('active'));
-            if(tab === 'usuarios') {
-                document.querySelector('.admin-tab-btn:nth-child(1)').classList.add('active');
-                document.getElementById('tab-usuarios').classList.add('active');
-            } else if(tab === 'platos') {
-                document.querySelector('.admin-tab-btn:nth-child(2)').classList.add('active');
-                document.getElementById('tab-platos').classList.add('active');
-            } else if(tab === 'pedidos') {
-                document.querySelector('.admin-tab-btn:nth-child(3)').classList.add('active');
-                document.getElementById('tab-pedidos').classList.add('active');
-            } else if(tab === 'historialventas') {
-                document.querySelector('.admin-tab-btn:nth-child(4)').classList.add('active');
-                document.getElementById('tab-historialventas').classList.add('active');
-            } else if(tab === 'estadospedidos') {
-                document.querySelector('.admin-tab-btn:nth-child(5)').classList.add('active');
-                document.getElementById('tab-estadospedidos').classList.add('active');
-            } else if(tab === 'detallespedidos') {
-                document.querySelector('.admin-tab-btn:nth-child(6)').classList.add('active');
-                document.getElementById('tab-detallespedidos').classList.add('active');
-            } else if(tab === 'categorias') {
-                document.querySelector('.admin-tab-btn:nth-child(7)').classList.add('active');
-                document.getElementById('tab-categorias').classList.add('active');
+        // Oculta automáticamente los popups de mensajes flash después de 4 segundos
+        window.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.flash-popup').forEach(function(popup) {
+                setTimeout(function() {
+                    if (popup) { // Comprobar si el popup todavía existe
+                         popup.style.opacity = '0'; // Iniciar desvanecimiento
+                         setTimeout(function() { popup.style.display = 'none'; }, 500); // Ocultar después de la animación
+                    }
+                }, 4000);
+            });
+        });
+
+        // Funcionalidad de pestañas
+        const tabButtons = document.querySelectorAll('.admin-tab-btn');
+        const tabContents = document.querySelectorAll('.admin-tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabTarget = button.getAttribute('data-tab');
+
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `tab-${tabTarget}`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Activar la primera pestaña por defecto (o una específica si se pasa por URL hash)
+        function activateInitialTab() {
+            let initialTab = 'usuarios'; // Pestaña por defecto
+            if (window.location.hash) {
+                const hashTab = window.location.hash.substring(1); // Eliminar #
+                const potentialTab = document.querySelector(`.admin-tab-btn[data-tab="${hashTab}"]`);
+                if (potentialTab) {
+                    initialTab = hashTab;
+                }
+            }
+            
+            const initialButton = document.querySelector(`.admin-tab-btn[data-tab="${initialTab}"]`);
+            const initialContent = document.getElementById(`tab-${initialTab}`);
+
+            if (initialButton && initialContent) {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                initialButton.classList.add('active');
+                initialContent.classList.add('active');
             }
         }
+        activateInitialTab();
+
     </script>
-    </body>
+</body>
 {% endblock %}

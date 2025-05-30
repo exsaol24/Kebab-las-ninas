@@ -10,25 +10,26 @@
 {% block body %}
 <body class="admin-panel">
     <div class="admin-panel-container">
-        <h1>Editar Usuario</h1>
-        <form method="post">
-            <label>Nombre:</label>
-            <input type="text" name="nombre" value="{{ usuario.nombre }}" required>
-            <label>Email:</label>
-            <input type="email" name="email" value="{{ usuario.email }}" required>
-            <label>Dirección:</label>
-            <input type="text" name="direccion" value="{{ usuario.direccion }}" required>
-            <label>Teléfono:</label>
-            <input type="text" name="telefono" value="{{ usuario.telefono }}" required>
-            <label>Administrador:</label>
-            <select name="administrador">
-                <option value="0" {% if not usuario.administrador %}selected{% endif %}>No</option>
-                <option value="1" {% if usuario.administrador %}selected{% endif %}>Sí</option>
-            </select>
-            <br>
-            <button type="submit" class="btn btn-edit">Guardar</button>
-            <a href="{{ path('admin_panel') }}" class="btn btn-cancel">Cancelar</a>
-        </form>
+        <h1 class="admin-panel-title">Editar Usuario</h1>
+        <div class="admin-edit-form">
+            <form method="post">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="{{ usuario.nombre }}" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ usuario.email }}" required>
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" name="direccion" value="{{ usuario.direccion }}" required>
+                <label for="telefono">Teléfono:</label>
+                <input type="text" id="telefono" name="telefono" value="{{ usuario.telefono }}" required>
+                <label for="administrador">Administrador:</label>
+                <select id="administrador" name="administrador">
+                    <option value="0" {% if not usuario.administrador %}selected{% endif %}>No</option>
+                    <option value="1" {% if usuario.administrador %}selected{% endif %}>Sí</option>
+                </select>
+                <button type="submit" class="btn btn-edit">Guardar</button>
+                <a href="{{ path('admin_panel') }}" class="btn btn-cancel">Cancelar</a>
+            </form>
+        </div>
     </div>
 </body>
 {% endblock %}
