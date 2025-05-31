@@ -50,8 +50,8 @@
             {% if app.session.get('es_admin') is same as(true) %}
                 <a href="{{ path('admin_panel') }}" class="navbar-link">Panel de administrador</a>
             {% endif %}
-            <a href="{{ path('perfil_editar', {'id': app.session.get('user_id')}) }}" class="navbar-link">
-                {{ app.session.get('user_name') }}
+            <a href="{{ path('perfil_editar', {'id': app.session.get('user_id')}) }}" class="navbar-link cart-icon-link">
+                <img src="{{ asset('img/usuario.png') }}" alt="usuario" class="cart-icon">
             </a>
             <a href="{{ path('app_logout') }}" class="navbar-link">Cerrar sesión</a>
         {% else %}

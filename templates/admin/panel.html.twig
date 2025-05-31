@@ -5,28 +5,23 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/admin-panel.css') }}">
-    {# Si tienes estilos específicos adicionales en administrador.css que no deben estar en admin-panel.css, mantenlo.
-       De lo contrario, considera fusionarlos.
-    <link rel="stylesheet" href="{{ asset('css/administrador.css') }}"> #}
+
 {% endblock %}
 
 {% block body %}
 <body class="admin-panel">
 
-    {# Popup para mensajes flash #}
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            {# Usamos un ID único si hay múltiples mensajes, aunque el JS actual solo maneja uno.
-               Para múltiples, necesitarías JS más avanzado o simplemente permitir que se apilen.
-               Por ahora, asumiendo un solo popup visible a la vez con el JS actual. #}
+
             <div id="flash-popup-{{ loop.index }}" class="flash-popup flash-popup-{{ label|lower }}">
-                <span>{{ message }}</span> {# Envolver mensaje en span para mejor control con flexbox si es necesario #}
+                <span>{{ message }}</span>
                 <button class="flash-popup-close" onclick="this.parentElement.style.display='none'" aria-label="Cerrar">&times;</button>
             </div>
         {% endfor %}
     {% endfor %}
 
-    <div class="admin-panel-container"> {# Usar admin-panel-container como principal wrapper #}
+    <div class="admin-panel-container">
         <h1 class="admin-panel-title">Panel de Administrador</h1>
 
         <div class="admin-tabs">
@@ -72,10 +67,7 @@
                             <td>
                                 <a href="{{ path('admin_usuario_editar', {'id': usuario.id}) }}" class="btn btn-edit">Editar</a>
                                 <form action="{{ path('admin_usuario_eliminar', {'id': usuario.id}) }}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
-                                    {# Symfony usa un campo _token por defecto para la protección CSRF en formularios,
-                                       pero si es una petición GET transformada a DELETE o un link, asegúrate de manejar el token
-                                       correctamente o usa el token específico como hiciste para platos.
-                                       Para consistencia, si usas forms, usa el token. #}
+                                    
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ usuario.id) }}">
                                     <button type="submit" class="btn btn-delete">Eliminar</button>
                                 </form>
@@ -86,6 +78,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div class="pagination-controls"></div>
             </div>
         </div>
 
@@ -143,6 +136,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div class="pagination-controls"></div>
             </div>
         </div>
 
@@ -181,6 +175,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div class="pagination-controls"></div>
             </div>
         </div>
 
@@ -218,12 +213,13 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div class="pagination-controls"></div>
             </div>
         </div>
 
         <div id="tab-estadospedidos" class="admin-tab-content">
             <p class="admin-panel-desc">Aquí puedes gestionar los estados de los pedidos.</p>
-            {# Posiblemente añadir un botón "Añadir Estado" aquí si es CRUD completo #}
+           
             <div class="admin-table-responsive">
                 <table class="admin-table">
                     <thead>
@@ -251,6 +247,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div class="pagination-controls"></div>
             </div>
         </div>
 
@@ -264,7 +261,7 @@
                             <th>ID Pedido</th>
                             <th>Plato</th>
                             <th>Cantidad</th>
-                            <th>Personalización</th> {# Anteriormente 'Precio', parece un error tipográfico #}
+                            <th>Personalización</th>
                             <th>Precio Unitario</th>
                             <th>Acciones</th>
                         </tr>
@@ -291,6 +288,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div class="pagination-controls"></div>
             </div>
         </div>
 
@@ -324,19 +322,20 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div class="pagination-controls"></div>
             </div>
         </div>
 
-    </div> {# End of admin-panel-container #}
+    </div>
 
     <script>
         // Oculta automáticamente los popups de mensajes flash después de 4 segundos
         window.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.flash-popup').forEach(function(popup) {
                 setTimeout(function() {
-                    if (popup) { // Comprobar si el popup todavía existe
-                         popup.style.opacity = '0'; // Iniciar desvanecimiento
-                         setTimeout(function() { popup.style.display = 'none'; }, 500); // Ocultar después de la animación
+                    if (popup) {
+                         popup.style.opacity = '0';
+                         setTimeout(function() { popup.style.display = 'none'; }, 500);
                     }
                 }, 4000);
             });
@@ -362,11 +361,10 @@
             });
         });
 
-        // Activar la primera pestaña por defecto (o una específica si se pasa por URL hash)
         function activateInitialTab() {
-            let initialTab = 'usuarios'; // Pestaña por defecto
+            let initialTab = 'usuarios';
             if (window.location.hash) {
-                const hashTab = window.location.hash.substring(1); // Eliminar #
+                const hashTab = window.location.hash.substring(1);
                 const potentialTab = document.querySelector(`.admin-tab-btn[data-tab="${hashTab}"]`);
                 if (potentialTab) {
                     initialTab = hashTab;
@@ -386,6 +384,100 @@
         }
         activateInitialTab();
 
+        // Paginación para todas las tablas con la clase 'admin-table'
+        document.addEventListener('DOMContentLoaded', function() {
+            const rowsPerPage = 10;
+
+            document.querySelectorAll('.admin-table').forEach(function(table) {
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const paginationDiv = table.nextElementSibling;
+                if (!paginationDiv || !paginationDiv.classList.contains('pagination-controls')) return;
+
+                function showPage(page) {
+                    const pageCount = Math.ceil(rows.length / rowsPerPage);
+                    page = Math.max(1, Math.min(page, pageCount));
+                    const start = (page - 1) * rowsPerPage;
+                    const end = start + rowsPerPage;
+                    rows.forEach((row, i) => {
+                        row.style.display = (i >= start && i < end) ? '' : 'none';
+                    });
+
+                    paginationDiv.innerHTML = '';
+                    if (pageCount <= 1) return;
+
+                    const prevBtn = document.createElement('button');
+                    prevBtn.innerHTML = '⟨';
+                    prevBtn.className = 'pagination-arrow';
+                    prevBtn.disabled = page === 1;
+                    prevBtn.onclick = () => showPage(page - 1);
+                    paginationDiv.appendChild(prevBtn);
+
+                    let startPage = Math.max(1, page - 2);
+                    let endPage = Math.min(pageCount, page + 2);
+                    if (page <= 3) endPage = Math.min(5, pageCount);
+                    if (page >= pageCount - 2) startPage = Math.max(1, pageCount - 4);
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        const btn = document.createElement('button');
+                        btn.textContent = i;
+                        btn.className = 'pagination-btn' + (i === page ? ' active' : '');
+                        btn.onclick = () => showPage(i);
+                        paginationDiv.appendChild(btn);
+                    }
+
+                    const nextBtn = document.createElement('button');
+                    nextBtn.innerHTML = '⟩';
+                    nextBtn.className = 'pagination-arrow';
+                    nextBtn.disabled = page === pageCount;
+                    nextBtn.onclick = () => showPage(page + 1);
+                    paginationDiv.appendChild(nextBtn);
+                }
+                showPage(1);
+            });
+        });
     </script>
+
+    <style>
+.pagination-controls {
+    margin: 12px 0 24px 0;
+    text-align: center;
+    user-select: none;
+}
+.pagination-btn, .pagination-arrow {
+    background: #fbeee0;
+    border: 1px solid #e67e22;
+    color: #e67e22;
+    margin: 0 2px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.pagination-btn.active {
+    background: #e67e22;
+    color: #fff;
+    box-shadow: 0 2px 8px #e67e2240;
+    border: 1.5px solid #e67e22;
+    transform: scale(1.08);
+}
+.pagination-btn:hover:not(.active) {
+    background: #f9d7a0;
+    color: #e67e22;
+}
+.pagination-arrow {
+    font-size: 1.1em;
+    padding: 4px 10px;
+}
+.pagination-arrow:disabled {
+    opacity: 0.4;
+    cursor: default;
+    background: #fbeee0;
+    color: #e67e22;
+    border: 1px solid #e67e22;
+}
+</style>
 </body>
 {% endblock %}

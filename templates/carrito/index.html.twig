@@ -48,64 +48,62 @@
                                     <form action="{{ path('app_carrito_actualizar', {'key': item.key}) }}" method="post" class="quantity-form">
                                         <span class="label">Cantidad:</span>
                                         <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1">
+                                        
+                                        <div class="personalizacion-list">
+                                            {% set categoria = item.plato.categoria.nombre|lower %}
+                                            {% if categoria == 'entrantes' %}
+                                                <label class="perso-item">
+                                                    <input type="checkbox" name="personalizacion[salsa_blanca]" value="1"
+                                                        {% if (item.personalizacion.salsa_blanca|default(false)) %}checked{% endif %}>
+                                                    <span class="perso-icon">🥛</span> Salsa blanca
+                                                </label>
+                                            {% elseif categoria == 'kebabs' or categoria == 'falafel' %}
+                                                <label class="perso-item">
+                                                    <input type="checkbox" name="personalizacion[salsa_yogurt]" value="1"
+                                                        {% if (item.personalizacion.salsa_yogurt|default(false)) %}checked{% endif %}>
+                                                    <span class="perso-icon">🥛</span> Salsa yogurt
+                                                </label>
+                                                <label class="perso-item">
+                                                    <input type="checkbox" name="personalizacion[lechuga]" value="1"
+                                                        {% if (item.personalizacion.lechuga|default(false)) %}checked{% endif %}>
+                                                    <span class="perso-icon">🥬</span> Lechuga
+                                                </label>
+                                                <label class="perso-item">
+                                                    <input type="checkbox" name="personalizacion[tomate]" value="1"
+                                                        {% if (item.personalizacion.tomate|default(false)) %}checked{% endif %}>
+                                                    <span class="perso-icon">🍅</span> Tomate
+                                                </label>
+                                                <label class="perso-item">
+                                                    <input type="checkbox" name="personalizacion[cebolla]" value="1"
+                                                        {% if (item.personalizacion.cebolla|default(false)) %}checked{% endif %}>
+                                                    <span class="perso-icon">🧅</span> Cebolla
+                                                </label>
+                                                <label class="perso-item">
+                                                    <input type="checkbox" name="personalizacion[maiz]" value="1"
+                                                        {% if (item.personalizacion.maiz|default(false)) %}checked{% endif %}>
+                                                    <span class="perso-icon">🌽</span> Maíz
+                                                </label>
+                                                <label class="perso-item">
+                                                    <input type="checkbox" name="personalizacion[queso_feta]" value="1"
+                                                        {% if (item.personalizacion.queso_feta|default(false)) %}checked{% endif %}>
+                                                    <span class="perso-icon">🧀</span> Queso feta
+                                                </label>
+                                                <label class="perso-item">
+                                                    <input type="checkbox" name="personalizacion[lombarda]" value="1"
+                                                        {% if (item.personalizacion.lombarda|default(false)) %}checked{% endif %}>
+                                                    <span class="perso-icon">🥗</span> Lombarda
+                                                </label>
+                                                <label class="perso-item">
+                                                    <input type="checkbox" name="personalizacion[salsa_picante]" value="1"
+                                                        {% if (item.personalizacion.salsa_picante|default(false)) %}checked{% endif %}>
+                                                    <span class="perso-icon">🌶️</span> Salsa picante
+                                                </label>
+                                            {% else %}
+                                                <span>No disponible</span>
+                                            {% endif %}
+                                        </div>
                                         <button type="submit" class="update-btn">Actualizar</button>
                                     </form>
-                                </div>
-                            </div>
-                            <div class="personalizacion">
-                                <span class="label">Personalización:</span>
-                                <div class="personalizacion-list">
-                                    {% set categoria = item.plato.categoria.nombre|lower %}
-                                    {% if categoria == 'entrantes' %}
-                                        <label class="perso-item">
-                                            <input type="checkbox" name="personalizacion[{{ item.key }}][salsa_blanca]" value="1"
-                                                {% if (item.personalizacion.salsa_blanca|default(false)) %}checked{% endif %}>
-                                            <span class="perso-icon">🥛</span> Salsa blanca
-                                        </label>
-                                    {% elseif categoria == 'kebabs' or categoria == 'falafel' %}
-                                        <label class="perso-item">
-                                            <input type="checkbox" name="personalizacion[{{ item.key }}][salsa_yogurt]" value="1"
-                                                {% if (item.personalizacion.salsa_yogurt|default(false)) %}checked{% endif %}>
-                                            <span class="perso-icon">🥛</span> Salsa yogurt
-                                        </label>
-                                        <label class="perso-item">
-                                            <input type="checkbox" name="personalizacion[{{ item.key }}][lechuga]" value="1"
-                                                {% if (item.personalizacion.lechuga|default(false)) %}checked{% endif %}>
-                                            <span class="perso-icon">🥬</span> Lechuga
-                                        </label>
-                                        <label class="perso-item">
-                                            <input type="checkbox" name="personalizacion[{{ item.key }}][tomate]" value="1"
-                                                {% if (item.personalizacion.tomate|default(false)) %}checked{% endif %}>
-                                            <span class="perso-icon">🍅</span> Tomate
-                                        </label>
-                                        <label class="perso-item">
-                                            <input type="checkbox" name="personalizacion[{{ item.key }}][cebolla]" value="1"
-                                                {% if (item.personalizacion.cebolla|default(false)) %}checked{% endif %}>
-                                            <span class="perso-icon">🧅</span> Cebolla
-                                        </label>
-                                        <label class="perso-item">
-                                            <input type="checkbox" name="personalizacion[{{ item.key }}][maiz]" value="1"
-                                                {% if (item.personalizacion.maiz|default(false)) %}checked{% endif %}>
-                                            <span class="perso-icon">🌽</span> Maíz
-                                        </label>
-                                        <label class="perso-item">
-                                            <input type="checkbox" name="personalizacion[{{ item.key }}][queso_feta]" value="1"
-                                                {% if (item.personalizacion.queso_feta|default(false)) %}checked{% endif %}>
-                                            <span class="perso-icon">🧀</span> Queso feta
-                                        </label>
-                                        <label class="perso-item">
-                                            <input type="checkbox" name="personalizacion[{{ item.key }}][lombarda]" value="1"
-                                                {% if (item.personalizacion.lombarda|default(false)) %}checked{% endif %}>
-                                            <span class="perso-icon">🥗</span> Lombarda
-                                        </label>
-                                        <label class="perso-item">
-                                            <input type="checkbox" name="personalizacion[{{ item.key }}][salsa_picante]" value="1"
-                                                {% if (item.personalizacion.salsa_picante|default(false)) %}checked{% endif %}>
-                                            <span class="perso-icon">🌶️</span> Salsa picante
-                                        </label>
-                                    {% else %}
-                                        <span>No disponible</span>
-                                    {% endif %}
                                 </div>
                             </div>
                             <div class="subtotal">
@@ -122,8 +120,15 @@
                     <div class="total-value">{{ total | number_format(2, '.', ',') }} €</div>
                 </div>
                 <div class="form-group">
+                    <label for="metodo_pago">Método de pago:</label>
+                    <select id="metodo_pago" name="metodo_pago" class="form-control" required onchange="toggleTarjeta()">
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                    </select>
+                </div>
+                <div class="form-group" id="tarjeta-group">
                     <label for="tarjeta_credito">Tarjeta de crédito:</label>
-                    <input type="text" id="tarjeta_credito" name="tarjeta_credito" maxlength="19" class="form-control" placeholder="1234 5678 9012 3456" required>
+                    <input type="text" id="tarjeta_credito" name="tarjeta_credito" maxlength="19" class="form-control" placeholder="1234 5678 9012 3456">
                     <small id="tarjeta-error" style="color:red;display:none;">Tarjeta no válida. Introduce una tarjeta válida.</small>
                 </div>
                 <div class="cart-actions">
@@ -132,16 +137,34 @@
                 </div>
             </form>
 <script>
-function validarTarjetaCredito() {
-    var tarjeta = document.getElementById('tarjeta_credito').value.replace(/\s+/g, '');
-    // Regex para Visa, MasterCard, American Express, Discover, Diners Club, JCB
-    var regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
-    var error = document.getElementById('tarjeta-error');
-    if (!regex.test(tarjeta)) {
-        error.style.display = 'block';
-        return false;
+function toggleTarjeta() {
+    var metodo = document.getElementById('metodo_pago').value;
+    var tarjetaGroup = document.getElementById('tarjeta-group');
+    var tarjetaInput = document.getElementById('tarjeta_credito');
+    if (metodo === 'Tarjeta') {
+        tarjetaGroup.style.display = 'block';
+        tarjetaInput.required = true;
+    } else {
+        tarjetaGroup.style.display = 'none';
+        tarjetaInput.required = false;
+        document.getElementById('tarjeta-error').style.display = 'none';
     }
-    error.style.display = 'none';
+}
+toggleTarjeta();
+document.getElementById('metodo_pago').addEventListener('change', toggleTarjeta);
+
+function validarTarjetaCredito() {
+    var metodo = document.getElementById('metodo_pago').value;
+    if (metodo === 'Tarjeta') {
+        var tarjeta = document.getElementById('tarjeta_credito').value.replace(/\s+/g, '');
+        var regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
+        var error = document.getElementById('tarjeta-error');
+        if (!regex.test(tarjeta)) {
+            error.style.display = 'block';
+            return false;
+        }
+        error.style.display = 'none';
+    }
     return true;
 }
 </script>

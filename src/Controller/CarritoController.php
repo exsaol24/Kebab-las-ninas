@@ -104,12 +104,14 @@ class CarritoController extends AbstractController
     public function actualizar($key, Request $request): Response
     {
         $cantidad = max(1, (int)$request->request->get('cantidad', 1));
+        $personalizacion = $request->request->all('personalizacion');
         $session = $request->getSession();
         $carrito = $session->get('carrito', []);
         if (isset($carrito[$key])) {
             $carrito[$key]['cantidad'] = $cantidad;
+            $carrito[$key]['personalizacion'] = $personalizacion; // <-- Añadido
             $session->set('carrito', $carrito);
-            $this->addFlash('success', 'Cantidad actualizada.');
+            $this->addFlash('success', 'Cantidad y personalización actualizadas.');
         }
         return $this->redirectToRoute('app_carrito');
     }
@@ -182,7 +184,9 @@ class CarritoController extends AbstractController
         }
         $pedido->setEstado($estado);
         $pedido->setDireccionentrega($usuario->getDireccion());
-        $pedido->setMetodopago('Efectivo');
+        // Recoge el método de pago del formulario
+        $metodoPago = $request->request->get('metodo_pago', 'Efectivo');
+        $pedido->setMetodopago($metodoPago);
         $pedido->setFechapedido(new \DateTime());
 
         $total = 0;
@@ -208,13 +212,34 @@ class CarritoController extends AbstractController
                 $cantidad = isset($item['cantidad']) && !is_array($item['cantidad']) ? (int)$item['cantidad'] : 1;
                 $detalle->setCantidad($cantidad);
                 $detalle->setPreciounitario($plato->getPrecio());
-                $pers = isset($personalizaciones[$key]) ? $personalizaciones[$key] : [];
-                $detalle->setPersonalizacion(json_encode($pers));
+
+                // Personalización legible
+                $pers = isset($item['personalizacion']) ? $item['personalizacion'] : [];
+                $nombres = [
+                    'salsa_blanca' => 'Salsa blanca',
+                    'salsa_yogurt' => 'Salsa yogurt',
+                    'lechuga' => 'Lechuga',
+                    'tomate' => 'Tomate',
+                    'cebolla' => 'Cebolla',
+                    'maiz' => 'Maíz',
+                    'queso_feta' => 'Queso feta',
+                    'lombarda' => 'Lombarda',
+                    'salsa_picante' => 'Salsa picante',
+                ];
+                $persLegible = [];
+                foreach ($pers as $clave => $valor) {
+                    if (!empty($valor) && isset($nombres[$clave])) {
+                        $persLegible[] = $nombres[$clave];
+                    }
+                }
+                $persString = count($persLegible) ? implode(', ', $persLegible) : 'Sin personalización';
+                $detalle->setPersonalizacion($persString);
+
                 $em->persist($detalle);
                 $detallesPedidos[] = [
                     'plato' => $plato,
                     'cantidad' => $cantidad,
-                    'personalizacion' => $pers,
+                    'personalizacion' => $persLegible,
                     'precio_unitario' => $plato->getPrecio(),
                 ];
             }

@@ -10,7 +10,7 @@
     <section class="banner" style="margin-top: 0;">
         <div class="banner-content">
             <h2>¡El mejor sabor en cada bocado!</h2>
-            <p>Disfruta de nuestros kebabs únicos y deliciosos.</p>
+            <p class="banner-desc">Disfruta de nuestros kebabs únicos y deliciosos.</p>
             <a href="sobrenosotros" class="btn btn-primary">Conócenos</a>
         </div>
         <div class="banner-image">
@@ -54,86 +54,56 @@
         </div>
     </section>
 
-    {# Zona de mapa  #}
-    <section class="ubicacion-section">
-        <div class="ubicacion-container">
-            <div class="ubicacion-info">
-                <h2>¿Dónde estamos?</h2>
-                <p>
-                    <strong>Av. Arias de Velasco, 58, 29601 Marbella, Málaga</strong><br>
-                    ¡Ven a visitarnos y disfruta del mejor kebab de la ciudad!
-                </p>
-            </div>
-            <div class="ubicacion-mapa">
-                <iframe
-                    src="https://www.google.com/maps?q=Av.+Arias+de+Velasco,+58,+29601+Marbella,+M%C3%A1laga&hl=es&output=embed"
-                    width="400"
-                    height="250"
-                    style="border:0; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.15); width:100%;"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-            </div>
-        </div>
-    </section>
-
-    <section id="testimonials" class="testimonials">
-        <h2>Lo que dicen nuestros clientes</h2>
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <p>"¡El mejor kebab que he probado! Definitivamente volveré."</p>
-                <span>- Albertito Pérez</span>
-            </div>
-            <div class="testimonial-card">
-                <p>"Excelente servicio y comida deliciosa. Muy recomendado."</p>
-                <span>- Marina López</span>
-            </div>
-            <div class="testimonial-card">
-                <p>"Un lugar perfecto para disfrutar con amigos y familia."</p>
-                <span>- Kevin Soto</span>
-            </div>
-        </div>
-    </section>
-
     <section id="platos" class="platos">
         <h2>Nuestros Platos</h2>
-        <div class="platos-grid">
-            {% for plato in platos %}
-                <div class="plato-card">
-                    <img src="{{ asset('uploads/platos/' ~ plato.imagen) }}" alt="{{ plato.nombre }}" class="plato-imagen">
-                    <div class="plato-info">
-                        <h3 class="plato-nombre">{{ plato.nombre }}</h3>
-                        <p class="plato-descripcion">{{ plato.descripcion }}</p>
-                        <p class="plato-precio">{{ plato.precio | number_format(2, '.', ',') }} €</p>
-                        {% if app.session.get('user_name') is not null %}
-                            <button class="btn btn-add-to-cart" onclick="abrirPersonalizacion({{ plato.id }}, '{{ plato.nombre|e('js') }}', '{{ plato.categoria.nombre|lower }}')">
-                                Añadir al carrito
-                            </button>
-                        {% else %}
-                            <span class="btn btn-add-to-cart js-login-required"
-                                data-login-message="Debes iniciar sesión para añadir productos al carrito.">
-                                Añadir al carrito
-                            </span>
-                        {% endif %}
-                    </div>
-                </div>
-            {% else %}
-                <p>No hay platos disponibles en este momento.</p>
-            {% endfor %}
-        </div>
+        {% set categoriasAgrupadas = {} %}
+        {% for plato in platos %}
+            {% set cat = plato.categoria.nombre %}
+            {% if categoriasAgrupadas[cat] is not defined %}
+                {% set categoriasAgrupadas = categoriasAgrupadas|merge({ (cat): [] }) %}
+            {% endif %}
+            {% set categoriasAgrupadas = categoriasAgrupadas|merge({ (cat): categoriasAgrupadas[cat]|merge([plato]) }) %}
+        {% endfor %}
 
-        {# Modal de personalización #}
-        <div id="personalizacion-modal" class="modal" style="display:none;">
+        {% for categoria, platosCategoria in categoriasAgrupadas %}
+            <h3 class="categoria-titulo">{{ categoria }}</h3>
+            <div class="platos-grid">
+                {% for plato in platosCategoria %}
+                    <div class="plato-card">
+                        <img src="{{ asset('uploads/platos/' ~ plato.imagen) }}" alt="{{ plato.nombre }}" class="plato-imagen">
+                        <div class="plato-info">
+                            <h4 class="plato-nombre">{{ plato.nombre }}</h4>
+                            <p class="plato-descripcion">{{ plato.descripcion }}</p>
+                            <p class="plato-precio">{{ plato.precio | number_format(2, '.', ',') }} €</p>
+                            {% if app.session.get('user_name') is not null %}
+                                <button class="btn btn-add-to-cart" onclick="abrirPersonalizacion({{ plato.id }}, '{{ plato.nombre|e('js') }}', '{{ plato.categoria.nombre|lower|e('js') }}')">
+                                    Añadir al carrito
+                                </button>
+                            {% else %}
+                                <span class="btn btn-add-to-cart js-login-required"
+                                    data-login-message="Debes iniciar sesión para añadir productos al carrito.">
+                                    Añadir al carrito
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No hay platos disponibles en este momento.</p>
+        {% endfor %}
+
+        <div id="personalizacion-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="cerrarPersonalizacion()">&times;</span>
+                <span class="close" onclick="cerrarPersonalizacion()">×</span>
                 <h2 id="modal-titulo"></h2>
                 <form id="personalizacion-form" method="post">
                     <div class="modal-cantidad">
                         <label for="modal-cantidad-input">Cantidad:</label>
                         <input type="number" id="modal-cantidad-input" name="cantidad" value="1" min="1" required>
                     </div>
-                    <div id="modal-opciones"></div>
+                    <div id="modal-opciones">
+                    </div>
                     <div class="modal-botones">
                         <button type="submit" class="btn btn-success">Añadir</button>
                         <button type="button" class="btn btn-secondary" onclick="cerrarPersonalizacion()">Cancelar</button>
@@ -141,47 +111,36 @@
                 </form>
             </div>
         </div>
-        <style>
-            .modal {
-                display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh;
-                background: rgba(0,0,0,0.4); justify-content: center; align-items: center;
-            }
-            .modal-content {
-                background: #fff; padding: 2rem; border-radius: 16px; max-width: 350px; margin: auto; box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-                position: relative; animation: modalIn .2s;
-            }
-            @keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-            .close { position: absolute; right: 1rem; top: 1rem; font-size: 2rem; cursor: pointer; color: #888; }
-            .modal-cantidad { margin-bottom: 1rem; }
-            .modal-botones { display: flex; gap: 1rem; margin-top: 1rem; }
-            #modal-opciones label { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 1.1em; }
-            #modal-opciones input[type="checkbox"] { accent-color: #e67e22; width: 18px; height: 18px; }
-        </style>
         <script>
             let currentPlatoId = null;
             let currentCategoria = null;
             function abrirPersonalizacion(platoId, platoNombre, categoria) {
                 currentPlatoId = platoId;
-                currentCategoria = categoria;
-                document.getElementById('modal-titulo').textContent = platoNombre;
+                currentCategoria = categoria.toLowerCase(); // Ensure lowercase for comparison
+                document.getElementById('modal-titulo').textContent = 'Personaliza: ' + platoNombre;
                 document.getElementById('personalizacion-modal').style.display = 'flex';
                 document.getElementById('personalizacion-form').action = '{{ path('app_carrito_agregar_personalizado', {'id': 'PLATO_ID'}) }}'.replace('PLATO_ID', platoId);
 
                 // Opciones según categoría
-                let opciones = '';
-                if (categoria === 'kebabs' || categoria === 'falafel') {
-                    opciones += '<label><input type="checkbox" name="personalizacion[cebolla]" value="1"> Cebolla</label>';
-                    opciones += '<label><input type="checkbox" name="personalizacion[salsa_yogurt]" value="1"> Salsa yogurt</label>';
-                    opciones += '<label><input type="checkbox" name="personalizacion[lechuga]" value="1"> Lechuga</label>';
-                    opciones += '<label><input type="checkbox" name="personalizacion[tomate]" value="1"> Tomate</label>';
-                    opciones += '<label><input type="checkbox" name="personalizacion[maiz]" value="1"> Maíz</label>';
-                    opciones += '<label><input type="checkbox" name="personalizacion[queso_feta]" value="1"> Queso feta</label>';
-                    opciones += '<label><input type="checkbox" name="personalizacion[lombarda]" value="1"> Lombarda</label>';
-                    opciones += '<label><input type="checkbox" name="personalizacion[salsa_picante]" value="1"> Salsa picante</label>';
-                } else if (categoria === 'entrantes') {
-                    opciones += '<label><input type="checkbox" name="personalizacion[salsa_blanca]" value="1"> Salsa blanca</label>';
+                let opcionesHtml = '<h4>Extras:</h4>'; // Optional: add a subheading for options
+                if (currentCategoria === 'kebabs' || currentCategoria === 'falafel' || currentCategoria === 'dürüm') { // Added durum
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[cebolla]" value="1"> Cebolla</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[salsa_yogurt]" value="1"> Salsa Yogurt</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[lechuga]" value="1"> Lechuga</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[tomate]" value="1"> Tomate</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[maiz]" value="1"> Maíz</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[queso_feta]" value="1"> Queso Feta (+0.50€)</label>'; // Example price
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[lombarda]" value="1"> Lombarda</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[salsa_picante]" value="1"> Salsa Picante</label>';
+                } else if (currentCategoria === 'entrantes' && (platoNombre.toLowerCase().includes('patatas') || platoNombre.toLowerCase().includes('nuggets'))) {
+                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[salsa_blanca]" value="1"> Salsa Blanca</label>';
+                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[ketchup]" value="1"> Ketchup</label>';
+                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[mayonesa]" value="1"> Mayonesa</label>';
+                } else if (opcionesHtml === '<h4>Extras:</h4>') {
+                    opcionesHtml = '<p>Este plato no tiene opciones de personalización adicionales.</p>';
                 }
-                document.getElementById('modal-opciones').innerHTML = opciones;
+                document.getElementById('modal-opciones').innerHTML = opcionesHtml;
+                document.getElementById('modal-cantidad-input').value = 1; // Reset quantity
             }
             function cerrarPersonalizacion() {
                 document.getElementById('personalizacion-modal').style.display = 'none';
@@ -198,57 +157,71 @@
             // AJAX para añadir producto personalizado al carrito
             document.addEventListener('DOMContentLoaded', function () {
                 const form = document.getElementById('personalizacion-form');
-                form.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    const action = form.action;
-                    const formData = new FormData(form);
+                if (form) { // Check if form exists
+                    form.addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        const action = form.action;
+                        const formData = new FormData(form);
 
-                    fetch(action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            cerrarPersonalizacion();
-                            // Actualizar contador carrito en navbar
-                            let cartCount = document.querySelector('.cart-count');
-                            if (!cartCount) {
-                                const cartLink = document.querySelector('.cart-icon-link');
-                                if (cartLink) {
-                                    cartCount = document.createElement('span');
-                                    cartCount.className = 'cart-count';
-                                    cartLink.appendChild(cartCount);
+                        fetch(action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                cerrarPersonalizacion();
+                                // Actualizar contador carrito en navbar
+                                let cartCount = document.querySelector('.cart-count');
+                                if (!cartCount) {
+                                    const cartLink = document.querySelector('.cart-icon-link'); // Ensure this selector matches your navbar
+                                    if (cartLink) {
+                                        cartCount = document.createElement('span');
+                                        cartCount.className = 'cart-count';
+                                        // Style the cart count (e.g., position absolute relative to link)
+                                        // This might be better done in your main CSS for the navbar
+                                        cartLink.style.position = 'relative'; // Example
+                                        cartCount.style.position = 'absolute';
+                                        cartCount.style.top = '-5px';
+                                        cartCount.style.right = '-5px';
+                                        cartCount.style.background = 'red';
+                                        cartCount.style.color = 'white';
+                                        cartCount.style.borderRadius = '50%';
+                                        cartCount.style.padding = '2px 6px';
+                                        cartCount.style.fontSize = '0.8em';
+                                        cartLink.appendChild(cartCount);
+                                    }
                                 }
+                                if (cartCount) {
+                                    cartCount.textContent = data.total_productos_carrito;
+                                    cartCount.style.display = data.total_productos_carrito > 0 ? 'inline-block' : 'none';
+                                }
+                                // Optional: Show a success toast/notification
+                            } else {
                             }
-                            if (cartCount) {
-                                cartCount.textContent = data.total_productos_carrito;
-                                cartCount.style.display = data.total_productos_carrito > 0 ? 'inline-block' : 'none';
-                            }
-                        } else {
-                            alert(data.message || 'Error al añadir al carrito.');
-                        }
-                    })
-                    .catch(() => {
-                        alert('Error de red al añadir al carrito.');
+                        })
+                        .catch((error) => {
+                            console.error('Error adding to cart:', error);
+                            alert('Error de red al añadir al carrito.');
+                        });
                     });
-                });
+                }
             });
         </script>
     </section>
 
     {# Apartado de reserva de mesas #}
-    <section id="reserva-mesas" class="reserva-mesas-section mejorada kebab-theme">
+    <section id="reserva-mesas" class="reserva-mesas-section kebab-theme">
         <div class="reserva-bg-decor"></div>
         <div class="reserva-card kebab-theme">
             <h2>
                 <span class="icono-mesa">🍽️</span>
                 Reserva tu mesa
             </h2>
-            <form id="reserva-form" class="reserva-form mejorada">
+            <form id="reserva-form" class="reserva-form">
                 <div class="input-group">
                     <label for="nombre"><span class="input-icon">👤</span> Nombre</label>
                     <input type="text" id="nombre" name="nombre" required placeholder="¿Cómo te llamas?">
@@ -268,24 +241,62 @@
                 <div class="input-group">
                     <label for="hora"><span class="input-icon">⏰</span> Hora</label>
                     <select id="hora" name="hora" required>
-                        <!-- Opciones generadas por JS -->
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary btn-reserva kebab-theme">Reservar mesa</button>
             </form>
             <div id="reserva-mensaje" class="reserva-mensaje"></div>
-            <div class="reserva-decor-icon"><img src="{{ asset('img/logo2.png') }}" alt="Kebab" /></div>
+            <div class="reserva-decor-icon"><img src="{{ asset('img/logo2.png') }}" alt="Kebab Las Niñas Decoración" /></div>
+        </div>
+    </section>
+
+    <section class="ubicacion-section">
+        <div class="ubicacion-container">
+            <div class="ubicacion-info">
+                <h2>¿Dónde estamos?</h2>
+                <p>
+                    <strong>Av. Arias de Velasco, 58, 29601 Marbella, Málaga</strong><br>
+                    ¡Ven a visitarnos y disfruta del mejor kebab de la ciudad!
+                </p>
+            </div>
+            <div class="ubicacion-mapa">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.908383804081!2d-4.882850684792049!3d36.50696197999852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd72d8b023207c7b%3A0xe91a43b3f009300!2sAv.%20Arias%20de%20Velasco%2C%2058%2C%2029601%20Marbella%2C%20M%C3%A1laga!5e0!3m2!1ses!2ses!4v1717180000000"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+        <h2>Lo que dicen nuestros clientes</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p>"¡El mejor kebab que he probado! Sabor auténtico y ingredientes frescos. Definitivamente volveré pronto con más amigos."</p>
+                <span>- Albertito Pérez</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Excelente servicio al cliente, muy amables y rápidos. La comida es deliciosa y las porciones generosas. ¡Muy recomendado!"</p>
+                <span>- Marina López</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Un lugar perfecto para disfrutar con amigos y familia. Ambiente acogedor y los durum están espectaculares. ¡Gracias!"</p>
+                <span>- Kevin Soto</span>
+            </div>
         </div>
     </section>
 
     <footer id="contact" class="footer">
-        <p>© 2025 Kebab Las Niñas. Todos los derechos reservados.</p>
-        <p>Contacto: <a href="mailto:info@kebablasniñas.com">info@kebablasniñas.com</a></p>
+        <p>© {{ "now"|date("Y") }} Kebab Las Niñas. Todos los derechos reservados.</p>
+        <p>Contacto: <a href="mailto:lasninaskebab@gmail.com">lasninaskebab@gmail.com</a></p>
+        <p>Teléfono Reservas: <a href="tel:+34000000000">+34 XXX XX XX XX</a></p>
         <p>Síguenos en nuestras redes sociales:</p>
         <div class="social-links">
-            <a href="https://es-es.facebook.com/"><img src="{{ asset('img/facebook.png') }}" alt="Facebook"></a>
-            <a href="https://www.instagram.com/kebab_lasninas/"><img src="{{ asset('img/instagram.png') }}" alt="Instagram"></a>
-            <a href="https://x.com/"><img src="{{ asset('img/x.png') }}" alt="Twitter"></a>
+            <a href="https://es-es.facebook.com/" target="_blank" rel="noopener noreferrer"><img src="{{ asset('img/facebook.png') }}" alt="Facebook"></a>
+            <a href="https://www.instagram.com/kebab_lasninas/" target="_blank" rel="noopener noreferrer"><img src="{{ asset('img/instagram.png') }}" alt="Instagram"></a>
+            <a href="https://x.com/" target="_blank" rel="noopener noreferrer"><img src="{{ asset('img/x.png') }}" alt="Twitter X"></a>
         </div>
     </footer>
 
@@ -300,37 +311,44 @@
             const dots = document.querySelectorAll('.ofertas-carousel-dot');
 
             function showOferta(idx) {
+                if (slides.length === 0) return; // Guard clause
                 slides.forEach((slide, i) => {
                     slide.classList.toggle('active', i === idx);
                 });
-                 dots.forEach((dot, i) => {
+                dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === idx);
                 });
+                currentOferta = idx; // Ensure currentOferta is updated
             }
-            function nextOferta() {
+
+            function nextOfertaSlide() { // Renamed to avoid conflict
+                if (totalOfertas === 0) return;
                 currentOferta = (currentOferta + 1) % totalOfertas;
                 showOferta(currentOferta);
             }
-            function prevOferta() {
+
+            function prevOfertaSlide() { // Renamed to avoid conflict
+                 if (totalOfertas === 0) return;
                 currentOferta = (currentOferta - 1 + totalOfertas) % totalOfertas;
                 showOferta(currentOferta);
             }
-            if (prevBtn && nextBtn) {
-                prevBtn.addEventListener('click', prevOferta);
-                nextBtn.addEventListener('click', nextOferta);
+
+            if (prevBtn && nextBtn && totalOfertas > 0) {
+                prevBtn.addEventListener('click', prevOfertaSlide);
+                nextBtn.addEventListener('click', nextOfertaSlide);
+
+                dots.forEach(dot => {
+                    dot.addEventListener('click', function() {
+                        const slideIndex = parseInt(this.dataset.slide);
+                        showOferta(slideIndex);
+                    });
+                });
+
+                // Auto-slide cada 6 segundos
+                setInterval(nextOfertaSlide, 6000);
+                showOferta(currentOferta); // Initial display
             }
 
-            dots.forEach(dot => {
-                dot.addEventListener('click', function() {
-                    const slideIndex = parseInt(this.dataset.slide);
-                    currentOferta = slideIndex;
-                    showOferta(currentOferta);
-                });
-            });
-
-            // Auto-slide cada 6 segundos
-            setInterval(nextOferta, 6000);
-            showOferta(currentOferta);
 
             // Manejo para usuarios no logueados
             const loginRequiredButtons = document.querySelectorAll('.js-login-required');
@@ -339,80 +357,120 @@
                     event.preventDefault();
                     const message = this.dataset.loginMessage || 'Debes iniciar sesión.';
                     alert(message);
+                    // Consider redirecting to login page:
+                    // window.location.href = '{{ path('app_login') }}'; // If you have a login route
                 });
             });
 
-            // AJAX para añadir al carrito
-            const addToCartButtons = document.querySelectorAll('.js-add-to-cart');
-            addToCartButtons.forEach(button => {
-                button.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    const platoId = this.dataset.platoId;
-                    fetch('{{ path('app_carrito_agregar', {'id': 'PLATO_ID'}) }}'.replace('PLATO_ID', platoId), {
-                        method: 'POST',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'Content-Type': 'application/json'
+            // Formulario de Reserva
+            const reservaForm = document.getElementById('reserva-form');
+            if(reservaForm) { // Check if form exists
+                const horaSelect = document.getElementById('hora');
+                function populateTimeSlots() {
+                    if (!horaSelect) return;
+                    horaSelect.innerHTML = ''; // Clear existing options
+
+                    const startHour = 19; // 7 PM
+                    const endHour = 26;   // Up to 2 AM (effectively 1:45 AM will be last slot before 2:00)
+                    const intervalMinutes = 15;
+
+                    for (let h = startHour; h < endHour; h++) {
+                        for (let m = 0; m < 60; m += intervalMinutes) {
+                            let displayHour = h;
+                            if (h >= 24) {
+                                displayHour = h - 24; // Convert 24 to 00, 25 to 01 for display
+                            }
+
+                            // Stop condition: don't add 02:00 itself, last slot is 01:45
+                            if (displayHour === 2 && m === 0 && h === 26) {
+                                break;
+                            }
+
+                            const formattedHour = String(displayHour).padStart(2, '0');
+                            const formattedMinute = String(m).padStart(2, '0');
+                            const timeValue = `${formattedHour}:${formattedMinute}`;
+
+                            const option = document.createElement('option');
+                            option.value = timeValue;
+                            option.textContent = timeValue;
+                            horaSelect.appendChild(option);
                         }
+                         if (displayHour === 2 && m === 0 && h === 26) { // Outer loop break
+                            break;
+                        }
+                    }
+                }
+                populateTimeSlots();
+
+                const fechaInput = document.getElementById('fecha');
+                const today = new Date();
+                const twoWeeksFromToday = new Date();
+                twoWeeksFromToday.setDate(today.getDate() + 14);
+
+                const formatDate = (date) => {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                };
+
+                if(fechaInput){
+                    fechaInput.min = formatDate(today);
+                    fechaInput.max = formatDate(twoWeeksFromToday);
+                    fechaInput.value = formatDate(today); // Set default to today
+                }
+
+
+                reservaForm.addEventListener('submit', function(e){
+                    e.preventDefault();
+                    const form = this;
+                    const formData = new FormData(form);
+                    const mensajeDiv = document.getElementById('reserva-mensaje');
+                    mensajeDiv.className = 'reserva-mensaje'; // Reset classes
+
+                    // Basic client-side validation example (add more as needed)
+                    const nombre = formData.get('nombre').trim();
+                    const telefono = formData.get('telefono').trim();
+                    const personas = formData.get('personas');
+
+                    if (!nombre || !telefono || !personas || personas < 1) {
+                        mensajeDiv.textContent = 'Por favor, completa todos los campos correctamente.';
+                        mensajeDiv.classList.add('error', 'visible');
+                        return;
+                    }
+                     // Phone validation (basic)
+                    if (!/^[0-9]{9,}$/.test(telefono)) {
+                        mensajeDiv.textContent = 'El formato del teléfono no es válido (mínimo 9 dígitos).';
+                        mensajeDiv.classList.add('error', 'visible');
+                        return;
+                    }
+
+
+                    fetch('{{ path('reserva_mesa') }}', { // Make sure this route exists and handles POST
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
                     })
-                    .then(response => response.json())
+                    .then(r => r.json())
                     .then(data => {
                         if (data.success) {
-                            alert('Plato añadido al carrito.');
-                            // Actualizar contador carrito en navbar
-                            let cartCount = document.querySelector('.cart-count');
-                            if (!cartCount) {
-                                // Buscar el enlace del carrito
-                                const cartLink = document.querySelector('.cart-icon-link');
-                                if (cartLink) {
-                                    cartCount = document.createElement('span');
-                                    cartCount.className = 'cart-count';
-                                    cartLink.appendChild(cartCount);
-                                }
-                            }
-                            if (cartCount) {
-                                cartCount.textContent = data.total_productos_carrito;
-                                cartCount.style.display = data.total_productos_carrito > 0 ? 'inline-block' : 'none';
-                            }
+                            mensajeDiv.textContent = data.message || '¡Reserva enviada! Nos pondremos en contacto contigo para confirmarla.';
+                            mensajeDiv.classList.add('success', 'visible'); // Use 'success' class if you defined it
+                            form.reset();
+                            populateTimeSlots(); // Repopulate time slots
+                            if(fechaInput) fechaInput.value = formatDate(today); // Reset date to today
                         } else {
-                            alert(data.message || 'Error al añadir al carrito.');
+                            mensajeDiv.textContent = data.message || 'Error al reservar. Por favor, inténtalo de nuevo.';
+                            mensajeDiv.classList.add('error', 'visible');
                         }
                     })
-                    .catch(() => {
-                        alert('Error de red al añadir al carrito.');
+                    .catch((error) => {
+                        console.error('Error en la solicitud de reserva:', error);
+                        mensajeDiv.textContent = 'Error de red al reservar. Por favor, inténtalo de nuevo.';
+                        mensajeDiv.classList.add('error', 'visible');
                     });
                 });
-            });
-
-            // Envío AJAX
-            document.getElementById('reserva-form').addEventListener('submit', function(e){
-                e.preventDefault();
-                const form = this;
-                const formData = new FormData(form);
-                const mensajeDiv = document.getElementById('reserva-mensaje');
-                mensajeDiv.className = 'reserva-mensaje'; // Limpia clases previas
-
-                fetch('{{ path('reserva_mesa') }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.success) {
-                        mensajeDiv.textContent = '¡Reserva enviada! Nos pondremos en contacto contigo para confirmarla.';
-                        mensajeDiv.classList.add('visible');
-                        form.reset();
-                    } else {
-                        mensajeDiv.textContent = data.message || 'Error al reservar.';
-                        mensajeDiv.classList.add('error', 'visible');
-                    }
-                })
-                .catch(() => {
-                    mensajeDiv.textContent = 'Error de red al reservar.';
-                    mensajeDiv.classList.add('error', 'visible');
-                });
-            });
+            }
         });
     </script>
 
