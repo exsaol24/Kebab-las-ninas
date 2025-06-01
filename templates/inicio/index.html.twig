@@ -116,20 +116,20 @@
             let currentCategoria = null;
             function abrirPersonalizacion(platoId, platoNombre, categoria) {
                 currentPlatoId = platoId;
-                currentCategoria = categoria.toLowerCase(); // Ensure lowercase for comparison
+                currentCategoria = categoria.toLowerCase();
                 document.getElementById('modal-titulo').textContent = 'Personaliza: ' + platoNombre;
                 document.getElementById('personalizacion-modal').style.display = 'flex';
                 document.getElementById('personalizacion-form').action = '{{ path('app_carrito_agregar_personalizado', {'id': 'PLATO_ID'}) }}'.replace('PLATO_ID', platoId);
 
                 // Opciones según categoría
-                let opcionesHtml = '<h4>Extras:</h4>'; // Optional: add a subheading for options
-                if (currentCategoria === 'kebabs' || currentCategoria === 'falafel' || currentCategoria === 'dürüm') { // Added durum
+                let opcionesHtml = '<h4>Extras:</h4>'; 
+                if (currentCategoria === 'kebabs' || currentCategoria === 'falafel' || currentCategoria === 'dürüm') {
                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[cebolla]" value="1"> Cebolla</label>';
                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[salsa_yogurt]" value="1"> Salsa Yogurt</label>';
                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[lechuga]" value="1"> Lechuga</label>';
                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[tomate]" value="1"> Tomate</label>';
                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[maiz]" value="1"> Maíz</label>';
-                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[queso_feta]" value="1"> Queso Feta (+0.50€)</label>'; // Example price
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[queso_feta]" value="1"> Queso Feta (+0.50€)</label>';
                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[lombarda]" value="1"> Lombarda</label>';
                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[salsa_picante]" value="1"> Salsa Picante</label>';
                 } else if (currentCategoria === 'entrantes' && (platoNombre.toLowerCase().includes('patatas') || platoNombre.toLowerCase().includes('nuggets'))) {
@@ -140,7 +140,7 @@
                     opcionesHtml = '<p>Este plato no tiene opciones de personalización adicionales.</p>';
                 }
                 document.getElementById('modal-opciones').innerHTML = opcionesHtml;
-                document.getElementById('modal-cantidad-input').value = 1; // Reset quantity
+                document.getElementById('modal-cantidad-input').value = 1;
             }
             function cerrarPersonalizacion() {
                 document.getElementById('personalizacion-modal').style.display = 'none';
@@ -157,7 +157,7 @@
             // AJAX para añadir producto personalizado al carrito
             document.addEventListener('DOMContentLoaded', function () {
                 const form = document.getElementById('personalizacion-form');
-                if (form) { // Check if form exists
+                if (form) {
                     form.addEventListener('submit', function (e) {
                         e.preventDefault();
                         const action = form.action;
@@ -177,13 +177,12 @@
                                 // Actualizar contador carrito en navbar
                                 let cartCount = document.querySelector('.cart-count');
                                 if (!cartCount) {
-                                    const cartLink = document.querySelector('.cart-icon-link'); // Ensure this selector matches your navbar
+                                    const cartLink = document.querySelector('.cart-icon-link');
                                     if (cartLink) {
                                         cartCount = document.createElement('span');
                                         cartCount.className = 'cart-count';
-                                        // Style the cart count (e.g., position absolute relative to link)
-                                        // This might be better done in your main CSS for the navbar
-                                        cartLink.style.position = 'relative'; // Example
+                                       
+                                        cartLink.style.position = 'relative';
                                         cartCount.style.position = 'absolute';
                                         cartCount.style.top = '-5px';
                                         cartCount.style.right = '-5px';
@@ -199,7 +198,6 @@
                                     cartCount.textContent = data.total_productos_carrito;
                                     cartCount.style.display = data.total_productos_carrito > 0 ? 'inline-block' : 'none';
                                 }
-                                // Optional: Show a success toast/notification
                             } else {
                             }
                         })
@@ -291,7 +289,7 @@
     <footer id="contact" class="footer">
         <p>© {{ "now"|date("Y") }} Kebab Las Niñas. Todos los derechos reservados.</p>
         <p>Contacto: <a href="mailto:lasninaskebab@gmail.com">lasninaskebab@gmail.com</a></p>
-        <p>Teléfono Reservas: <a href="tel:+34000000000">+34 XXX XX XX XX</a></p>
+        <p>Teléfono Reservas: <a href="tel:+34000000000">+34 615 255 785</a></p>
         <p>Síguenos en nuestras redes sociales:</p>
         <div class="social-links">
             <a href="https://es-es.facebook.com/" target="_blank" rel="noopener noreferrer"><img src="{{ asset('img/facebook.png') }}" alt="Facebook"></a>
@@ -311,23 +309,23 @@
             const dots = document.querySelectorAll('.ofertas-carousel-dot');
 
             function showOferta(idx) {
-                if (slides.length === 0) return; // Guard clause
+                if (slides.length === 0) return;
                 slides.forEach((slide, i) => {
                     slide.classList.toggle('active', i === idx);
                 });
                 dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === idx);
                 });
-                currentOferta = idx; // Ensure currentOferta is updated
+                currentOferta = idx;
             }
 
-            function nextOfertaSlide() { // Renamed to avoid conflict
+            function nextOfertaSlide() {
                 if (totalOfertas === 0) return;
                 currentOferta = (currentOferta + 1) % totalOfertas;
                 showOferta(currentOferta);
             }
 
-            function prevOfertaSlide() { // Renamed to avoid conflict
+            function prevOfertaSlide() {
                  if (totalOfertas === 0) return;
                 currentOferta = (currentOferta - 1 + totalOfertas) % totalOfertas;
                 showOferta(currentOferta);
@@ -344,9 +342,8 @@
                     });
                 });
 
-                // Auto-slide cada 6 segundos
                 setInterval(nextOfertaSlide, 6000);
-                showOferta(currentOferta); // Initial display
+                showOferta(currentOferta);
             }
 
 
@@ -357,31 +354,28 @@
                     event.preventDefault();
                     const message = this.dataset.loginMessage || 'Debes iniciar sesión.';
                     alert(message);
-                    // Consider redirecting to login page:
-                    // window.location.href = '{{ path('app_login') }}'; // If you have a login route
                 });
             });
 
             // Formulario de Reserva
             const reservaForm = document.getElementById('reserva-form');
-            if(reservaForm) { // Check if form exists
+            if(reservaForm) {
                 const horaSelect = document.getElementById('hora');
                 function populateTimeSlots() {
                     if (!horaSelect) return;
-                    horaSelect.innerHTML = ''; // Clear existing options
+                    horaSelect.innerHTML = '';
 
-                    const startHour = 19; // 7 PM
-                    const endHour = 26;   // Up to 2 AM (effectively 1:45 AM will be last slot before 2:00)
+                    const startHour = 19;
+                    const endHour = 26;
                     const intervalMinutes = 15;
 
                     for (let h = startHour; h < endHour; h++) {
                         for (let m = 0; m < 60; m += intervalMinutes) {
                             let displayHour = h;
                             if (h >= 24) {
-                                displayHour = h - 24; // Convert 24 to 00, 25 to 01 for display
+                                displayHour = h - 24;
                             }
 
-                            // Stop condition: don't add 02:00 itself, last slot is 01:45
                             if (displayHour === 2 && m === 0 && h === 26) {
                                 break;
                             }
@@ -395,7 +389,7 @@
                             option.textContent = timeValue;
                             horaSelect.appendChild(option);
                         }
-                         if (displayHour === 2 && m === 0 && h === 26) { // Outer loop break
+                         if (displayHour === 2 && m === 0 && h === 26) {
                             break;
                         }
                     }
@@ -417,7 +411,7 @@
                 if(fechaInput){
                     fechaInput.min = formatDate(today);
                     fechaInput.max = formatDate(twoWeeksFromToday);
-                    fechaInput.value = formatDate(today); // Set default to today
+                    fechaInput.value = formatDate(today);
                 }
 
 
@@ -426,9 +420,8 @@
                     const form = this;
                     const formData = new FormData(form);
                     const mensajeDiv = document.getElementById('reserva-mensaje');
-                    mensajeDiv.className = 'reserva-mensaje'; // Reset classes
+                    mensajeDiv.className = 'reserva-mensaje';
 
-                    // Basic client-side validation example (add more as needed)
                     const nombre = formData.get('nombre').trim();
                     const telefono = formData.get('telefono').trim();
                     const personas = formData.get('personas');
@@ -438,7 +431,6 @@
                         mensajeDiv.classList.add('error', 'visible');
                         return;
                     }
-                     // Phone validation (basic)
                     if (!/^[0-9]{9,}$/.test(telefono)) {
                         mensajeDiv.textContent = 'El formato del teléfono no es válido (mínimo 9 dígitos).';
                         mensajeDiv.classList.add('error', 'visible');
@@ -446,7 +438,7 @@
                     }
 
 
-                    fetch('{{ path('reserva_mesa') }}', { // Make sure this route exists and handles POST
+                    fetch('{{ path('reserva_mesa') }}', {
                         method: 'POST',
                         body: formData,
                         headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -455,10 +447,10 @@
                     .then(data => {
                         if (data.success) {
                             mensajeDiv.textContent = data.message || '¡Reserva enviada! Nos pondremos en contacto contigo para confirmarla.';
-                            mensajeDiv.classList.add('success', 'visible'); // Use 'success' class if you defined it
+                            mensajeDiv.classList.add('success', 'visible');
                             form.reset();
-                            populateTimeSlots(); // Repopulate time slots
-                            if(fechaInput) fechaInput.value = formatDate(today); // Reset date to today
+                            populateTimeSlots();
+                            if(fechaInput) fechaInput.value = formatDate(today);
                         } else {
                             mensajeDiv.textContent = data.message || 'Error al reservar. Por favor, inténtalo de nuevo.';
                             mensajeDiv.classList.add('error', 'visible');
