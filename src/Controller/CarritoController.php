@@ -109,7 +109,7 @@ class CarritoController extends AbstractController
         $carrito = $session->get('carrito', []);
         if (isset($carrito[$key])) {
             $carrito[$key]['cantidad'] = $cantidad;
-            $carrito[$key]['personalizacion'] = $personalizacion; // <-- Añadido
+            $carrito[$key]['personalizacion'] = $personalizacion;
             $session->set('carrito', $carrito);
             $this->addFlash('success', 'Cantidad y personalización actualizadas.');
         }
@@ -256,7 +256,6 @@ class CarritoController extends AbstractController
         $em->persist($historial);
         $em->flush();
 
-        // Send email to the user
         try {
             $emailContent = $twig->render('emails/pedido_confirmacion.html.twig', [
                 'pedido' => $pedido,
@@ -265,7 +264,7 @@ class CarritoController extends AbstractController
             ]);
 
             $email = (new Email())
-                ->from('your_email@example.com') // Replace with your sender email
+                ->from('your_email@example.com')
                 ->to($usuario->getEmail())
                 ->subject('Confirmación de tu pedido en Kebab Las Niñas')
                 ->html($emailContent);
