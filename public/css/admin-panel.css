@@ -1,0 +1,620 @@
+:root {
+    --primary-color: #fbbf24;
+    --secondary-color: #f59e42;
+    --background: #23272f;
+    --card-bg: #2d323c;
+    --text: #f3f3f3;
+    --text-muted: #a0aec0;
+    --danger: #e53e3e;
+    --success: #38a169;
+    --border: #444851;
+    --header-bg: #1a1d23;
+    --hover-bg: #373c47;
+
+    /* Variables para los botones de las pestañas */
+    --tab-button-inactive-bg: #373a42;
+    --tab-button-inactive-text: #c0c0c0;
+    --tab-button-hover-bg: #4f535d;
+    --tab-button-active-bg: var(--primary-color);
+    --tab-button-active-text: #1e2025;
+
+    --input-bg: #2a2e37;
+    --input-border-focus: var(--primary-color);
+    --shadow-color: rgba(0,0,0,0.15);
+    --shadow-color-darker: rgba(0,0,0,0.3);
+
+    --font-family-sans: 'Poppins', Arial, sans-serif;
+
+    --input-readonly-bg: #2d323c;
+    --input-readonly-border: var(--border);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body.admin-panel {
+    background-color: var(--background);
+    font-family: var(--font-family-sans);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.admin-panel-container {
+    max-width: 1600px;
+    width: 95%;
+    margin: 100px auto 30px auto;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px var(--shadow-color-darker);
+    padding: 25px 30px;
+    box-sizing: border-box;
+}
+
+.admin-panel-container .admin-panel-title {
+    color: var(--primary-color);
+    font-size: 2.2em;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+    text-shadow: 1px 1px 2px var(--shadow-color);
+}
+
+.admin-panel-container .admin-panel-desc {
+    color: var(--text-muted);
+    font-size: 1em;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* Contenedor para las pestañas (tab buttons) */
+.admin-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 30px;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    background-color: var(--header-bg);
+    border-radius: 10px;
+    box-shadow: inset 0 1px 3px var(--shadow-color);
+}
+
+.admin-tab-btn {
+    padding: 10px 22px;
+    border: none;
+    background: var(--tab-button-inactive-bg);
+    color: var(--tab-button-inactive-text);
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    flex-grow: 0;
+    text-align: center;
+    min-width: 90px;
+}
+
+.admin-tab-btn:hover {
+    background: var(--tab-button-hover-bg);
+    transform: translateY(-2px);
+    color: var(--primary-color);
+}
+
+.admin-tab-btn.active {
+    background: var(--tab-button-active-bg);
+    color: var(--tab-button-active-text);
+    box-shadow: 0 3px 7px var(--shadow-color-darker);
+    transform: translateY(0);
+    font-weight: 600;
+}
+
+.admin-tab-content {
+    display: none;
+    animation: fadeInContent 0.5s ease-out;
+}
+
+.admin-tab-content.active {
+    display: block;
+}
+
+@keyframes fadeInContent {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Contenedor de la tabla para el scroll */
+.admin-table-responsive {
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    margin-bottom: 2em;
+    background-color: var(--card-bg);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9em;
+    vertical-align: middle;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.admin-table th {
+    background: var(--header-bg);
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.95em;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.admin-table-responsive table thead tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+.admin-table-responsive table thead tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+.admin-table-responsive table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+.admin-table-responsive table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+    background-color: var(--hover-bg);
+}
+
+.admin-table img {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Botones de acción general y dentro de las tablas */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 18px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    font-size: 0.9em;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    line-height: 1.5;
+}
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px var(--shadow-color-darker);
+}
+
+.btn-add {
+    background: var(--success);
+    color: white;
+    margin-bottom: 20px;
+}
+.btn-add:hover {
+    background: #2a8553;
+}
+
+.btn-edit {
+    background: var(--primary-color);
+    color: var(--tab-button-active-text);
+    margin-right: 6px;
+}
+.btn-edit:hover {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.btn-delete {
+    background: var(--danger);
+    color: #fff;
+    margin-right: 6px;
+}
+.btn-delete:hover {
+    background: #c53030;
+}
+
+.btn-cancel {
+    background: var(--border);
+    color: var(--text);
+}
+.btn-cancel:hover {
+    background: #5a5f6e;
+}
+
+.admin-table form {
+    display: inline-block;
+    margin: 0;
+}
+
+/* Etiquetas de estado (admin/no-admin) */
+.status-label {
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.status-label-admin, .status-label-success {
+    color: var(--success);
+    background-color: rgba(56, 161, 105, 0.15);
+}
+.status-label-no-admin, .status-label-neutral {
+    color: var(--text-muted);
+    background-color: rgba(160, 174, 192, 0.15);
+}
+
+/* Inputs de formulario - AJUSTES */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    display: block;
+    font-size: 0.9em;
+}
+
+/* Unificar el estilo de los elementos de formulario básicos */
+.form-control,
+.admin-edit-form input[type="text"],
+.admin-edit-form input[type="email"],
+.admin-edit-form input[type="password"],
+.admin-edit-form input[type="number"],
+.admin-edit-form select,
+.admin-edit-form textarea {
+    padding: 12px 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 100%;
+    font-size: 0.95em;
+    background: var(--input-bg);
+    color: var(--text);
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    line-height: 1.5;
+}
+
+.form-control:focus,
+.admin-edit-form input:focus,
+.admin-edit-form select:focus,
+.admin-edit-form textarea:focus {
+    border-color: var(--input-border-focus);
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.35);
+    background: var(--input-bg);
+}
+
+/* Estilos específicos para selects*/
+.admin-edit-form select {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23f3f3f3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+/* Estilos para campos de solo lectura*/
+.form-control[readonly],
+.admin-edit-form input[readonly],
+.admin-edit-form select[readonly],
+.admin-edit-form textarea[readonly] {
+    background-color: var(--input-readonly-bg);
+    border-color: var(--input-readonly-border);
+    color: var(--text-muted);
+    cursor: default;
+    opacity: 0.8;
+}
+
+/* Contenedor para el símbolo de euro y el input de Total*/
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.input-with-icon .currency-symbol {
+    position: absolute;
+    left: 15px;
+    color: var(--text-muted);
+    font-size: 0.95em;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.input-with-icon .form-control {
+    padding-left: 35px;
+}
+
+
+.form-control[type="date"],
+.form-control[type="time"],
+.form-control[type="datetime-local"] {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23f3f3f3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+
+/* Estilos para el popup de mensajes flash */
+.flash-popup {
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 300px;
+    max-width: calc(100% - 40px);
+    border-radius: 8px;
+    padding: 18px 40px 18px 20px;
+    z-index: 10000;
+    font-size: 0.95em;
+    box-shadow: 0 5px 20px var(--shadow-color-darker);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: fadeInPopup 0.4s ease-out, slideDownPopup 0.4s ease-out;
+    border: none;
+}
+
+.flash-popup-error {
+    background: #4D1B1B;
+    color: #fed7d7;
+}
+
+.flash-popup-success {
+    background: #1A3E2B;
+    color: #c6f6d5;
+}
+
+.flash-popup-info {
+    background: var(--header-bg);
+    color: var(--primary-color);
+}
+
+.flash-popup-close {
+    font-size: 1.6em;
+    cursor: pointer;
+    color: inherit;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0 0 0 15px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.flash-popup-close:hover {
+    transform: scale(1.1) rotate(90deg);
+}
+
+@keyframes fadeInPopup {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes slideDownPopup {
+    from { top: 0px; }
+    to { top: 25px; }
+}
+
+/* Estilos para el formulario de edición */
+.admin-edit-form {
+    background: var(--card-bg);
+    padding: 32px 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    max-width: 450px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-edit-form label {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 0.9em;
+}
+
+
+.admin-edit-form input,
+.admin-edit-form select,
+.admin-edit-form textarea {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 0.95em;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.admin-edit-form input:focus,
+.admin-edit-form select:focus,
+.admin-edit-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.35);
+    background: var(--input-bg);
+}
+
+
+/* Contenedor de acciones del formulario (para agrupar botones)*/
+.admin-edit-form .form-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+
+.admin-edit-form button.btn,
+.admin-edit-form a.btn {
+    width: auto;
+    padding: 14px 28px;
+    font-size: 1.05em;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px var(--shadow-color-darker);
+    flex-grow: 0;
+}
+
+/* Asegurar el hover del botón de editar */
+.btn-edit:hover {
+    background: var(--secondary-color);
+    color: white;
+}
+
+/* Media queries existentes, se mantienen igual */
+@media (max-width: 768px) {
+    .admin-panel-container {
+        margin: 70px auto 20px auto;
+        padding: 20px 15px;
+        width: 98%;
+    }
+
+    .admin-panel-container .admin-panel-title {
+        font-size: 1.8em;
+    }
+
+    .admin-tabs {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px;
+    }
+
+    .admin-tab-btn {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 8px;
+        padding: 12px 15px;
+    }
+    .admin-tab-btn:last-child {
+        margin-bottom: 0;
+    }
+
+    .admin-table th, .admin-table td {
+        padding: 10px 12px;
+        font-size: 0.85em;
+    }
+    .btn {
+        padding: 8px 14px;
+        font-size: 0.85em;
+    }
+    .btn-edit, .btn-delete {
+        margin-right: 4px;
+    }
+
+    /* Ajustes específicos para el formulario de edición en tabletas */
+    .admin-edit-form {
+        gap: 15px;
+    }
+    .admin-edit-form .form-actions {
+        flex-direction: column;
+        margin-top: 15px;
+    }
+    .admin-edit-form button.btn,
+    .admin-edit-form a.btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-panel-container {
+        padding: 15px 10px;
+        border-radius: 8px;
+    }
+    .admin-panel-container .admin-panel-title {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+    }
+    .admin-panel-container .admin-panel-desc {
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+    .admin-tab-btn {
+        font-size: 0.85em;
+        padding: 10px;
+    }
+    .admin-table th, .admin-table td {
+        font-size: 0.8em;
+        padding: 8px 10px;
+    }
+    .admin-table img {
+        max-width: 40px;
+        max-height: 40px;
+    }
+    .flash-popup {
+        font-size: 0.9em;
+        min-width: unset;
+        width: calc(100% - 20px);
+        padding: 15px 30px 15px 15px;
+        top: 10px;
+    }
+    @keyframes slideDownPopup {
+        from { top: -50px; }
+        to { top: 10px; }
+    }
+    .flash-popup-close {
+        font-size: 1.4em;
+        padding-left: 10px;
+    }
+
+    /* Ajustes específicos para el formulario de edición en móviles */
+    .admin-edit-form {
+        gap: 10px;
+    }
+    .admin-edit-form button.btn,
+    .admin-edit-form a.btn {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+}

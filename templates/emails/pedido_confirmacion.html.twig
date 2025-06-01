@@ -1,0 +1,69 @@
+{# templates/emails/pedido_confirmacion.html.twig #}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmación de tu pedido - Kebab Las Niñas</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #faf7f2; color: #333; }
+        .container { max-width: 600px; margin: 30px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #e67e22; padding: 32px; }
+        h2 { color: #e67e22; }
+        .pedido-info { margin-bottom: 24px; }
+        .pedido-info strong { color: #e67e22; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+        th, td { padding: 10px 8px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background: #fbeee0; color: #e67e22; }
+        .total-row td { font-weight: bold; color: #e67e22; }
+        .footer { text-align: center; color: #888; font-size: 0.95em; margin-top: 24px; }
+        .metodo-pago { font-size: 1.1em; margin-bottom: 12px; }
+        .personalizacion { color: #555; font-size: 0.98em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>¡Gracias por tu pedido, {{ usuario.nombre|default(usuario.email) }}!</h2>
+        <div class="pedido-info">
+            <p><strong>Número de pedido:</strong> {{ pedido.id }}</p>
+            <p><strong>Fecha:</strong> {{ pedido.fechapedido|date('d/m/Y H:i') }}</p>
+            <p><strong>Dirección de entrega:</strong> {{ pedido.direccionentrega }}</p>
+            <p class="metodo-pago"><strong>Método de pago:</strong> {{ pedido.metodopago }}</p>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Personalización</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in detallesPedidos %}
+                    <tr>
+                        <td>{{ detalle.plato.nombre }}</td>
+                        <td class="personalizacion">
+                            {% if detalle.personalizacion is iterable and detalle.personalizacion|length > 0 %}
+                                {{ detalle.personalizacion|join(', ') }}
+                            {% else %}
+                                Sin personalización
+                            {% endif %}
+                        </td>
+                        <td>{{ detalle.cantidad }}</td>
+                        <td>{{ (detalle.precio_unitario * detalle.cantidad)|number_format(2, '.', ',') }} €</td>
+                    </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="3" style="text-align:right;">Total:</td>
+                    <td>{{ pedido.total|number_format(2, '.', ',') }} €</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>En breve comenzaremos a preparar tu pedido.<br>
+        Si tienes alguna duda, puedes responder a este correo.</p>
+        <div class="footer">
+            <p>© {{ "now"|date("Y") }} Kebab Las Niñas</p>
+            <p>¡Gracias por confiar en nosotros!</p>
+        </div>
+    </div>
+</body>
+</html>

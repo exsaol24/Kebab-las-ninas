@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ editar ? 'Editar Categoría' : 'Nueva Categoría' }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin-panel.css') }}">
+{% endblock %}
+
+{% block body %}
+<body class="admin-panel">
+<div class="admin-panel-container">
+    <h1 class="admin-panel-title">{{ editar ? 'Editar Categoría' : 'Nueva Categoría' }}</h1>
+    <div class="admin-edit-form">
+        {{ form_start(form) }}
+            {{ form_row(form.nombre) }}
+            <button class="btn btn-edit" type="submit">{{ editar ? 'Guardar cambios' : 'Crear' }}</button>
+        {{ form_end(form) }}
+        <a href="{{ path('admin_categorias') }}" class="btn btn-cancel" style="margin-top: 15px;">Volver al listado</a>
+    </div>
+</div>
+</body>
+{% endblock %}

@@ -1,59 +1,66 @@
-<nav class="flex items-center justify-between flex-wrap bg-gray-800 p-6">
-    <div class="flex items-center flex-shrink-0 text-white mr-6">
-        <span class="font-semibold text-xl tracking-tight">hospital Database</span>
+{% set page_css = 'carrito' %}
+{% if app.request.attributes.get('_route') != 'app_login' %}
+<nav class="navbar">
+    <div class="navbar-brand">
+        <a href="{{ path('app_inicio') }}" class="navbar-logo">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo" class="navbar-logo-img">
+        </a>
     </div>
-    <div class="block lg:hidden">
-        <button class="flex items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white">
-            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+    <div class="navbar-toggle">
+        <button class="navbar-button" type="button">
+            <div class="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </button>
     </div>
-    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-        <div class="text-sm lg:flex-grow">
-            <a
-                href="{{ path('app_administrador') }}"
-                class="block mt-4 lg:inline-block lg:mt-0 text-gray-200 hover:text-white mr-4"
-            >
-                Administrador
+    <div class="navbar-links" id="navbar-links">
+        <button class="close-button" type="button">
+            <div class="close-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+
+        <a href="{{ path('app_sobrenosotros') }}" class="navbar-link">Sobre Nosotros</a>
+
+        {% set carrito_items = app.session.get('carrito', []) %}
+        {% set total_productos_carrito = 0 %}
+        {% for id, item in carrito_items %}
+            {% set cantidad = 1 %}
+            {% if item.cantidad is defined %}
+                {% if item.cantidad is iterable %}
+                    {% set cantidad = 1 %}
+                {% else %}
+                    {% set cantidad = item.cantidad|default(1) + 0 %}
+                {% endif %}
+            {% endif %}
+            {% set total_productos_carrito = total_productos_carrito + cantidad %}
+        {% endfor %}
+
+        <a href="{{ path('app_carrito') }}" class="navbar-link cart-icon-link">
+            <img src="{{ asset('img/cart-icon.png') }}" alt="Carrito" class="cart-icon">
+            {% if total_productos_carrito > 0 %}
+                <span class="cart-count">{{ total_productos_carrito }}</span>
+            {% endif %}
+        </a>
+
+        {% if app.session is not null and app.session.get('user_name') is not null %}
+            {% if app.session.get('es_admin') is same as(true) %}
+                <a href="{{ path('admin_panel') }}" class="navbar-link">Panel de administrador</a>
+            {% endif %}
+            <a href="{{ path('perfil_editar', {'id': app.session.get('user_id')}) }}" class="navbar-link cart-icon-link">
+                <img src="{{ asset('img/usuario.png') }}" alt="usuario" class="cart-icon">
             </a>
-        </div>
-              <div class="text-sm lg:flex-grow">
-            <a
-                href="{{ path('app_historial') }}"
-                class="block mt-4 lg:inline-block lg:mt-0 text-gray-200 hover:text-white mr-4"
-            >
-                Historial
-            </a>
-        </div>
-           <div class="text-sm lg:flex-grow">
-            <a
-                href="{{ path('app_doctor') }}"
-                class="block mt-4 lg:inline-block lg:mt-0 text-gray-200 hover:text-white mr-4"
-            >
-                Doctor
-            </a>
-        </div>
-         <div class="text-sm lg:flex-grow">
-            <a
-                href="{{ path('app_usuario') }}"
-                class="block mt-4 lg:inline-block lg:mt-0 text-gray-200 hover:text-white mr-4"
-            >
-                Usuario
-            </a>
-        </div>
-         <div class="text-sm lg:flex-grow">
-            <a
-                href="{{ path('app_paciente') }}"
-                class="block mt-4 lg:inline-block lg:mt-0 text-gray-200 hover:text-white mr-4"
-            >
-                Paciente
-            </a>
-        </div>
-        <div>
-          
-             
-             
-            
-           
-        </div>
+            <a href="{{ path('app_logout') }}" class="navbar-link">Cerrar sesión</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="navbar-link">Iniciar sesión</a>
+        {% endif %}
     </div>
+    
+    <!-- Overlay para cerrar el menú al hacer clic fuera -->
+    <div class="menu-overlay" id="menu-overlay"></div>
 </nav>
+<script src="{{ asset('js/navbar.js') }}"></script>
+{% endif %}

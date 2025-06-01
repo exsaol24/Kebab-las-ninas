@@ -1,0 +1,464 @@
+{# templates/inicio/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% set page_css = 'inicio' %}
+
+{% block title %}Inicio - Kebab Las Niñas{% endblock %}
+
+{% block body %}
+
+    <section class="banner" style="margin-top: 0;">
+        <div class="banner-content">
+            <h2>¡El mejor sabor en cada bocado!</h2>
+            <p class="banner-desc">Disfruta de nuestros kebabs únicos y deliciosos.</p>
+            <a href="sobrenosotros" class="btn btn-primary">Conócenos</a>
+        </div>
+        <div class="banner-image">
+            <img src="{{ asset('img/sobrekebab1.png') }}" alt="Deliciosos Kebabs">
+        </div>
+    </section>
+
+    {# Carrusel de Ofertas #}
+    <section class="ofertas-carousel-section">
+        <div class="ofertas-carousel-container">
+            <div class="ofertas-carousel" id="ofertasCarousel">
+                <div class="oferta-slide active">
+                    <img src="{{ asset('img/oferta1.png') }}" alt="Oferta 1">
+                    <div class="oferta-info">
+                        <h3>2x1 en Kebabs Clásicos</h3>
+                        <p>¡Solo los miércoles! Ven con un amigo y paga solo uno.</p>
+                    </div>
+                </div>
+                <div class="oferta-slide">
+                    <img src="{{ asset('img/oferta2.png') }}" alt="Oferta 2">
+                    <div class="oferta-info">
+                        <h3>Menú Familiar</h3>
+                        <p>4 kebabs + patatas + bebida grande por solo 19,90€.</p>
+                    </div>
+                </div>
+                <div class="oferta-slide">
+                    <img src="{{ asset('img/oferta3.png') }}" alt="Oferta 3">
+                    <div class="oferta-info">
+                        <h3>Bebida gratis</h3>
+                        <p>Con cada kebab XL, llévate una bebida gratis.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="ofertas-carousel-btn prev" id="ofertasPrev">❮</button>
+            <button class="ofertas-carousel-btn next" id="ofertasNext">❯</button>
+             <div class="ofertas-carousel-dots">
+                <span class="ofertas-carousel-dot active" data-slide="0"></span>
+                <span class="ofertas-carousel-dot" data-slide="1"></span>
+                <span class="ofertas-carousel-dot" data-slide="2"></span>
+            </div>
+        </div>
+    </section>
+
+    <section id="platos" class="platos">
+        <h2>Nuestros Platos</h2>
+        {% set categoriasAgrupadas = {} %}
+        {% for plato in platos %}
+            {% set cat = plato.categoria.nombre %}
+            {% if categoriasAgrupadas[cat] is not defined %}
+                {% set categoriasAgrupadas = categoriasAgrupadas|merge({ (cat): [] }) %}
+            {% endif %}
+            {% set categoriasAgrupadas = categoriasAgrupadas|merge({ (cat): categoriasAgrupadas[cat]|merge([plato]) }) %}
+        {% endfor %}
+
+        {% for categoria, platosCategoria in categoriasAgrupadas %}
+            <h3 class="categoria-titulo">{{ categoria }}</h3>
+            <div class="platos-grid">
+                {% for plato in platosCategoria %}
+                    <div class="plato-card">
+                        <img src="{{ asset('uploads/platos/' ~ plato.imagen) }}" alt="{{ plato.nombre }}" class="plato-imagen">
+                        <div class="plato-info">
+                            <h4 class="plato-nombre">{{ plato.nombre }}</h4>
+                            <p class="plato-descripcion">{{ plato.descripcion }}</p>
+                            <p class="plato-precio">{{ plato.precio | number_format(2, '.', ',') }} €</p>
+                            {% if app.session.get('user_name') is not null %}
+                                <button class="btn btn-add-to-cart" onclick="abrirPersonalizacion({{ plato.id }}, '{{ plato.nombre|e('js') }}', '{{ plato.categoria.nombre|lower|e('js') }}')">
+                                    Añadir al carrito
+                                </button>
+                            {% else %}
+                                <span class="btn btn-add-to-cart js-login-required"
+                                    data-login-message="Debes iniciar sesión para añadir productos al carrito.">
+                                    Añadir al carrito
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No hay platos disponibles en este momento.</p>
+        {% endfor %}
+
+        <div id="personalizacion-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="cerrarPersonalizacion()">×</span>
+                <h2 id="modal-titulo"></h2>
+                <form id="personalizacion-form" method="post">
+                    <div class="modal-cantidad">
+                        <label for="modal-cantidad-input">Cantidad:</label>
+                        <input type="number" id="modal-cantidad-input" name="cantidad" value="1" min="1" required>
+                    </div>
+                    <div id="modal-opciones">
+                    </div>
+                    <div class="modal-botones">
+                        <button type="submit" class="btn btn-success">Añadir</button>
+                        <button type="button" class="btn btn-secondary" onclick="cerrarPersonalizacion()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            let currentPlatoId = null;
+            let currentCategoria = null;
+            function abrirPersonalizacion(platoId, platoNombre, categoria) {
+                currentPlatoId = platoId;
+                currentCategoria = categoria.toLowerCase();
+                document.getElementById('modal-titulo').textContent = 'Personaliza: ' + platoNombre;
+                document.getElementById('personalizacion-modal').style.display = 'flex';
+                document.getElementById('personalizacion-form').action = '{{ path('app_carrito_agregar_personalizado', {'id': 'PLATO_ID'}) }}'.replace('PLATO_ID', platoId);
+
+                // Opciones según categoría
+                let opcionesHtml = '<h4>Extras:</h4>'; 
+                if (currentCategoria === 'kebabs' || currentCategoria === 'falafel' || currentCategoria === 'dürüm') {
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[cebolla]" value="1"> Cebolla</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[salsa_yogurt]" value="1"> Salsa Yogurt</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[lechuga]" value="1"> Lechuga</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[tomate]" value="1"> Tomate</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[maiz]" value="1"> Maíz</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[queso_feta]" value="1"> Queso Feta (+0.50€)</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[lombarda]" value="1"> Lombarda</label>';
+                    opcionesHtml += '<label><input type="checkbox" name="personalizacion[salsa_picante]" value="1"> Salsa Picante</label>';
+                } else if (currentCategoria === 'entrantes' && (platoNombre.toLowerCase().includes('patatas') || platoNombre.toLowerCase().includes('nuggets'))) {
+                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[salsa_blanca]" value="1"> Salsa Blanca</label>';
+                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[ketchup]" value="1"> Ketchup</label>';
+                     opcionesHtml += '<label><input type="checkbox" name="personalizacion[mayonesa]" value="1"> Mayonesa</label>';
+                } else if (opcionesHtml === '<h4>Extras:</h4>') {
+                    opcionesHtml = '<p>Este plato no tiene opciones de personalización adicionales.</p>';
+                }
+                document.getElementById('modal-opciones').innerHTML = opcionesHtml;
+                document.getElementById('modal-cantidad-input').value = 1;
+            }
+            function cerrarPersonalizacion() {
+                document.getElementById('personalizacion-modal').style.display = 'none';
+                document.getElementById('personalizacion-form').reset();
+            }
+            // Cierra el modal si se hace click fuera del contenido
+            window.onclick = function(event) {
+                const modal = document.getElementById('personalizacion-modal');
+                if (event.target === modal) {
+                    cerrarPersonalizacion();
+                }
+            }
+
+            // AJAX para añadir producto personalizado al carrito
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('personalizacion-form');
+                if (form) {
+                    form.addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        const action = form.action;
+                        const formData = new FormData(form);
+
+                        fetch(action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                cerrarPersonalizacion();
+                                // Actualizar contador carrito en navbar
+                                let cartCount = document.querySelector('.cart-count');
+                                if (!cartCount) {
+                                    const cartLink = document.querySelector('.cart-icon-link');
+                                    if (cartLink) {
+                                        cartCount = document.createElement('span');
+                                        cartCount.className = 'cart-count';
+                                       
+                                        cartLink.style.position = 'relative';
+                                        cartCount.style.position = 'absolute';
+                                        cartCount.style.top = '-5px';
+                                        cartCount.style.right = '-5px';
+                                        cartCount.style.background = 'red';
+                                        cartCount.style.color = 'white';
+                                        cartCount.style.borderRadius = '50%';
+                                        cartCount.style.padding = '2px 6px';
+                                        cartCount.style.fontSize = '0.8em';
+                                        cartLink.appendChild(cartCount);
+                                    }
+                                }
+                                if (cartCount) {
+                                    cartCount.textContent = data.total_productos_carrito;
+                                    cartCount.style.display = data.total_productos_carrito > 0 ? 'inline-block' : 'none';
+                                }
+                            } else {
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error adding to cart:', error);
+                            alert('Error de red al añadir al carrito.');
+                        });
+                    });
+                }
+            });
+        </script>
+    </section>
+
+    {# Apartado de reserva de mesas #}
+    <section id="reserva-mesas" class="reserva-mesas-section kebab-theme">
+        <div class="reserva-bg-decor"></div>
+        <div class="reserva-card kebab-theme">
+            <h2>
+                <span class="icono-mesa">🍽️</span>
+                Reserva tu mesa
+            </h2>
+            <form id="reserva-form" class="reserva-form">
+                <div class="input-group">
+                    <label for="nombre"><span class="input-icon">👤</span> Nombre</label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="¿Cómo te llamas?">
+                </div>
+                <div class="input-group">
+                    <label for="telefono"><span class="input-icon">📞</span> Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" required pattern="[0-9]{9,}" placeholder="Ej: 612345678">
+                </div>
+                <div class="input-group">
+                    <label for="personas"><span class="input-icon">👥</span> Nº de personas</label>
+                    <input type="number" id="personas" name="personas" min="1" max="20" required placeholder="Ej: 4">
+                </div>
+                <div class="input-group">
+                    <label for="fecha"><span class="input-icon">📅</span> Fecha</label>
+                    <input type="date" id="fecha" name="fecha" required>
+                </div>
+                <div class="input-group">
+                    <label for="hora"><span class="input-icon">⏰</span> Hora</label>
+                    <select id="hora" name="hora" required>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-reserva kebab-theme">Reservar mesa</button>
+            </form>
+            <div id="reserva-mensaje" class="reserva-mensaje"></div>
+            <div class="reserva-decor-icon"><img src="{{ asset('img/logo2.png') }}" alt="Kebab Las Niñas Decoración" /></div>
+        </div>
+    </section>
+
+    <section class="ubicacion-section">
+        <div class="ubicacion-container">
+            <div class="ubicacion-info">
+                <h2>¿Dónde estamos?</h2>
+                <p>
+                    <strong>Av. Arias de Velasco, 58, 29601 Marbella, Málaga</strong><br>
+                    ¡Ven a visitarnos y disfruta del mejor kebab de la ciudad!
+                </p>
+            </div>
+            <div class="ubicacion-mapa">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.908383804081!2d-4.882850684792049!3d36.50696197999852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd72d8b023207c7b%3A0xe91a43b3f009300!2sAv.%20Arias%20de%20Velasco%2C%2058%2C%2029601%20Marbella%2C%20M%C3%A1laga!5e0!3m2!1ses!2ses!4v1717180000000"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+        <h2>Lo que dicen nuestros clientes</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p>"¡El mejor kebab que he probado! Sabor auténtico y ingredientes frescos. Definitivamente volveré pronto con más amigos."</p>
+                <span>- Albertito Pérez</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Excelente servicio al cliente, muy amables y rápidos. La comida es deliciosa y las porciones generosas. ¡Muy recomendado!"</p>
+                <span>- Marina López</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Un lugar perfecto para disfrutar con amigos y familia. Ambiente acogedor y los durum están espectaculares. ¡Gracias!"</p>
+                <span>- Kevin Soto</span>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="footer">
+        <p>© {{ "now"|date("Y") }} Kebab Las Niñas. Todos los derechos reservados.</p>
+        <p>Contacto: <a href="mailto:lasninaskebab@gmail.com">lasninaskebab@gmail.com</a></p>
+        <p>Teléfono Reservas: <a href="tel:+34000000000">+34 615 255 785</a></p>
+        <p>Síguenos en nuestras redes sociales:</p>
+        <div class="social-links">
+            <a href="https://es-es.facebook.com/" target="_blank" rel="noopener noreferrer"><img src="{{ asset('img/facebook.png') }}" alt="Facebook"></a>
+            <a href="https://www.instagram.com/kebab_lasninas/" target="_blank" rel="noopener noreferrer"><img src="{{ asset('img/instagram.png') }}" alt="Instagram"></a>
+            <a href="https://x.com/" target="_blank" rel="noopener noreferrer"><img src="{{ asset('img/x.png') }}" alt="Twitter X"></a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Carrusel de ofertas
+            let currentOferta = 0;
+            const slides = document.querySelectorAll('.oferta-slide');
+            const totalOfertas = slides.length;
+            const prevBtn = document.getElementById('ofertasPrev');
+            const nextBtn = document.getElementById('ofertasNext');
+            const dots = document.querySelectorAll('.ofertas-carousel-dot');
+
+            function showOferta(idx) {
+                if (slides.length === 0) return;
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === idx);
+                });
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === idx);
+                });
+                currentOferta = idx;
+            }
+
+            function nextOfertaSlide() {
+                if (totalOfertas === 0) return;
+                currentOferta = (currentOferta + 1) % totalOfertas;
+                showOferta(currentOferta);
+            }
+
+            function prevOfertaSlide() {
+                 if (totalOfertas === 0) return;
+                currentOferta = (currentOferta - 1 + totalOfertas) % totalOfertas;
+                showOferta(currentOferta);
+            }
+
+            if (prevBtn && nextBtn && totalOfertas > 0) {
+                prevBtn.addEventListener('click', prevOfertaSlide);
+                nextBtn.addEventListener('click', nextOfertaSlide);
+
+                dots.forEach(dot => {
+                    dot.addEventListener('click', function() {
+                        const slideIndex = parseInt(this.dataset.slide);
+                        showOferta(slideIndex);
+                    });
+                });
+
+                setInterval(nextOfertaSlide, 6000);
+                showOferta(currentOferta);
+            }
+
+
+            // Manejo para usuarios no logueados
+            const loginRequiredButtons = document.querySelectorAll('.js-login-required');
+            loginRequiredButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const message = this.dataset.loginMessage || 'Debes iniciar sesión.';
+                    alert(message);
+                });
+            });
+
+            // Formulario de Reserva
+            const reservaForm = document.getElementById('reserva-form');
+            if(reservaForm) {
+                const horaSelect = document.getElementById('hora');
+                function populateTimeSlots() {
+                    if (!horaSelect) return;
+                    horaSelect.innerHTML = '';
+
+                    const startHour = 19;
+                    const endHour = 26;
+                    const intervalMinutes = 15;
+
+                    for (let h = startHour; h < endHour; h++) {
+                        for (let m = 0; m < 60; m += intervalMinutes) {
+                            if (h === 25 && m > 45) break;
+
+                            let displayHour = h;
+                            if (displayHour >= 24) {
+                                displayHour -= 24;
+                            }
+
+                            const formattedHour = String(displayHour).padStart(2, '0');
+                            const formattedMinute = String(m).padStart(2, '0');
+                            const timeValue = `${formattedHour}:${formattedMinute}`;
+
+                            const option = document.createElement('option');
+                            option.value = timeValue;
+                            option.textContent = timeValue;
+                            horaSelect.appendChild(option);
+                        }
+                    }
+                }
+                populateTimeSlots();
+
+                const fechaInput = document.getElementById('fecha');
+                const today = new Date();
+                const twoWeeksFromToday = new Date();
+                twoWeeksFromToday.setDate(today.getDate() + 14);
+
+                const formatDate = (date) => {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                };
+
+                if(fechaInput){
+                    fechaInput.min = formatDate(today);
+                    fechaInput.max = formatDate(twoWeeksFromToday);
+                    fechaInput.value = formatDate(today);
+                }
+
+
+                reservaForm.addEventListener('submit', function(e){
+                    e.preventDefault();
+                    const form = this;
+                    const formData = new FormData(form);
+                    const mensajeDiv = document.getElementById('reserva-mensaje');
+                    mensajeDiv.className = 'reserva-mensaje';
+
+                    const nombre = formData.get('nombre').trim();
+                    const telefono = formData.get('telefono').trim();
+                    const personas = formData.get('personas');
+
+                    if (!nombre || !telefono || !personas || personas < 1) {
+                        mensajeDiv.textContent = 'Por favor, completa todos los campos correctamente.';
+                        mensajeDiv.classList.add('error', 'visible');
+                        return;
+                    }
+                    if (!/^[0-9]{9,}$/.test(telefono)) {
+                        mensajeDiv.textContent = 'El formato del teléfono no es válido (mínimo 9 dígitos).';
+                        mensajeDiv.classList.add('error', 'visible');
+                        return;
+                    }
+
+
+                    fetch('{{ path('reserva_mesa') }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            mensajeDiv.textContent = data.message || '¡Reserva enviada! Nos pondremos en contacto contigo para confirmarla.';
+                            mensajeDiv.classList.add('success', 'visible');
+                            form.reset();
+                            populateTimeSlots();
+                            if(fechaInput) fechaInput.value = formatDate(today);
+                        } else {
+                            mensajeDiv.textContent = data.message || 'Error al reservar. Por favor, inténtalo de nuevo.';
+                            mensajeDiv.classList.add('error', 'visible');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error en la solicitud de reserva:', error);
+                        mensajeDiv.textContent = 'Error de red al reservar. Por favor, inténtalo de nuevo.';
+                        mensajeDiv.classList.add('error', 'visible');
+                    });
+                });
+            }
+        });
+    </script>
+
+{% endblock %}

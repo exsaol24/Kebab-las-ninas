@@ -1,0 +1,157 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #fbbf24, #f59e0b);
+    padding: 20px;
+    background: url(/public/video/doner.mp4) no-repeat center center fixed;
+    background-size: cover;
+}
+
+.background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 40px 80px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    width: 100%;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 0 auto;
+}
+
+.form-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.title {
+    font-size: 28px;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #374151;
+    margin-bottom: 35px;
+    font-size: 17px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.input {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    transition: border-color 0.3s;
+}
+
+.input:focus {
+    border-color: #f59e0b;
+    outline: none;
+    box-shadow: 0 0 4px rgba(245, 158, 11, 0.5);
+}
+
+.button {
+    width: 100%;
+    background: #f59e0b;
+    color: white;
+    padding: 18px;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 30px;
+}
+
+.button:hover {
+    background: #d97706;
+    transform: scale(1.02);
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 15px;
+}
+
+.register-link a {
+    color: #f59e0b;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.register-link a:hover {
+    color: #d97706;
+}
+
+.form-brand-img {
+    display: block;
+    margin: 0 auto 35px;
+    max-width: 250px;
+    height: auto;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 15px;
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        padding: 40px 30px;
+        max-width: 90%;
+    }
+
+    .title {
+        font-size: 26px;
+        margin-bottom: 18px;
+    }
+
+    .subtitle {
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+
+    .input {
+        padding: 14px;
+        font-size: 14px;
+    }
+
+    .button {
+        padding: 16px;
+        font-size: 16px;
+        margin-top: 25px;
+    }
+
+    .register-link {
+        font-size: 13px;
+        margin-top: 35px;
+    }
+
+    .form-brand-img {
+        margin-bottom: 30px;
+        max-width: 200px;
+    }
+}

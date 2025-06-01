@@ -1,0 +1,441 @@
+/* Estilos base del Navbar */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fbbf24;
+    padding: 16px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease;
+    height: 80px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.hidden {
+    transform: translateY(-100%);
+}
+
+.navbar-brand {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.navbar-logo-img {
+    width: 8rem;
+    display: block;
+}
+
+/* Estilos para el mensaje de bienvenida */
+.welcome-message {
+    color: #000000;
+    align-self: center;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    /* Orden en el escritorio: el mensaje antes que el carrito y el login/logout */
+    order: 1;
+}
+
+/* Contenedor de enlaces del Navbar (Escritorio) */
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    /* Espacio entre elementos de la derecha */
+    position: relative;
+    padding: 0;
+    margin: 0;
+    margin-left: auto;
+    /* Empuja todo el grupo de enlaces a la derecha */
+}
+
+/* Estilos de los enlaces del Navbar */
+.navbar-link {
+    color: #000000;
+    text-decoration: none;
+    font-size: 1rem;
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 24px;
+    transition: all 0.2s ease-in-out;
+    font-weight: 500;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Orden de los elementos en escritorio */
+.navbar-links>.cart-icon-link {
+    order: 2;
+    /* Carrito después del mensaje de bienvenida */
+}
+
+.navbar-links>a.navbar-link[href*="app_login"],
+.navbar-links>a.navbar-link[href*="app_logout"] {
+    order: 3;
+    /* Botón de Iniciar/Cerrar sesión al final */
+}
+
+
+.navbar-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.navbar-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar-link:hover::after {
+    width: 70%;
+}
+
+/* Botón para mostrar/ocultar menú en móviles */
+.navbar-toggle {
+    display: none;
+    position: relative;
+    z-index: 1100;
+}
+
+.navbar-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    transition: transform 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.navbar-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.hamburger-icon {
+    position: relative;
+    width: 24px;
+    height: 20px;
+}
+
+.hamburger-icon span {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: #ffffff;
+    border-radius: 3px;
+    left: 0;
+    transition: all 0.3s ease;
+}
+
+.hamburger-icon span:nth-child(1) {
+    top: 0;
+}
+
+.hamburger-icon span:nth-child(2) {
+    top: 8px;
+}
+
+.hamburger-icon span:nth-child(3) {
+    top: 16px;
+}
+
+/* Botón de cierre para el menú móvil */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: none;
+    z-index: 1150;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.close-icon {
+    position: relative;
+    width: 24px;
+    height: 24px;
+}
+
+.close-icon span {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: #ffffff;
+    border-radius: 3px;
+    left: 0;
+    top: 50%;
+}
+
+.close-icon span:nth-child(1) {
+    transform: rotate(45deg);
+}
+
+.close-icon span:nth-child(2) {
+    transform: rotate(-45deg);
+}
+
+/* Overlay para cerrar el menú al hacer clic fuera */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* --- ESTILOS RESPONSIVE --- */
+@media (max-width: 768px) {
+    .navbar {
+        justify-content: space-between;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-toggle.hidden-toggle {
+        display: none;
+    }
+
+    /* Menú lateral desplegable (vuelve a salir de la derecha y ocupa menos ancho) */
+    .navbar>.navbar-links {
+        visibility: hidden;
+        opacity: 0;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        /* Inicialmente fuera de la pantalla a la derecha */
+        width: 280px;
+        /* Ancho del menú lateral, como estaba antes */
+        max-width: 85%;
+        /* Máximo el 85% del ancho de la pantalla */
+        height: 100vh;
+        background-color: rgba(30, 30, 30, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+        /* Sombra a la izquierda */
+        transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        z-index: 1050;
+        overflow-y: auto;
+        overflow-x: hidden;
+        flex-direction: column;
+        align-items: flex-start;
+        /* Alineamos los items a la izquierda del menú desplegable */
+        gap: 5px;
+        padding: 80px 25px 25px 25px;
+        /* Padding para el botón de cierre y contenido */
+        box-sizing: border-box;
+        display: flex;
+        /* Reseteamos margin-left que era para escritorio */
+        margin-left: 0;
+    }
+
+    .navbar-links.show {
+        right: 0;
+        /* Se desliza desde la derecha a la posición 0 */
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .navbar-links.show .close-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 20px;
+        /* Ajusta si es necesario */
+        right: 20px;
+        /* Ajusta si es necesario */
+    }
+
+    /* Estilos para los elementos dentro del menú lateral móvil */
+    .navbar-links .welcome-message,
+    .navbar-links .navbar-link,
+    /* Esto incluye Iniciar/Cerrar sesión */
+    .navbar-links .cart-icon-link {
+        color: #f0f0f0;
+        font-size: 1.1rem;
+        text-align: left;
+        /* Texto alineado a la izquierda */
+        width: 100%;
+        /* Items ocupan todo el ancho del menú lateral */
+        padding: 15px;
+        box-sizing: border-box;
+        border-radius: 8px;
+        margin: 5px 0;
+        transition: all 0.3s ease;
+        background-color: transparent;
+        border-left: 3px solid transparent;
+        /* Borde sutil para hover */
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        /* Contenido del item alineado a la izquierda */
+        /* Reseteamos la propiedad order, en móvil el orden es el del HTML */
+        order: initial;
+    }
+
+    .navbar-links .welcome-message {
+        font-weight: bold;
+        padding: 15px;
+        margin: 5px 0 15px 0;
+        border-radius: 8px;
+        border-left: 3px solid #fbbf24;
+        /* Borde distintivo para el mensaje */
+        background-color: rgba(255, 255, 255, 0.05);
+        justify-content: flex-start;
+    }
+
+    .navbar-links .navbar-link:hover,
+    .navbar-links .cart-icon-link:hover {
+        /* Agrupamos hover para consistencia */
+        background-color: rgba(255, 255, 255, 0.1);
+        border-left: 3px solid #fbbf24;
+        padding-left: 20px;
+        /* Indentación en hover */
+    }
+
+    .navbar-links .navbar-link::after {
+        /* Ocultar la línea de abajo en móvil */
+        display: none;
+    }
+
+    .navbar-links .cart-icon-link {
+        padding: 15px;
+        margin: 5px 0;
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
+    }
+
+    .navbar-links .cart-icon-link .cart-icon {
+        filter: invert(1) grayscale(100%) brightness(200%);
+        /* Icono blanco */
+        width: 28px;
+        height: auto;
+        display: block;
+        margin-right: 15px;
+        /* Espacio entre icono y contador/texto */
+    }
+
+    .navbar-links .cart-icon-link .cart-count {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        background-color: #e53e3e;
+        color: white;
+        padding: 2px 6px;
+        font-size: 0.8rem;
+        line-height: 1;
+        min-width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        z-index: 1;
+        box-shadow: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.cart-icon-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+    order: 2;
+    /* Aseguramos el orden en escritorio */
+}
+
+.cart-icon-link:hover {
+    transform: scale(1.1);
+}
+
+.cart-icon {
+    width: 28px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #e53e3e;
+    color: white;
+    border-radius: 50%;
+    padding: 1px 5px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    line-height: 1.2;
+    min-width: 18px;
+    text-align: center;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 18px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.cart-icon-link:hover .cart-count {
+    transform: scale(1.1);
+    background-color: #c53030;
+}

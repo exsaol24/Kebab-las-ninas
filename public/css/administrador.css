@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+
+}
+.admin-panel-title {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 0.2em;
+            letter-spacing: 1px;
+        }
+        .admin-panel-desc {
+            color: #bdbdbd;
+            margin-bottom: 1.5em;
+        }
+        .admin-table {
+            background: #23272f;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+            overflow: hidden;
+        }
+        .admin-table th {
+            background: #1a1d23;
+            color: #fbbf24;
+            font-weight: 700;
+            font-size: 1.08em;
+            border-bottom: 2px solid #fcd34d;
+        }
+        .admin-table td, .admin-table th {
+            padding: 13px 14px;
+            border-bottom: 1px solid #444851;
+            color: #f3f3f3;
+        }
+        .admin-table tr:last-child td {
+            border-bottom: none;
+        }
+        .admin-table tr:hover {
+            background: #2d323c;
+        }
+        .btn-edit, .btn-delete {
+            padding: 6px 16px;
+            border-radius: 5px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 1em;
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn-edit {
+            background: #fbbf24;
+            color: #23272f;
+        }
+        .btn-edit:hover {
+            background: #f59e42;
+            color: #fff;
+        }
+        .btn-delete {
+            background: #e53e3e;
+            color: #fff;
+        }
+        .btn-delete:hover {
+            background: #a82323;
+        }
+        .admin-label {
+            color: #38a169;
+            font-weight: 700;
+        }
+        .no-admin-label {
+            color: #bdbdbd;
+            font-weight: 500;
+        }
+        @media (max-width: 900px) {
+            .admin-table th, .admin-table td { font-size: 0.97em; }
+        }
+        @media (max-width: 600px) {
+            .admin-panel-title { font-size: 1.3em; }
+            .admin-table th, .admin-table td { padding: 8px 6px; }
+        }
+        .admin-panel-bg {
+            max-width:1100px;
+            margin:40px auto 0 auto;
+            padding:32px 24px 36px 24px;
+            background:#23272f;
+            border-radius:16px;
+            box-shadow:0 6px 32px rgba(0,0,0,0.22);
+        }
